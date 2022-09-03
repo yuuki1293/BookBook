@@ -1,4 +1,4 @@
-package com.github.yuuki1293;
+package com.yuuki1293.bookbook;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
