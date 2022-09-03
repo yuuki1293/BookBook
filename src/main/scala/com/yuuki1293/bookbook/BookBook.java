@@ -28,6 +28,5 @@ public class BookBook {
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(new Sample());
     }
 }
