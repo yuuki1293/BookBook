@@ -2,12 +2,12 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org'}
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
+        classpath group: 'org.parchmentmc', name: 'librarian', version: '1.+'
     }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -158,6 +158,8 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    mavenCentral()
+
     maven {
         name = "Azure-SLP"
         url = uri("https://pkgs.dev.azure.com/Kotori316/minecraft/_packaging/mods/maven/v1")
@@ -189,6 +191,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     def scala_version = getProperty("scala_version")
     def scala_major = getProperty("scala_major")
+
 
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     compileOnly(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.2-kotori')
