@@ -1,5 +1,6 @@
-package com.yuuki1293.bookbook;
+package com.yuuki1293.bookbook.common;
 
+import com.yuuki1293.bookbook.Main;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
