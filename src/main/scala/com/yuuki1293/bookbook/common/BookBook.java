@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common;
 
 import com.yuuki1293.bookbook.Main;
+import com.yuuki1293.bookbook.common.register.RegisterItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -14,6 +15,8 @@ public class BookBook {
 
     public BookBook() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+
+        RegisterItem.registry();
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
