@@ -1,8 +1,15 @@
 package com.yuuki1293.bookbook.common.item
 
-import net.minecraft.world.entity.Entity
-import net.minecraft.world.item.{Item, ItemStack}
-import net.minecraft.world.level.Level
+import com.yuuki1293.bookbook.common.item.ItemBook.set
+import net.minecraft.world.item.Item.Properties
+import net.minecraft.world.item.{CreativeModeTab, Item}
 
-class ItemBook(pProperties: Item.Properties) extends Item(pProperties) {
+class ItemBook(properties: Properties) extends Item(set(properties)) {
+  def this() = this(new Properties)
+}
+
+object ItemBook {
+  def set(p: Properties): Properties = {
+    p.tab(CreativeModeTab.TAB_MATERIALS)
+  }
 }

@@ -8,7 +8,7 @@ import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, Registr
 object RegisterItem {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, "bookbook")
 
-  val BOOK: RegistryObject[ItemBook] = ITEMS.register("book", () => new ItemBook(new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS)))
+  val BOOK: RegistryObject[ItemBook] = ITEMS.register("book", () => new ItemBook)
 
   def registry(): Unit = {
     ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus)
