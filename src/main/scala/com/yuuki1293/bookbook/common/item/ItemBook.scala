@@ -15,7 +15,7 @@ class ItemBook(properties: Properties) extends Item(set(properties)) {
 
   override def createEntity(level: Level, location: Entity, stack: ItemStack): Entity = {
     val itemBook = new EntityItemBook(EntityType.ITEM, level, location.getX, location.getY, location.getZ, stack)
-
+    itemBook.setDeltaMovement(location.getDeltaMovement)
     itemBook.setPickUpDelay(40)
 
     itemBook
