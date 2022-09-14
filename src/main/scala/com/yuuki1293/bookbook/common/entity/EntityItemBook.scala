@@ -12,7 +12,6 @@ class EntityItemBook(entityType: EntityType[_ <: ItemEntity], level: Level) exte
   def this(entityType: EntityType[_ <: ItemEntity], level: Level, posX: Double, posY: Double, posZ: Double, itemStack: ItemStack ) = {
     this(entityType, level)
     this.setPos(posX, posY, posZ)
-    this.setDeltaMovement(this.random.nextDouble * 0.2D - 0.1D, 0.2D, this.random.nextDouble * 0.2D - 0.1D)
     this.setItem(itemStack)
     this.lifespan = itemStack.getEntityLifespan(level)
   }
@@ -22,6 +21,8 @@ class EntityItemBook(entityType: EntityType[_ <: ItemEntity], level: Level) exte
   }
 
   override def tick(): Unit = {
+    super.tick()
+
     if (this.isInWater) {
       val name = new TextComponent("[\"\",{\"text\":\"b\",\"obfuscated\":true,\"color\":\"black\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_blue\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_green\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_aqua\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_red\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_purple\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"gold\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"gray\"},{\"text\":\"\\u672c\\u304c\\u6eba\\u308c\\u305f\\uff8c\\uff9e\\uff6f\\uff78\\uff8c\\uff9e\\uff6f\\uff78\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"dark_gray\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"blue\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"green\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"aqua\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"red\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"light_purple\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"yellow\"},{\"text\":\"b\",\"obfuscated\":true,\"color\":\"white\"}]")
       this.setCustomName(name)
