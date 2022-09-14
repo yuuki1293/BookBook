@@ -1,10 +1,8 @@
 {
   "type": "minecraft:smelting",
-  "ingredients": [
-    {
-      "item": "bookbook:book"
-    }
-  ],
+  "ingredient": {
+    "item": "bookbook:book"
+  },
   "result": "minecraft:book",
   "experience": 0,
   "cookingtime": 200
