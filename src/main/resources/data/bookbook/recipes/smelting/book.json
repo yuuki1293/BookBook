@@ -6,7 +6,7 @@
       "Drawn": true
     }
   },
-  "result": "minecraft:book",
+  "result": "bookbook:book",
   "nbt": {
     "Drawn": false
   },
