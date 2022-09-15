@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.item.ItemBook
-import net.minecraft.world.item.{CreativeModeTab, Item}
+import net.minecraft.world.item.Item
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
