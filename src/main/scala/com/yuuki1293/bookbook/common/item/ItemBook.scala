@@ -9,6 +9,8 @@ import net.minecraft.world.item.Item.Properties
 import net.minecraft.world.item.{CreativeModeTab, Item, ItemStack}
 import net.minecraft.world.level.Level
 
+import java.util
+
 class ItemBook(properties: Properties) extends Item(set(properties)) {
 
   def this() = this(new Properties)
@@ -24,16 +26,25 @@ class ItemBook(properties: Properties) extends Item(set(properties)) {
   }
 
   override def fillItemCategory(pCategory: CreativeModeTab, pItems: NonNullList[ItemStack]): Unit = {
-    super.fillItemCategory(pCategory, pItems)
-    if (allowdedIn(CreativeModeTab.TAB_MISC))
-      pItems.add(createDrawn)
+    if (allowdedIn(pCategory)) {
+      pItems.addAll(createBooks)
+    }
   }
 
-  def createDrawn: ItemStack = { // Give a fully set up color applicator
+  private def createBooks: java.util.Collection[_ <: ItemStack] = {
+    val books = new util.ArrayList[ItemStack]()
+
     val item = RegisterItem.BOOK.get().asItem()
-    val stack = new ItemStack(item)
-    ItemBook.setDrawn(stack, drawn = true)
-    stack
+
+    val drawn = new ItemStack(item)
+    ItemBook.setDrawn(drawn, drawn = true)
+    books.add(drawn)
+
+    val not_drawn = new ItemStack(item)
+    ItemBook.setDrawn(not_drawn, drawn = false)
+    books.add(not_drawn)
+
+    books
   }
 }
 
