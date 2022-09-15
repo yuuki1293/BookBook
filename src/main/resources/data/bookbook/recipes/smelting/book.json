@@ -1,9 +1,15 @@
 {
   "type": "minecraft:smelting",
   "ingredient": {
-    "item": "bookbook:book"
+    "item": "bookbook:book",
+    "tag": {
+      "Drawn": true
+    }
   },
   "result": "minecraft:book",
+  "nbt": {
+    "Drawn": false
+  },
   "experience": 0,
   "cookingtime": 200
 }

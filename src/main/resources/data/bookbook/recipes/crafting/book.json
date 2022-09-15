@@ -5,20 +5,14 @@
       "item": "minecraft:paper"
     },
     {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "minecraft:leather"
-    },
-    {
-      "item": "minecraft:water_bucket"
+      "item": "minecraft:cooked_porkchop"
     }
   ],
   "result": {
     "item": "bookbook:book",
+    "tag": {
+      "Drawn": false
+    },
     "count": 1
   }
 }
