@@ -10,7 +10,7 @@
   ],
   "result": {
     "item": "bookbook:book",
-    "tag": {
+    "nbt": {
       "Drawn": false
     },
     "count": 1

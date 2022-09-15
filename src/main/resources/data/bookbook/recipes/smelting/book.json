@@ -2,7 +2,7 @@
   "type": "minecraft:smelting",
   "ingredient": {
     "item": "bookbook:book",
-    "tag": {
+    "nbt": {
       "Drawn": true
     }
   },
