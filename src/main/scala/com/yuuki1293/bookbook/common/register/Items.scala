@@ -7,12 +7,12 @@ import net.minecraft.world.item.{BlockItem, CreativeModeTab, Item}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
-object RegisterItem {
+object Items {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
 
   val BOOK: RegistryObject[ItemBook] = ITEMS.register("book", () => new ItemBook)
   val DROWNED_BOOK: RegistryObject[ItemDrownedBook] = ITEMS.register("drowned_book", () => new ItemDrownedBook)
-  val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(RegisterBlock.BOOKSHELF.getId.getPath, () => new BlockItem(RegisterBlock.BOOKSHELF.get(), new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
+  val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
 
   def registry(): Unit = {
     ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus)

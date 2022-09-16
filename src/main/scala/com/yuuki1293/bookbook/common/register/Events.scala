@@ -1,6 +1,6 @@
 package com.yuuki1293.bookbook.common.register
 
-object RegisterEvent {
+object Events {
   def registry(): Unit = {
   }
 }

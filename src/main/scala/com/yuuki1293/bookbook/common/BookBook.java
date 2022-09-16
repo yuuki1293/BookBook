@@ -1,8 +1,8 @@
 package com.yuuki1293.bookbook.common;
 
-import com.yuuki1293.bookbook.common.register.RegisterBlock;
-import com.yuuki1293.bookbook.common.register.RegisterEvent;
-import com.yuuki1293.bookbook.common.register.RegisterItem;
+import com.yuuki1293.bookbook.common.register.Blocks;
+import com.yuuki1293.bookbook.common.register.Events;
+import com.yuuki1293.bookbook.common.register.Items;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 
@@ -13,10 +13,10 @@ public class BookBook {
     // Directly reference a slf4j logger
 
     public BookBook() {
-        RegisterItem.registry();
-        RegisterBlock.registry();
+        Items.registry();
+        Blocks.registry();
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-        RegisterEvent.registry();
+        Events.registry();
     }
 }

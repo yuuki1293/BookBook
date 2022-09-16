@@ -8,7 +8,7 @@ import net.minecraft.world.level.material.Material
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
-object RegisterBlock {
+object Blocks {
   val BLOCKS: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MODID)
 
   val BOOKSHELF: RegistryObject[BlockBookShelf] = BLOCKS.register("bookshelf", () => new BlockBookShelf(BlockBehaviour.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD)))
