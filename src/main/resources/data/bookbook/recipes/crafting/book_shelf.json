@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "BBB",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "bookbook:book"
+    },
+    "B": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "bookbook:book_shelf"
+  }
+}
