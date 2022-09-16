@@ -1,9 +1,9 @@
-package com.yuuki1293.bookbook;
+package com.yuuki1293.bookbook.common;
 
+import com.yuuki1293.bookbook.common.register.RegisterEvent;
+import com.yuuki1293.bookbook.common.register.RegisterItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(BookBook.MODID)
@@ -12,12 +12,9 @@ public class BookBook {
     // Directly reference a slf4j logger
 
     public BookBook() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        RegisterItem.registry();
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        MinecraftForge.EVENT_BUS.register(new Main());
+        RegisterEvent.registry();
     }
 }

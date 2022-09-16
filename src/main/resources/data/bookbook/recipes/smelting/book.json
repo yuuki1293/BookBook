@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "bookbook:drowned_book"
+  },
+  "result": "bookbook:book",
+  "experience": 0,
+  "cookingtime": 200
+}
