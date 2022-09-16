@@ -36,13 +36,13 @@ class ItemBook(properties: Properties) extends Item(set(properties)) {
 
     val item = RegisterItem.BOOK.get().asItem()
 
-    val drawn = new ItemStack(item)
-    ItemBook.setDrawn(drawn, drawn = true)
-    books.add(drawn)
+    val drown = new ItemStack(item)
+    ItemBook.setDrawn(drown, drown = true)
+    books.add(drown)
 
-    val not_drawn = new ItemStack(item)
-    ItemBook.setDrawn(not_drawn, drawn = false)
-    books.add(not_drawn)
+    val not_drown = new ItemStack(item)
+    ItemBook.setDrawn(not_drown, drown = false)
+    books.add(not_drown)
 
     books
   }
@@ -54,10 +54,10 @@ object ItemBook {
   }
 
   def isDrawn(itemStack: ItemStack): Boolean = {
-    itemStack.getOrCreateTag().getBoolean("Drawn")
+    itemStack.getOrCreateTag().getBoolean("Drown")
   }
 
-  def setDrawn(itemStack: ItemStack, drawn: Boolean): Unit = {
-    itemStack.getOrCreateTag().putBoolean("Drawn", drawn)
+  def setDrawn(itemStack: ItemStack, drown: Boolean): Unit = {
+    itemStack.getOrCreateTag().putBoolean("Drown", drown)
   }
 }

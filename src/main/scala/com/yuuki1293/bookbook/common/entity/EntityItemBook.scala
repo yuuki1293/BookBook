@@ -24,7 +24,7 @@ class EntityItemBook(entityType: EntityType[_ <: ItemEntity], level: Level) exte
     super.tick()
 
     if (this.isInWater) {
-      ItemBook.setDrawn(this.getItem, drawn = true)
+      ItemBook.setDrawn(this.getItem, drown = true)
     }
   }
 }
