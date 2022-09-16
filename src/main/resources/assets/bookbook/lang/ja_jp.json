@@ -1,3 +1,4 @@
 {
-  "item.bookbook.book": "溺れた本"
+  "item.bookbook.book": "本",
+  "item.bookbook.drowned_book": "溺れた本"
 }

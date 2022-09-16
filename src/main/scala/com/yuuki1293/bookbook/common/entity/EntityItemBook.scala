@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common.entity
 
-import com.yuuki1293.bookbook.common.item.ItemBook
+import com.yuuki1293.bookbook.common.item.{ItemBook, ItemDrownedBook}
+import com.yuuki1293.bookbook.common.register.RegisterItem
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.item.ItemEntity
@@ -24,7 +25,14 @@ class EntityItemBook(entityType: EntityType[_ <: ItemEntity], level: Level) exte
     super.tick()
 
     if (this.isInWater) {
-      ItemBook.setDrawn(this.getItem, drown = true)
+      val drownedBook = new ItemStack(RegisterItem.DROWNED_BOOK.get().asItem())
+
+      drownedBook.setTag(this.getItem.getTag)
+      drownedBook.setCount(this.getItem.getCount)
+      drownedBook.setEntityRepresentation(this.getItem.getEntityRepresentation)
+      drownedBook.setPopTime(this.getItem.getPopTime)
+
+      this.setItem(drownedBook)
     }
   }
 }
