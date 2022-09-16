@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.entity
 
-import com.yuuki1293.bookbook.common.item.{ItemBook, ItemDrownedBook}
 import com.yuuki1293.bookbook.common.register.RegisterItem
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.entity.EntityType
