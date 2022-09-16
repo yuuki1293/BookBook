@@ -11,7 +11,7 @@ import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, Registr
 object RegisterBlock {
   val BLOCKS: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MODID)
 
-  val BOOK_SHELF: RegistryObject[BlockBookShelf] = BLOCKS.register("bookshelf", () => new BlockBookShelf(BlockBehaviour.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD)))
+  val BOOKSHELF: RegistryObject[BlockBookShelf] = BLOCKS.register("bookshelf", () => new BlockBookShelf(BlockBehaviour.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD)))
 
   def registry(): Unit = {
     BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus)
