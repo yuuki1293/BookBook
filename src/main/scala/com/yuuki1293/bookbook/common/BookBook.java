@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common;
 
+import com.yuuki1293.bookbook.common.register.RegisterBlock;
 import com.yuuki1293.bookbook.common.register.RegisterEvent;
 import com.yuuki1293.bookbook.common.register.RegisterItem;
 import net.minecraftforge.common.MinecraftForge;
@@ -13,6 +14,7 @@ public class BookBook {
 
     public BookBook() {
         RegisterItem.registry();
+        RegisterBlock.registry();
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
         RegisterEvent.registry();
