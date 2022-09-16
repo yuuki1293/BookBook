@@ -7,10 +7,10 @@
   ],
   "key": {
     "T": {
-      "item": "bookbook:book"
+      "tag": "minecraft:planks"
     },
     "B": {
-      "tag": "minecraft:planks"
+      "item": "bookbook:book"
     }
   },
   "result": {
