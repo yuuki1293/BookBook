@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TTT",
+    "BBB",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "tag": "minecraft:planks"
+    },
+    "B": {
+      "item": "bookbook:drowned_book"
+    }
+  },
+  "result": {
+    "item": "bookbook:drowned_bookshelf"
+  }
+}
