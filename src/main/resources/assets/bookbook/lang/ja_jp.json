@@ -1,7 +1,7 @@
 {
-  "item.bookbook.book": "本",
+  "item.bookbook.book": "生きている本",
   "item.bookbook.drowned_book": "溺れた本",
-  "item.bookbook.bookshelf": "本棚",
+  "item.bookbook.bookshelf": "生きている本棚",
 
-  "block.bookbook.bookshelf": "本棚"
+  "block.bookbook.bookshelf": "生きている本棚"
 }

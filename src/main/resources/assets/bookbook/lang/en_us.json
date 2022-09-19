@@ -1,7 +1,7 @@
 {
-  "item.bookbook.book": "Book",
+  "item.bookbook.book": "Living Book",
   "item.bookbook.drowned_book": "Drowned Book",
-  "item.bookbook.bookshelf": "Book Shelf",
+  "item.bookbook.bookshelf": "Living Book Shelf",
 
-  "block.bookbook.bookshelf": "Book Shelf"
+  "block.bookbook.bookshelf": "Living Book Shelf"
 }
