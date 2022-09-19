@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "bookbook:block/drowned_oak_planks",
+    "side": "bookbook:block/drowned_bookshelf"
+  }
+}

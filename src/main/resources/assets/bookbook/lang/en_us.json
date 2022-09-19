@@ -3,5 +3,6 @@
   "item.bookbook.drowned_book": "Drowned Book",
   "item.bookbook.bookshelf": "Living Book Shelf",
 
-  "block.bookbook.bookshelf": "Living Book Shelf"
+  "block.bookbook.bookshelf": "Living Book Shelf",
+  "block.bookbook.drowned_bookshelf": "Drowned Book Shelf"
 }
