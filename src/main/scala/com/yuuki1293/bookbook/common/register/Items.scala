@@ -10,8 +10,8 @@ import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, Registr
 object Items {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
 
-  val BOOK: RegistryObject[ItemBook] = ITEMS.register("book", () => new ItemBook)
-  val DROWNED_BOOK: RegistryObject[ItemDrownedBook] = ITEMS.register("drowned_book", () => new ItemDrownedBook)
+  val BOOK: RegistryObject[ItemBook] = ITEMS.register("book", () => new ItemBook(new Properties().tab(CreativeModeTab.TAB_MATERIALS)))
+  val DROWNED_BOOK: RegistryObject[ItemDrownedBook] = ITEMS.register("drowned_book", () => new ItemDrownedBook(new Properties().tab(CreativeModeTab.TAB_MATERIALS)))
   val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
 
