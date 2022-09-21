@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "compressed_drowned_book_0",
+  "pattern": [
+    "BBB",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "bookbook:drowned_book"
+    }
+  },
+  "result": {
+    "item": "bookbook:compressed_drowned_book_0"
+  }
+}
