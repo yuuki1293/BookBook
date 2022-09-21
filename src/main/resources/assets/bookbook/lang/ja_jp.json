@@ -2,6 +2,9 @@
   "item.bookbook.book": "生きている本",
   "item.bookbook.drowned_book": "溺れた本",
   "item.bookbook.bookshelf": "生きている本棚",
+  "item.bookbook.compressed_book_0": "圧縮された本(tier1)",
+  "item.bookbook.compressed_book_1": "圧縮された本(tier2)",
+  "item.bookbook.compressed_book_2": "圧縮された本(tier3)",
 
   "block.bookbook.bookshelf": "生きている本棚",
   "block.bookbook.drowned_bookshelf": "溺れた本棚"

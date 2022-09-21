@@ -2,6 +2,9 @@
   "item.bookbook.book": "Living Book",
   "item.bookbook.drowned_book": "Drowned Book",
   "item.bookbook.bookshelf": "Living Book Shelf",
+  "item.bookbook.compressed_book_0": "Compressed Book(tier1)",
+  "item.bookbook.compressed_book_1": "Compressed Book(tier2)",
+  "item.bookbook.compressed_book_2": "Compressed Book(tier3)",
 
   "block.bookbook.bookshelf": "Living Book Shelf",
   "block.bookbook.drowned_bookshelf": "Drowned Book Shelf"
