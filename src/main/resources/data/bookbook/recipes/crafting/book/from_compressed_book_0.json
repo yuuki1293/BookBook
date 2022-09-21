@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "group": "book",
   "ingredients": [
     {
       "item": "bookbook:compressed_book_0"
