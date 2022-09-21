@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "bookbook:compressed_drowned_book_0"
+    }
+  ],
+  "result": {
+    "item": "bookbook:drowned_book",
+    "count": 9
+  }
+}
