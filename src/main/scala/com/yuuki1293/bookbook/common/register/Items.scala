@@ -5,8 +5,7 @@ import com.yuuki1293.bookbook.common.item.{BaseItemCompressed, ItemBook, ItemDro
 import net.minecraft.world.item.{BlockItem, CreativeModeTab, Item}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
-
-import java.util.function.Supplier
+import org.apache.logging.log4j.LogManager
 
 object Items {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
@@ -20,8 +19,8 @@ object Items {
   val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
 
-  def registryCompressed[T <: Item](prefix: String)(tier: Int, properties: Item.Properties)(implicit tag : reflect.ClassTag[T]): RegistryObject[T] = {
-    ITEMS.register(s"$prefix$tier", () => tag.runtimeClass.getDeclaredConstructor(classOf[Item.Properties]).newInstance(properties).asInstanceOf[T])
+  def registryCompressed[T <: BaseItemCompressed](prefix: String)(tier: Int, properties: Item.Properties)(implicit tag: reflect.ClassTag[T]): RegistryObject[T] = {
+    ITEMS.register(s"$prefix$tier", () => tag.runtimeClass.getDeclaredConstructors.head.newInstance(tier, properties).asInstanceOf[T])
   }
 
   def registryCBook: (Int, Item.Properties) => RegistryObject[BaseItemCompressed] = registryCompressed[BaseItemCompressed]("compressed_book_")
