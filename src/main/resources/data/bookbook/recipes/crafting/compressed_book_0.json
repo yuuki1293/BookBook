@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "bookbook:book"
+    }
+  },
+  "result": {
+    "item": "bookbook:compressed_book_0"
+  }
+}
