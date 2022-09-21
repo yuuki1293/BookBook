@@ -5,7 +5,6 @@ import com.yuuki1293.bookbook.common.item.{BaseItemCompressed, ItemBook, ItemDro
 import net.minecraft.world.item.{BlockItem, CreativeModeTab, Item}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
-import org.apache.logging.log4j.LogManager
 
 object Items {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
@@ -15,6 +14,9 @@ object Items {
   val COMPRESSED_BOOK_0: RegistryObject[BaseItemCompressed] = registryCBook(0, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
   val COMPRESSED_BOOK_1: RegistryObject[BaseItemCompressed] = registryCBook(1, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
   val COMPRESSED_BOOK_2: RegistryObject[BaseItemCompressed] = registryCBook(2, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
+  val COMPRESSED_DROWNED_BOOK_0: RegistryObject[BaseItemCompressed] = registryCDBook(0, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
+  val COMPRESSED_DROWNED_BOOK_1: RegistryObject[BaseItemCompressed] = registryCDBook(1, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
+  val COMPRESSED_DROWNED_BOOK_2: RegistryObject[BaseItemCompressed] = registryCDBook(2, new Item.Properties().tab(CreativeModeTab.TAB_MATERIALS))
 
   val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
@@ -24,6 +26,8 @@ object Items {
   }
 
   def registryCBook: (Int, Item.Properties) => RegistryObject[BaseItemCompressed] = registryCompressed[BaseItemCompressed]("compressed_book_")
+
+  def registryCDBook: (Int, Item.Properties) => RegistryObject[BaseItemCompressed] = registryCompressed[BaseItemCompressed]("compressed_drowned_book_")
 
   def registry(): Unit = {
     ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus)
