@@ -21,8 +21,9 @@ object Items {
   val COMPRESSED_DROWNED_BOOK_1: RegistryObject[BaseItemCompressed] = registryCDBook(1, default())
   val COMPRESSED_DROWNED_BOOK_2: RegistryObject[BaseItemCompressed] = registryCDBook(2, default())
 
-  val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
-  val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), new Item.Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)))
+  val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), default()))
+  val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), default()))
+  val BOOK_FURNACE: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOK_FURNACE.getId.getPath, () => new BlockItem(Blocks.BOOK_FURNACE.get(), default()))
 
   def registryCompressed[T <: BaseItemCompressed](prefix: String)(tier: Int, properties: Item.Properties)(implicit tag: reflect.ClassTag[T]): RegistryObject[T] = {
     ITEMS.register(s"$prefix$tier", () => tag.runtimeClass.getDeclaredConstructors.head.newInstance(tier, properties).asInstanceOf[T])
