@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraftforge.network.NetworkHooks
 
-class EntityItemBook(entityType: EntityType[_ <: ItemEntity], level: Level) extends ItemEntity(entityType, level) {
+class ItemBookEntity(entityType: EntityType[_ <: ItemEntity], level: Level) extends ItemEntity(entityType, level) {
   def this(entityType: EntityType[_ <: ItemEntity], level: Level, posX: Double, posY: Double, posZ: Double, itemStack: ItemStack) = {
     this(entityType, level)
     this.setPos(posX, posY, posZ)

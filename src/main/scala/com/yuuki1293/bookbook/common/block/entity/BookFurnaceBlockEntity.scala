@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
-class BlockEntityBookFurnace(worldPosition: BlockPos, blockState: BlockState)
+class BookFurnaceBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends AbstractFurnaceBlockEntity(BlockEntities.BOOK_FURNACE.get(), worldPosition, blockState, RecipeType.SMELTING) {
 
   override protected def getDefaultName: Component = new TranslatableComponent("container.book_furnace")
