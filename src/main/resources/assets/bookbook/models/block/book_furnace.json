@@ -2,7 +2,7 @@
   "parent": "minecraft:block/orientable",
   "textures": {
     "top": "minecraft:block/oak_planks",
-    "front": "minecraft:block/furnace_front",
+    "front": "bookbook:block/book_furnace_front",
     "side": "minecraft:block/bookshelf"
   }
 }
