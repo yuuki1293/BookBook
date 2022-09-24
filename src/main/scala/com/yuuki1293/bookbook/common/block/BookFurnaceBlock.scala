@@ -1,6 +1,6 @@
 package com.yuuki1293.bookbook.common.block
 
-import com.yuuki1293.bookbook.common.block.entity.BlockEntityBookFurnace
+import com.yuuki1293.bookbook.common.block.entity.BookFurnaceBlockEntity
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.{BlockPos, Direction}
@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 
 import java.util.Random
 
-class BlockBookFurnace(properties: BlockBehaviour.Properties) extends AbstractFurnaceBlock(properties) {
+class BookFurnaceBlock(properties: BlockBehaviour.Properties) extends AbstractFurnaceBlock(properties) {
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
-    new BlockEntityBookFurnace(pPos, pState)
+    new BookFurnaceBlockEntity(pPos, pState)
   }
 
   override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
@@ -27,7 +27,7 @@ class BlockBookFurnace(properties: BlockBehaviour.Properties) extends AbstractFu
 
   override protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
     val blockEntity = pLevel.getBlockEntity(pPos)
-    if (blockEntity.isInstanceOf[BlockEntityBookFurnace]) {
+    if (blockEntity.isInstanceOf[BookFurnaceBlockEntity]) {
       pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
       pPlayer.awardStat(Stats.INTERACT_WITH_FURNACE)
     }
