@@ -7,9 +7,6 @@ import net.minecraft.world.item.{Item, ItemStack}
 import net.minecraft.world.level.Level
 
 class BookItem(properties: Properties) extends Item(properties) {
-
-  def this() = this(new Properties)
-
   override def hasCustomEntity(stack: ItemStack) = true
 
   override def createEntity(level: Level, location: Entity, stack: ItemStack): Entity = {
