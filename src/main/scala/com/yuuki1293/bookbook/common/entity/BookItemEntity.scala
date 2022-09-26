@@ -5,6 +5,7 @@ import com.yuuki1293.bookbook.common.register.Items
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -25,7 +26,11 @@ class BookItemEntity(entityType: EntityType[_ <: ItemEntity], level: Level) exte
   override def tick(): Unit = {
     super.tick()
 
-    if (this.isInWater && this.getItem.getItem.isInstanceOf[BookItem] && !this.getItem.getItem.asInstanceOf[BookItem].isWaterProof) {
+    testInWater()
+  }
+
+  def testInWater(): Unit = {
+    if (this.isInWater && !BookItem.isWaterProof(this.getItem)) {
       val drownedBook = new ItemStack(Items.DROWNED_BOOK.get().asItem())
 
       drownedBook.setTag(this.getItem.getTag)
