@@ -66,7 +66,7 @@ class WaterproofedBookRecipe(pId: ResourceLocation) extends CustomRecipe(pId){
 //    NonNullList.withSize(pContainer.getContainerSize, ItemStack.EMPTY)
 //  }
 
-  override def getSerializer: RecipeSerializer[_] = WaterproofedBookRecipe.getSerializer
+  override def getSerializer: RecipeSerializer[WaterproofedBookRecipe] = WaterproofedBookRecipe.getSerializer
 
   override def canCraftInDimensions(pWidth: Int, pHeight: Int): Boolean = pWidth * pHeight >= 2
 
@@ -82,7 +82,7 @@ class WaterproofedBookRecipe(pId: ResourceLocation) extends CustomRecipe(pId){
 object WaterproofedBookRecipe {
   var SERIALIZER: Option[SimpleRecipeSerializer[WaterproofedBookRecipe]] = None
 
-  def getSerializer: RecipeSerializer[_] = {
+  def getSerializer: RecipeSerializer[WaterproofedBookRecipe] = {
     SERIALIZER match {
       case Some(value) => value
       case None =>
