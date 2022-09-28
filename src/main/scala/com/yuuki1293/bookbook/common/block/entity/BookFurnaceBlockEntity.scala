@@ -16,7 +16,7 @@ class BookFurnaceBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   override protected def getDefaultName: Component = new TranslatableComponent("container.book_furnace")
 
-  override def getBurnDuration(pFuel: ItemStack): Int = super.getBurnDuration(pFuel) / 2
+  override def getBurnDuration(pFuel: ItemStack): Int = super.getBurnDuration(pFuel) * 2
 
   override protected def createMenu(pContainerId: Int, pPlayer: Inventory): AbstractContainerMenu = {
     new BookFurnaceMenu(pContainerId, pPlayer, this, this.dataAccess)
