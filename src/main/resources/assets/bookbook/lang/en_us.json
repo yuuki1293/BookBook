@@ -10,5 +10,6 @@
   "item.bookbook.compressed_drowned_book_2": "Compressed Drowned Book(tier3)",
 
   "block.bookbook.bookshelf": "Living Book Shelf",
-  "block.bookbook.drowned_bookshelf": "Drowned Book Shelf"
+  "block.bookbook.drowned_bookshelf": "Drowned Book Shelf",
+  "block.bookbook.book_furnace": "Book Furnace"
 }

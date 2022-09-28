@@ -1,9 +1,6 @@
 package com.yuuki1293.bookbook.common;
 
-import com.yuuki1293.bookbook.common.register.BlockEntities;
-import com.yuuki1293.bookbook.common.register.Blocks;
-import com.yuuki1293.bookbook.common.register.Events;
-import com.yuuki1293.bookbook.common.register.Items;
+import com.yuuki1293.bookbook.common.register.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;

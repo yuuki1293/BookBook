@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraftforge.network.NetworkHooks
 
-class ItemBookEntity(entityType: EntityType[_ <: ItemEntity], level: Level) extends ItemEntity(entityType, level) {
+class BookItemEntity(entityType: EntityType[_ <: ItemEntity], level: Level) extends ItemEntity(entityType, level) {
   def this(entityType: EntityType[_ <: ItemEntity], level: Level, posX: Double, posY: Double, posZ: Double, itemStack: ItemStack) = {
     this(entityType, level)
     this.setPos(posX, posY, posZ)
@@ -24,6 +24,10 @@ class ItemBookEntity(entityType: EntityType[_ <: ItemEntity], level: Level) exte
   override def tick(): Unit = {
     super.tick()
 
+    testInWater()
+  }
+
+  def testInWater(): Unit = {
     if (this.isInWater) {
       val drownedBook = new ItemStack(Items.DROWNED_BOOK.get().asItem())
 
