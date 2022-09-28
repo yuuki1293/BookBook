@@ -10,7 +10,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 @Mod(BookBook.MODID)
 public class BookBook {
     public static final String MODID = "bookbook";
-    // Directly reference a slf4j logger
 
     public BookBook() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();

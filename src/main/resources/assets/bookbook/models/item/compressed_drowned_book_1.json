@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "bookbook:item/compressed_drowned_book_1"
-  }
-}

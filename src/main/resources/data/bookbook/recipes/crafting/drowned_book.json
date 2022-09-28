@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "bookbook:compressed_drowned_book_0"
+      "item": "bookbook:compressed_book_0"
     }
   ],
   "result": {
