@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.entity
 
-import com.yuuki1293.bookbook.common.item.BookItem
 import com.yuuki1293.bookbook.common.register.Items
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.protocol.Packet
@@ -29,7 +28,7 @@ class BookItemEntity(entityType: EntityType[_ <: ItemEntity], level: Level) exte
   }
 
   def testInWater(): Unit = {
-    if (this.isInWater && !BookItem.isWaterProof(this.getItem)) {
+    if (this.isInWater) {
       val drownedBook = new ItemStack(Items.DROWNED_BOOK.get().asItem())
 
       drownedBook.setTag(this.getItem.getTag)

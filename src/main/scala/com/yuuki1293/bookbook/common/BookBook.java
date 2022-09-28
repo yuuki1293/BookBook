@@ -19,7 +19,6 @@ public class BookBook {
         Blocks.registry();
         BlockEntities.registry(eventBus);
         Events.registry();
-        Recipe.registry(eventBus);
         MinecraftForge.EVENT_BUS.register(this);
     }
 }
