@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.BookBook
-import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem, DrownedBookItem}
+import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem}
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
@@ -13,7 +13,7 @@ object Items {
   val ITEMS: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
 
   val BOOK: RegistryObject[BookItem] = ITEMS.register("book", () => new BookItem(default()))
-  val DROWNED_BOOK: RegistryObject[DrownedBookItem] = ITEMS.register("drowned_book", () => new Item(default()))
+  val DROWNED_BOOK: RegistryObject[Item] = ITEMS.register("drowned_book", () => new Item(default()))
   val COMPRESSED_BOOK_0: RegistryObject[BaseCompressedItem] = registryCBook(0, default())
   val COMPRESSED_BOOK_1: RegistryObject[BaseCompressedItem] = registryCBook(1, default())
   val COMPRESSED_BOOK_2: RegistryObject[BaseCompressedItem] = registryCBook(2, default())
