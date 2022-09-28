@@ -17,9 +17,6 @@ object Items {
   val COMPRESSED_BOOK_0: RegistryObject[BaseCompressedItem] = registryCBook(0, default())
   val COMPRESSED_BOOK_1: RegistryObject[BaseCompressedItem] = registryCBook(1, default())
   val COMPRESSED_BOOK_2: RegistryObject[BaseCompressedItem] = registryCBook(2, default())
-  val COMPRESSED_DROWNED_BOOK_0: RegistryObject[BaseCompressedItem] = registryCDBook(0, default())
-  val COMPRESSED_DROWNED_BOOK_1: RegistryObject[BaseCompressedItem] = registryCDBook(1, default())
-  val COMPRESSED_DROWNED_BOOK_2: RegistryObject[BaseCompressedItem] = registryCDBook(2, default())
 
   val BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), default()))
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = ITEMS.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), default()))
@@ -30,8 +27,6 @@ object Items {
   }
 
   def registryCBook: (Int, Item.Properties) => RegistryObject[BaseCompressedItem] = registryCompressed[BaseCompressedItem]("compressed_book_")
-
-  def registryCDBook: (Int, Item.Properties) => RegistryObject[BaseCompressedItem] = registryCompressed[BaseCompressedItem]("compressed_drowned_book_")
 
   def registry(): Unit = {
     ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus)
