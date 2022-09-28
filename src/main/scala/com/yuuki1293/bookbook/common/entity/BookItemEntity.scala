@@ -5,7 +5,6 @@ import com.yuuki1293.bookbook.common.register.Items
 import net.minecraft.nbt.StringTag
 import net.minecraft.network.protocol.Packet
 import net.minecraft.world.entity.EntityType
-import net.minecraft.world.entity.ai.targeting.TargetingConditions
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
