@@ -1,10 +1,11 @@
 package com.yuuki1293.bookbook.common.inventory
 
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu.FUEL_SLOT
-import net.minecraft.world.Container
+import com.yuuki1293.bookbook.common.register.MenuTypes
+import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
-import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, Slot}
+import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, SimpleContainerData, Slot}
 import net.minecraft.world.level.Level
 
 class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData) extends AbstractContainerMenu(pMenuType, pContainerId) {
@@ -26,6 +27,8 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   }
 
   this.addDataSlots(pData)
+
+  def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(2))
 
   override def stillValid(pPlayer: Player): Boolean = this.container.stillValid(pPlayer)
 
