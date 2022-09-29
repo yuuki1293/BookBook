@@ -13,8 +13,8 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.{CapabilityItemHandler, ItemStackHandler}
 
 class InventoryBlockEntity(pType: BlockEntityType[_], pPos: BlockPos, pBlockState: BlockState, size: Int) extends BlockEntity(pType, pPos, pBlockState) {
-  protected var timer: Int
-  protected var requiresUpdate: Boolean
+  protected var timer: Int = 0
+  protected var requiresUpdate: Boolean = false
 
   val inventory: ItemStackHandler = createInventory()
   protected var handler: LazyOptional[ItemStackHandler] = LazyOptional.of(() => this.inventory)
