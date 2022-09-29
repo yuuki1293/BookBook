@@ -49,9 +49,9 @@ class InventoryBlockEntity(pType: BlockEntityType[_], pPos: BlockPos, pBlockStat
     load(tag)
   }
 
-  def insertItem(slot: Int, stack: ItemStack): ItemStack = {
-    val copy = stack.copy()
-    stack.shrink(copy.getCount)
+  def insertItem(slot: Int, itemStack: ItemStack): ItemStack = {
+    val copy = itemStack.copy()
+    itemStack.shrink(copy.getCount)
     this.requiresUpdate = true
     this.handler.map[ItemStack](_.insertItem(slot, copy, false)).orElse(ItemStack.EMPTY)
   }
@@ -99,9 +99,9 @@ class InventoryBlockEntity(pType: BlockEntityType[_], pPos: BlockPos, pBlockStat
         super.extractItem(slot, amount, simulate)
       }
 
-      override def insertItem(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack = {
+      override def insertItem(slot: Int, itemStack: ItemStack, simulate: Boolean): ItemStack = {
         InventoryBlockEntity.this.update()
-        super.insertItem(slot, stack, simulate)
+        super.insertItem(slot, itemStack, simulate)
       }
     }
   }
