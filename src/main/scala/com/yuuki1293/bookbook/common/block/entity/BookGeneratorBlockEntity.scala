@@ -11,18 +11,15 @@ import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, SimpleContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
-import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
-import net.minecraft.world.level.block.entity.BlockEntity.setChanged
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.CapabilityEnergy
-import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState) with WorldlyContainer {
@@ -34,8 +31,6 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   private val maxExtract = 100
   private var burnTime = 0
   private var burnDuration = 0
-  private var progress = 0
-  private var maxProgress = 0
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => this.energyStorage)
   protected val dataAccess: ContainerData = new ContainerData() {
     override def get(pIndex: Int): Int = {
@@ -123,10 +118,6 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   def getEnergyForStack(itemStack: ItemStack): Int = ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING)
 
-  def getMaxProgress: Int = this.maxProgress
-
-  def getProgress: Int = this.progress
-
   override def invalidateCaps(): Unit = {
     super.invalidateCaps()
     this.energy.invalidate()
@@ -190,49 +181,30 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(SLOT_FUEL)
 
   override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = true
+
+  def isFuel(itemStack: ItemStack): Boolean = getBurnDuration(itemStack) > 0
+
+  def tick(): Unit = {
+    if (this.energyStorage.getEnergyStored < this.energyStorage.getMaxEnergyStored) {
+      if (this.isFuel(this.items.get(SLOT_FUEL)) && !this.isBurn && this.canBurn) {
+        this.burnDuration = this.getEnergyForStack(this.items.get(SLOT_FUEL))
+        this.items.get(SLOT_FUEL).shrink(1)
+        this.burnTime += 1
+      } else if (this.isBurn) {
+        this.burnTime += 1
+        if (this.burnTime >= this.burnDuration) {
+          this.burnTime = 0
+        }
+      } else {
+        this.burnTime = 0
+        this.burnDuration = 0
+      }
+    }
+
+    this.outputEnergy()
+  }
 }
 
 object BookGeneratorBlockEntity {
   protected val SLOT_FUEL = 0
-  val DATA_LIT_TIME = 0
-  val DATA_LIT_DURATION = 1
-  val NUM_DATA_VALUES = 2
-  val BURN_TIME_STANDARD = 200
-
-  def serverTick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookGeneratorBlockEntity): Unit = {
-    var flag = pBlockEntity.isBurn
-    var flag1 = false
-
-    val itemStack = pBlockEntity.items.get(SLOT_FUEL)
-    if (pBlockEntity.isBurn) {
-      pBlockEntity.burnTime -= 1
-      pBlockEntity.energyStorage.receiveEnergy(10, simulate = false)
-    } else if (!itemStack.isEmpty) {
-      val i = pBlockEntity.getMaxStackSize
-      if (pBlockEntity.canBurn) {
-        pBlockEntity.burnTime = pBlockEntity.getBurnDuration(itemStack)
-        pBlockEntity.burnDuration = pBlockEntity.burnTime
-        if (pBlockEntity.isBurn) {
-          flag1 = true
-          if (itemStack.hasContainerItem)
-            pBlockEntity.items.set(SLOT_FUEL, itemStack.getContainerItem)
-          else if (!itemStack.isEmpty) {
-            itemStack.shrink(1)
-            if (itemStack.isEmpty) {
-              pBlockEntity.items.set(SLOT_FUEL, itemStack.getContainerItem)
-            }
-          }
-        }
-      }
-    }
-
-    if (flag != pBlockEntity.isBurn) {
-      flag1 = true
-      pState.setValue(BlockStateProperties.LIT, java.lang.Boolean.valueOf(pBlockEntity.isBurn))
-      pLevel.setBlock(pPos, pState, 3)
-    }
-
-    if (flag1)
-      setChanged(pLevel, pPos, pState)
-  }
 }
