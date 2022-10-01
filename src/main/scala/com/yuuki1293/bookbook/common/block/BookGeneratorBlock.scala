@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 import net.minecraft.world.level.block.{Block, EntityBlock}
 
 class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
-  override def getTicker[T <: BookGeneratorBlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
+  override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
     if(pLevel.isClientSide)
       null
     else
-      (_, _, _, blockEntity) => blockEntity.tick()
+      (_, _, _, blockEntity) => blockEntity.asInstanceOf[BookGeneratorBlockEntity].tick()
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {

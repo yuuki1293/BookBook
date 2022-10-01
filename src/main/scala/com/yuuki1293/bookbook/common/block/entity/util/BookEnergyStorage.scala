@@ -3,7 +3,7 @@ package com.yuuki1293.bookbook.common.block.entity.util
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraftforge.energy.EnergyStorage
 
-class BookEnergyStorage(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int, var energy: Int) extends EnergyStorage(capacity, maxReceive, maxExtract, energy) {
+class BookEnergyStorage(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int, pEnergy: Int) extends EnergyStorage(capacity, maxReceive, maxExtract, pEnergy) {
   def this(blockEntity: BlockEntity, capacity: Int) = this(blockEntity, capacity, capacity, capacity, 0)
 
   def this(blockEntity: BlockEntity, capacity: Int, maxTransfer: Int) = this(blockEntity, capacity, maxTransfer, maxTransfer, 0)

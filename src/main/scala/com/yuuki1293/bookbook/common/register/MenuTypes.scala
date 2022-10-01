@@ -9,5 +9,5 @@ import net.minecraftforge.registries.{DeferredRegister, RegistryObject}
 object MenuTypes {
   val MENU_TYPE: DeferredRegister[MenuType[_]] = DeferredRegister.create(Registry.MENU_REGISTRY, BookBook.MODID)
 
-  val BOOK_GENERATOR: RegistryObject[MenuType[_]] = MENU_TYPE.register("book_generator", () => new MenuType[_](new BookGeneratorMenu(_, _)))
+  val BOOK_GENERATOR: RegistryObject[MenuType[_]] = MENU_TYPE.register("book_generator", () => new MenuType[BookGeneratorMenu](new BookGeneratorMenu(_, _)))
 }

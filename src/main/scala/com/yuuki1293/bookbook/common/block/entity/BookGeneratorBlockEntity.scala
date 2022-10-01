@@ -65,8 +65,8 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getContainerSize: Int = this.items.size()
 
   override def isEmpty: Boolean = {
-    for (itemStack: ItemStack <- this.items.toArray) {
-      if (!itemStack.isEmpty)
+    for (i <- 0 until this.items.size()) {
+      if (!this.items.get(i).isEmpty)
         return false
     }
     true
