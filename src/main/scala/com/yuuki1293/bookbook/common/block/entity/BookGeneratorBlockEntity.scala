@@ -37,7 +37,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       pIndex match {
         case 0 => burnTime
         case 1 => burnDuration
-        case _ => 0
+        case 2 => getEnergy
+        case 3 => energyStorage.getMaxEnergyStored
+        case _ => throw new UnsupportedOperationException("Unable to get index: '" + pIndex)
       }
     }
 
@@ -45,10 +47,11 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       pIndex match {
         case 0 => burnTime = pValue
         case 1 => burnDuration = pValue
+        case _ => throw new UnsupportedOperationException("Unable to get index: '" + pIndex)
       }
     }
 
-    override def getCount: Int = 2
+    override def getCount: Int = 4
   }
 
   private def isBurn = this.burnTime > 0
@@ -206,5 +209,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 }
 
 object BookGeneratorBlockEntity {
-  protected val SLOT_FUEL = 0
+  val SLOT_FUEL = 0
+  val DATA_BURN_TIME = 0
+  val DATA_BURN_DURATION = 1
+  val DATA_ENERGY_STORED = 2
+  val DATA_MAX_ENERGY = 3
 }
