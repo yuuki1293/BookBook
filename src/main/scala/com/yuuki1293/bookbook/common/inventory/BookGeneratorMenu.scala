@@ -44,7 +44,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   def isBurn: Boolean = this.data.get(0) > 0
 
   /**
-   * 0 - Energy is empty
+   * 0 - Energy is empty<br>
    * 100 - Energy is full
    * @return The percentage of energy as a percentage of 100
    */
