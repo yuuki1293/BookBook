@@ -5,13 +5,13 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.yuuki1293.bookbook.client.screen.BookGeneratorScreen.TEXTURE
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
+import net.minecraft.client.gui.screens.inventory.{AbstractContainerScreen, MenuAccess}
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 
-class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory, pTitle: Component) extends AbstractContainerScreen(pMenu, pPlayerInventory, pTitle) {
+class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory, pTitle: Component) extends AbstractContainerScreen(pMenu, pPlayerInventory, pTitle) with MenuAccess[BookGeneratorMenu] {
   this.leftPos = 0
   this.topPos = 0
 
