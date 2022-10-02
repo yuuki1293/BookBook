@@ -2,8 +2,8 @@ package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.SLOT_FUEL
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
-import com.yuuki1293.bookbook.common.inventory.BookFurnaceMenu
-import com.yuuki1293.bookbook.common.register.BlockEntities
+import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
+import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -173,7 +173,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookFurnaceMenu(pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(2))
+    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(2))
   }
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
