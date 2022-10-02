@@ -12,7 +12,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   checkContainerSize(pContainer, 1)
   checkContainerDataCount(pData, 1)
   private val container: Container = pContainer
-  private val data: ContainerData = pData
+  val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
   this.addSlot(new FuelSlot(pContainer, FUEL_SLOT, 56, 35))
 
