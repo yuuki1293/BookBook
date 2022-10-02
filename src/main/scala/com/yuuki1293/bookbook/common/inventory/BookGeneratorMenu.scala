@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY}
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu.FUEL_SLOT
 import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.{Container, SimpleContainer}
@@ -32,7 +33,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
   override def stillValid(pPlayer: Player): Boolean = this.container.stillValid(pPlayer)
 
-  def getLitProgress(): Int = {
+  def getBurnProgress: Int = {
     var i = this.data.get(1)
     if (i==0)
       i=200
@@ -40,7 +41,14 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
     this.data.get(0) * 13 / i
   }
 
-  def isLit(): Boolean = this.data.get(0) > 0
+  def isBurn: Boolean = this.data.get(0) > 0
+
+  /**
+   * 0 - Energy is empty
+   * 100 - Energy is full
+   * @return The percentage of energy as a percentage of 100
+   */
+  def getEnergyProportion: Int = this.data.get(DATA_ENERGY_STORED) * 100 / this.data.get(DATA_MAX_ENERGY)
 }
 
 object BookGeneratorMenu {
