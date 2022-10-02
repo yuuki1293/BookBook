@@ -176,7 +176,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(2))
+    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
   }
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
