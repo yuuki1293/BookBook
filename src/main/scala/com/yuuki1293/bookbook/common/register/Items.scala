@@ -3,6 +3,7 @@ package com.yuuki1293.bookbook.common.register
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem}
 import net.minecraft.world.item.{BlockItem, Item}
+import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
@@ -29,7 +30,5 @@ object Items {
 
   def registryCBook: (Int, Item.Properties) => RegistryObject[BaseCompressedItem] = registryCompressed[BaseCompressedItem]("compressed_book_")
 
-  def registry(): Unit = {
-    ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus)
-  }
+  def registry(eventBus: IEventBus): Unit = ITEMS.register(eventBus)
 }

@@ -14,9 +14,10 @@ public class BookBook {
     public BookBook() {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        Items.registry();
-        Blocks.registry();
+        Items.registry(eventBus);
+        Blocks.registry(eventBus);
         BlockEntities.registry(eventBus);
+        MenuTypes.registry(eventBus);
         Events.registry();
         MinecraftForge.EVENT_BUS.register(this);
     }
