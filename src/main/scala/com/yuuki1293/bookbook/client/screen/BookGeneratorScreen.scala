@@ -31,7 +31,7 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
 
     if (this.menu.isBurn) {
       val progress = this.menu.getBurnProgress
-      this.blit(pPoseStack, left + 153, top + 62 + 18 - progress, 176, 12 - progress, 14, progress + 1)
+      this.blit(pPoseStack, left + 153, top + 62 + 14 - progress, 176, 12 - progress, 14, progress + 1)
     }
 
     val proportion = this.menu.getEnergyProportion / 2
