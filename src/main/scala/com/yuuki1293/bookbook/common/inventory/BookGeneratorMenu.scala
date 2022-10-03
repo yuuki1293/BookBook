@@ -15,7 +15,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   private val container: Container = pContainer
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
-  this.addSlot(new FuelSlot(pContainer, FUEL_SLOT, 56, 35))
+  this.addSlot(new FuelSlot(pContainer, FUEL_SLOT, 80, 35))
 
   for (i <- 0 until 3) {
     for (j <- 0 until 9) {
