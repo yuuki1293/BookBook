@@ -7,6 +7,8 @@ import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
@@ -25,7 +27,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState) with WorldlyContainer {
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
-  val energyStorage: BookEnergyStorage = createEnergyStorage()
+  val energyStorage: BookEnergyStorage = createEnergyStorage
 
   private val capacity = 1000
   private val maxExtract = 100
@@ -65,7 +67,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   private def isBurn = this.burnTime > 0
 
-  private def canBurn = getEnergy < this.energyStorage.getMaxEnergyStored
+  private def canBurn = getEnergy < getMaxEnergy
 
   protected def getBurnDuration(stack: ItemStack): Int = {
     if (stack.isEmpty)
@@ -149,7 +151,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     this.items = NonNullList.withSize(this.getContainerSize, ItemStack.EMPTY)
     ContainerHelper.loadAllItems(pTag, this.items)
     this.burnTime = pTag.getInt("BurnTime")
-    this.burnDuration = this.getBurnDuration(this.items.get(0))
+    this.burnDuration = this.getBurnDuration(this.items.get(SLOT_FUEL))
     this.energyStorage.setEnergy(pTag.getInt("Energy"))
   }
 
@@ -180,9 +182,8 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     ContainerHelper.saveAllItems(pTag, this.items)
   }
 
-  private def createEnergyStorage() = {
+  private def createEnergyStorage: BookEnergyStorage =
     new BookEnergyStorage(this, this.capacity, 0, this.maxExtract, 0)
-  }
 
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
@@ -198,9 +199,10 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   def isFuel(itemStack: ItemStack): Boolean = getBurnDuration(itemStack) > 0
 
+  override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
   def tick(): Unit = {
-    if (this.energyStorage.getEnergyStored < this.energyStorage.getMaxEnergyStored) {
-      if (this.isFuel(this.items.get(SLOT_FUEL)) && !this.isBurn && this.canBurn) {
+    if (canBurn) {
+      if (this.isFuel(this.items.get(SLOT_FUEL)) && !this.isBurn) {
         this.burnDuration = this.getEnergyForStack(this.items.get(SLOT_FUEL))
         this.items.get(SLOT_FUEL).shrink(1)
         this.burnTime += 1
