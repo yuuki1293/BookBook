@@ -28,7 +28,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
 
-  private val capacity = 1000
+  private val capacity = 5000
   private val maxExtract = 100
   private var burnTime = 0
   private var burnDuration = 0
@@ -208,8 +208,10 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
         this.burnDuration = this.getEnergyForStack(this.items.get(SLOT_FUEL))
         this.items.get(SLOT_FUEL).shrink(1)
         this.burnTime += 1
+        this.energyStorage.increase(10)
       } else if (this.isBurn) {
         this.burnTime += 1
+        this.energyStorage.increase(10)
         if (this.burnTime >= this.burnDuration) {
           this.burnTime = 0
         }
