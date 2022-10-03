@@ -3,12 +3,11 @@ package com.yuuki1293.bookbook.common.inventory
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY}
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu.FUEL_SLOT
 import com.yuuki1293.bookbook.common.register.MenuTypes
-import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
-import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, SimpleContainerData, Slot}
+import net.minecraft.world.inventory._
 import net.minecraft.world.level.Level
-import org.apache.logging.log4j.LogManager
+import net.minecraft.world.{Container, SimpleContainer}
 
 class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData) extends AbstractContainerMenu(pMenuType, pContainerId) {
   checkContainerSize(pContainer, 1)
