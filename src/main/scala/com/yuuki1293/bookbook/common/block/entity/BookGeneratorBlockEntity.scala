@@ -8,12 +8,12 @@ import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.world.entity.player.{Inventory, Player}
-import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, SimpleContainerData}
+import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
+import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraftforge.common.ForgeHooks
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
@@ -176,7 +176,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
+    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, this.dataAccess)
   }
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
