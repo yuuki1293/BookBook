@@ -4,13 +4,17 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraftforge.energy.EnergyStorage
 
 class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int) extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
-  def this(blockEntity: BlockEntity, capacity: Int) = this(blockEntity, capacity, capacity, capacity, 0)
+  def this(pBlockEntity: BlockEntity, pCapacity: Int) = this(pBlockEntity, pCapacity, pCapacity, pCapacity, 0)
 
-  def this(blockEntity: BlockEntity, capacity: Int, maxTransfer: Int) = this(blockEntity, capacity, maxTransfer, maxTransfer, 0)
+  def this(pBlockEntity: BlockEntity, pCapacity: Int, pMaxTransfer: Int) = this(pBlockEntity, pCapacity, pMaxTransfer, pMaxTransfer, 0)
 
-  def this(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int) = this(blockEntity, capacity, maxReceive, maxExtract, 0)
+  def this(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int) = this(pBlockEntity, pCapacity, pMaxReceive, pMaxExtract, 0)
 
   val blockEntity: BlockEntity = pBlockEntity
+  this.capacity = pCapacity
+  this.maxReceive = pMaxReceive
+  this.maxExtract = pMaxExtract
+  this.energy = Math.max(0, Math.min(pCapacity, pEnergy))
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
     this.blockEntity.setChanged()
