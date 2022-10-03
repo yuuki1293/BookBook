@@ -34,7 +34,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   private var burnDuration = 0
 
   val energyStorage: BookEnergyStorage = createEnergyStorage
-  private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => this.energyStorage)
+  private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   protected val dataAccess: ContainerData = new ContainerData() {
     /**
      * @param pIndex 0 - [[burnTime]]<br> 1 - [[burnDuration]]<br> 2 - [[getEnergy]]<br> 3 - [[getMaxEnergy]]<br> others - [[UnsupportedOperationException]]
@@ -66,7 +66,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     override def getCount: Int = 4
   }
 
-  private def isBurn = this.burnTime > 0
+  private def isBurn = burnTime > 0
 
   private def canBurn = getEnergy < getMaxEnergy
 
@@ -77,47 +77,47 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       ForgeHooks.getBurnTime(stack, RecipeType.SMELTING)
   }
 
-  override def getContainerSize: Int = this.items.size()
+  override def getContainerSize: Int = items.size()
 
   override def isEmpty: Boolean = {
-    for (i <- 0 until this.items.size()) {
-      if (!this.items.get(i).isEmpty)
+    for (i <- 0 until items.size()) {
+      if (!items.get(i).isEmpty)
         return false
     }
     true
   }
 
-  override def getItem(pSlot: Int): ItemStack = this.items.get(pSlot)
+  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(this.items, pSlot, pAmount)
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
-  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(this.items, pSlot)
+  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
 
   override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
-    this.items.set(pSlot, pStack)
-    if (pStack.getCount > this.getMaxStackSize) {
-      pStack.setCount(this.getMaxStackSize)
+    items.set(pSlot, pStack)
+    if (pStack.getCount > getMaxStackSize) {
+      pStack.setCount(getMaxStackSize)
     }
   }
 
   override def stillValid(pPlayer: Player): Boolean = {
-    if (this.level.getBlockEntity(this.worldPosition) != this) {
+    if (level.getBlockEntity(worldPosition) != this) {
       false
     } else {
-      pPlayer.distanceToSqr(this.worldPosition.getX.toDouble + 0.5D, this.worldPosition.getY.toDouble + 0.5D, this.worldPosition.getZ.toDouble + 0.5D) <= 64.0D
+      pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
     }
   }
 
   override def canPlaceItem(pIndex: Int, pStack: ItemStack): Boolean = ForgeHooks.getBurnTime(pStack, RecipeType.SMELTING) > 0
 
-  override def clearContent(): Unit = this.items.clear()
+  override def clearContent(): Unit = items.clear()
 
   var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
 
   override def getCapability[T](cap: Capability[T], side: Direction): LazyOptional[T] = {
     if (cap == CapabilityEnergy.ENERGY)
-      this.energy.cast()
-    else if (!this.remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+      energy.cast()
+    else if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
       if (side == Direction.UP)
         handlers(0).cast()
       else if (side == Direction.DOWN)
@@ -129,45 +129,45 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       super.getCapability(cap, side)
   }
 
-  def getEnergy: Int = this.energyStorage.getEnergyStored
+  def getEnergy: Int = energyStorage.getEnergyStored
 
-  def getMaxEnergy: Int = this.energyStorage.getMaxEnergyStored
+  def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
 
   def getEnergyForStack(itemStack: ItemStack): Int = ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING)
 
   override def invalidateCaps(): Unit = {
     super.invalidateCaps()
-    this.energy.invalidate()
+    energy.invalidate()
     for (x <- handlers.indices)
       handlers(x).invalidate()
   }
 
   override def reviveCaps(): Unit = {
     super.reviveCaps()
-    this.handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+    handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
   }
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    this.items = NonNullList.withSize(this.getContainerSize, ItemStack.EMPTY)
-    ContainerHelper.loadAllItems(pTag, this.items)
-    this.burnTime = pTag.getInt("BurnTime")
-    this.burnDuration = this.getBurnDuration(this.items.get(SLOT_FUEL))
-    this.energyStorage.setEnergy(pTag.getInt("Energy"))
+    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
+    ContainerHelper.loadAllItems(pTag, items)
+    burnTime = pTag.getInt("BurnTime")
+    burnDuration = getBurnDuration(items.get(SLOT_FUEL))
+    energyStorage.setEnergy(pTag.getInt("Energy"))
   }
 
   def outputEnergy(): Unit = {
-    if (this.energyStorage.getEnergyStored >= this.maxExtract && this.energyStorage.canExtract) {
+    if (energyStorage.getEnergyStored >= maxExtract && energyStorage.canExtract) {
       for (direction <- Direction.values()) {
-        val be = this.level.getBlockEntity(this.worldPosition.relative(direction))
+        val be = level.getBlockEntity(worldPosition.relative(direction))
         if (be != null) {
           be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).ifPresent(storage => {
             if (be != this && storage.getEnergyStored < storage.getMaxEnergyStored) {
-              val toSend = BookGeneratorBlockEntity.this.energyStorage.extractEnergy(this.maxExtract, simulate = false)
+              val toSend = energyStorage.extractEnergy(maxExtract, simulate = false)
               val received = storage.receiveEnergy(toSend, false)
 
-              BookGeneratorBlockEntity.this.energyStorage.setEnergy(
-                BookGeneratorBlockEntity.this.energyStorage.getEnergyStored + toSend - received
+              energyStorage.setEnergy(
+                energyStorage.getEnergyStored + toSend - received
               )
             }
           })
@@ -178,9 +178,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   override protected def saveAdditional(pTag: CompoundTag): Unit = {
     super.saveAdditional(pTag)
-    pTag.putInt("BurnTime", this.burnTime)
+    pTag.putInt("BurnTime", burnTime)
     pTag.putInt("Energy", getEnergy)
-    ContainerHelper.saveAllItems(pTag, this.items)
+    ContainerHelper.saveAllItems(pTag, items)
   }
 
   private def createEnergyStorage: BookEnergyStorage = {
@@ -189,7 +189,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, this.dataAccess)
+    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
   }
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
@@ -204,24 +204,20 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   def tick(): Unit = {
     if (canBurn) {
-      if (this.isFuel(this.items.get(SLOT_FUEL)) && !this.isBurn) {
-        this.burnDuration = this.getEnergyForStack(this.items.get(SLOT_FUEL))
-        this.items.get(SLOT_FUEL).shrink(1)
-        this.burnTime += 1
-        this.energyStorage.increase(10)
-      } else if (this.isBurn) {
-        this.burnTime += 1
-        this.energyStorage.increase(10)
-        if (this.burnTime >= this.burnDuration) {
-          this.burnTime = 0
-        }
+      if (isFuel(items.get(SLOT_FUEL)) && !isBurn) {
+        burnDuration = getEnergyForStack(items.get(SLOT_FUEL))
+        burnTime = burnDuration
+        items.get(SLOT_FUEL).shrink(1)
+      } else if (isBurn) {
+        burnTime -=1
+        energyStorage.increase(10)
       } else {
-        this.burnTime = 0
-        this.burnDuration = 0
+        burnTime = 0
+        burnDuration = 0
       }
     }
 
-    this.outputEnergy()
+    outputEnergy()
   }
 }
 
