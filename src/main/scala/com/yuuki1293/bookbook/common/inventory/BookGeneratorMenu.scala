@@ -48,7 +48,14 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
    * 100 - Energy is full
    * @return The percentage of energy as a percentage of 100
    */
-  def getEnergyProportion: Int = this.data.get(DATA_ENERGY_STORED) * 100 / this.data.get(DATA_MAX_ENERGY)
+  def getEnergyProportion: Int = {
+    val energyStored = this.data.get(DATA_ENERGY_STORED)
+    val maxEnergy = this.data.get(DATA_MAX_ENERGY)
+
+    if (maxEnergy == 0)
+      return 0
+    energyStored * 100 / maxEnergy
+  }
 }
 
 object BookGeneratorMenu {
