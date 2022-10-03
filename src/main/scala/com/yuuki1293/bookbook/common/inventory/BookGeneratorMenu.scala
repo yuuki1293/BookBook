@@ -8,10 +8,11 @@ import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, SimpleContainerData, Slot}
 import net.minecraft.world.level.Level
+import org.apache.logging.log4j.LogManager
 
 class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData) extends AbstractContainerMenu(pMenuType, pContainerId) {
   checkContainerSize(pContainer, 1)
-  checkContainerDataCount(pData, 1)
+  checkContainerDataCount(pData, 4)
   private val container: Container = pContainer
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
@@ -29,7 +30,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
   this.addDataSlots(pData)
 
-  def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(2))
+  def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
 
   override def stillValid(pPlayer: Player): Boolean = this.container.stillValid(pPlayer)
 
