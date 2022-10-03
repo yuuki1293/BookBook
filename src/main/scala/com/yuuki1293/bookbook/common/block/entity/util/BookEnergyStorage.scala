@@ -23,6 +23,8 @@ class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: 
   }
 
   def setEnergy(energy: Int): Unit = {
-    this.energy = Math.max(0, Math.min(energy, this.capacity))
+    this.energy = Math.max(0, Math.min(energy, capacity))
   }
+
+  def increase(inc: Int): Unit = energy = Math.min(capacity, energy + inc)
 }
