@@ -33,16 +33,25 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   private var burnDuration = 0
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => this.energyStorage)
   protected val dataAccess: ContainerData = new ContainerData() {
+    /**
+     * @param pIndex 0 - [[burnTime]]<br> 1 - [[burnDuration]]<br> 2 - [[getEnergy]]<br> 3 - [[getMaxEnergy]]<br> others - [[UnsupportedOperationException]]
+     * @return data
+     */
     override def get(pIndex: Int): Int = {
       pIndex match {
         case 0 => burnTime
         case 1 => burnDuration
         case 2 => getEnergy
-        case 3 => energyStorage.getMaxEnergyStored
+        case 3 => getMaxEnergy
         case _ => throw new UnsupportedOperationException("Unable to get index: '" + pIndex)
       }
     }
 
+    /**
+     *
+     * @param pIndex 0 - [[burnTime]]<br> 1 - [[burnDuration]]<br> others - [[UnsupportedOperationException]]
+     * @param pValue Assigned to pIndex
+     */
     override def set(pIndex: Int, pValue: Int): Unit = {
       pIndex match {
         case 0 => burnTime = pValue
@@ -118,6 +127,8 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 
   def getEnergy: Int = this.energyStorage.getEnergyStored
+
+  def getMaxEnergy: Int = this.energyStorage.getMaxEnergyStored
 
   def getEnergyForStack(itemStack: ItemStack): Int = ForgeHooks.getBurnTime(itemStack, RecipeType.SMELTING)
 
