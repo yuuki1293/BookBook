@@ -8,8 +8,13 @@
   "item.bookbook.compressed_drowned_book_0": "Compressed Drowned Book(tier1)",
   "item.bookbook.compressed_drowned_book_1": "Compressed Drowned Book(tier2)",
   "item.bookbook.compressed_drowned_book_2": "Compressed Drowned Book(tier3)",
+  "item.bookbook.book_generator": "Book Generator",
 
   "block.bookbook.bookshelf": "Living Book Shelf",
   "block.bookbook.drowned_bookshelf": "Drowned Book Shelf",
-  "block.bookbook.book_furnace": "Book Furnace"
+  "block.bookbook.book_furnace": "Book Furnace",
+  "block.bookbook.book_generator": "Book Generator",
+
+  "container.book_furnace": "Book Furnace",
+  "container.book_generator": "Book Generator"
 }
