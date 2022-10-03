@@ -27,12 +27,13 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState) with WorldlyContainer {
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
-  val energyStorage: BookEnergyStorage = createEnergyStorage
 
   private val capacity = 1000
   private val maxExtract = 100
   private var burnTime = 0
   private var burnDuration = 0
+
+  val energyStorage: BookEnergyStorage = createEnergyStorage
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => this.energyStorage)
   protected val dataAccess: ContainerData = new ContainerData() {
     /**
@@ -182,9 +183,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     ContainerHelper.saveAllItems(pTag, this.items)
   }
 
-  private def createEnergyStorage: BookEnergyStorage =
-    new BookEnergyStorage(this, this.capacity, 0, this.maxExtract, 0)
-
+  private def createEnergyStorage: BookEnergyStorage = {
+    new BookEnergyStorage(this, capacity, 0, maxExtract, 0)
+  }
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
@@ -200,6 +201,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   def isFuel(itemStack: ItemStack): Boolean = getBurnDuration(itemStack) > 0
 
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
+
   def tick(): Unit = {
     if (canBurn) {
       if (this.isFuel(this.items.get(SLOT_FUEL)) && !this.isBurn) {
