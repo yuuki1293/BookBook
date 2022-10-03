@@ -1,6 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
-import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY}
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY}
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu.FUEL_SLOT
 import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.entity.player.{Inventory, Player}
@@ -34,11 +34,11 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   override def stillValid(pPlayer: Player): Boolean = this.container.stillValid(pPlayer)
 
   def getBurnProgress: Int = {
-    var i = this.data.get(1)
+    var i = this.data.get(DATA_BURN_DURATION)
     if (i==0)
       i=200
 
-    this.data.get(0) * 13 / i
+    this.data.get(DATA_BURN_TIME) * 13 / i
   }
 
   def isBurn: Boolean = this.data.get(0) > 0
