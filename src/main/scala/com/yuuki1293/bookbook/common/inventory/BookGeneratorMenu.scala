@@ -6,8 +6,11 @@ import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
 import net.minecraft.world.inventory._
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.level.Level
 import net.minecraft.world.{Container, SimpleContainer}
+import net.minecraftforge.common.ForgeHooks
 
 class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData) extends AbstractContainerMenu(pMenuType, pContainerId) {
   checkContainerSize(pContainer, 1)
@@ -31,12 +34,49 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
 
+  override def quickMoveStack(pPlayer: Player, pIndex: Int): ItemStack = {
+    var itemStack = ItemStack.EMPTY
+    val slot = this.slots.get(pIndex)
+    if (slot != null && slot.hasItem) {
+      val itemStack1 = slot.getItem
+      itemStack = itemStack1.copy
+      if (pIndex == 0) {
+        if (!this.moveItemStackTo(itemStack1, 1, 37, true))
+          return ItemStack.EMPTY
+        slot.onQuickCraft(itemStack1, itemStack)
+      }
+      else if (this.moveItemStackTo(itemStack1, 0, 1, false)) {
+        return ItemStack.EMPTY
+      }
+      else if (pIndex >= 1 && pIndex < 28) {
+        if (!this.moveItemStackTo(itemStack1, 28, 37, false))
+          return ItemStack.EMPTY
+        else if (!this.moveItemStackTo(itemStack1, 1, 28, false))
+          return ItemStack.EMPTY
+        else if (!this.moveItemStackTo(itemStack1, 1, 37, false))
+          return ItemStack.EMPTY
+      }
+
+      if (itemStack1.isEmpty)
+        slot.set(ItemStack.EMPTY)
+      else
+        slot.setChanged()
+      if (itemStack1.getCount == itemStack.getCount)
+        return ItemStack.EMPTY
+      slot.onTake(pPlayer, itemStack1)
+    }
+
+    itemStack
+  }
+
   override def stillValid(pPlayer: Player): Boolean = this.container.stillValid(pPlayer)
+
+  def isFuel(stack: ItemStack): Boolean = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0
 
   def getBurnProgress: Int = {
     var i = this.data.get(DATA_BURN_DURATION)
-    if (i==0)
-      i=200
+    if (i == 0)
+      i = 200
 
     this.data.get(DATA_BURN_TIME) * 13 / i
   }
@@ -46,6 +86,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   /**
    * 0 - Energy is empty<br>
    * 100 - Energy is full
+   *
    * @return The percentage of energy as a percentage of 100
    */
   def getEnergyProportion: Int = {
