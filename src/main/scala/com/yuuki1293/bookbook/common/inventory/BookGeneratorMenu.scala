@@ -1,7 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
-import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY}
-import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu.FUEL_SLOT
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity._
 import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
@@ -18,7 +17,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   private val container: Container = pContainer
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
-  this.addSlot(new FuelSlot(pContainer, FUEL_SLOT, 80, 35))
+  this.addSlot(new FuelSlot(pContainer, SLOT_FUEL, 80, 35))
 
   for (i <- 0 until 3) {
     for (j <- 0 until 9) {
@@ -103,8 +102,4 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
       return 0
     energyStored * 100 / maxEnergy
   }
-}
-
-object BookGeneratorMenu {
-  val FUEL_SLOT = 0
 }
