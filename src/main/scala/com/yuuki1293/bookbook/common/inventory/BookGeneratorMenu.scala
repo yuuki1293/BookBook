@@ -73,6 +73,12 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
   def isFuel(stack: ItemStack): Boolean = ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0
 
+  /**
+   * 0% - 13<br>
+   * 100% - 0<br>
+   * n% - (100 - n) * 13 (rounded down)
+   * @return BurnTime * 13 / BurnDuration
+   */
   def getBurnProgress: Int = {
     var i = this.data.get(DATA_BURN_DURATION)
     if (i == 0)
