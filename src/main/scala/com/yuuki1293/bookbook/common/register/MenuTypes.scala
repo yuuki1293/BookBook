@@ -12,5 +12,5 @@ object MenuTypes {
 
   val BOOK_GENERATOR: RegistryObject[MenuType[BookGeneratorMenu]] = MENU_TYPE.register("book_generator_menu_type", () => new MenuType[BookGeneratorMenu](new BookGeneratorMenu(_, _)))
 
-  def registry(eventBus: IEventBus): Unit = MENU_TYPE.register(eventBus)
+  def registry(implicit eventBus: IEventBus): Unit = MENU_TYPE.register(eventBus)
 }

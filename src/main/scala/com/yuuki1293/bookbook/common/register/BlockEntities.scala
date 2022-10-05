@@ -12,5 +12,5 @@ object BlockEntities {
   val BOOK_FURNACE: RegistryObject[BlockEntityType[BookFurnaceBlockEntity]] = BLOCK_ENTITIES.register("book_furnace_block_entity", () => BlockEntityType.Builder.of(new BookFurnaceBlockEntity(_, _), Blocks.BOOK_FURNACE.get()).build(null))
   val BOOK_GENERATOR: RegistryObject[BlockEntityType[BookGeneratorBlockEntity]] = BLOCK_ENTITIES.register("book_generator_block_entity", () => BlockEntityType.Builder.of(new BookGeneratorBlockEntity(_, _), Blocks.BOOK_GENERATOR.get()).build(null))
 
-  def registry(eventBus: IEventBus): Unit = BLOCK_ENTITIES.register(eventBus)
+  def registry(implicit eventBus: IEventBus): Unit = BLOCK_ENTITIES.register(eventBus)
 }
