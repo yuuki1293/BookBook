@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.block.entity
 
+import com.yuuki1293.bookbook.common.block.BookGeneratorBlock
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.SLOT_FUEL
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
@@ -186,6 +187,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   private def createEnergyStorage: BookEnergyStorage = {
     new BookEnergyStorage(this, capacity, 0, maxExtract, 0)
   }
+
   override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
@@ -203,18 +205,26 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
 
   def tick(): Unit = {
+    val burnFlag = isBurn
+
     if (canBurn) {
       if (isFuel(items.get(SLOT_FUEL)) && !isBurn) {
         burnDuration = getEnergyForStack(items.get(SLOT_FUEL))
         burnTime = burnDuration
         items.get(SLOT_FUEL).shrink(1)
       } else if (isBurn) {
-        burnTime -=1
+        burnTime -= 1
         energyStorage.increase(10)
       } else {
         burnTime = 0
         burnDuration = 0
       }
+    }
+
+    if (burnFlag != isBurn) {
+      val L = org.apache.logging.log4j.LogManager.getLogger("bookbookd")
+      val state = blockState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(isBurn))
+      level.setBlock(worldPosition, state, 3)
     }
 
     outputEnergy()
