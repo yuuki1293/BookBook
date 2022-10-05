@@ -29,7 +29,6 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties) extends AbstractFu
     val blockEntity = pLevel.getBlockEntity(pPos)
     if (blockEntity.isInstanceOf[BookFurnaceBlockEntity]) {
       pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
-      pPlayer.awardStat(Stats.INTERACT_WITH_FURNACE)
     }
   }
 
