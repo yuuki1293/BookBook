@@ -9,7 +9,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(BookBook.MODID)
 object BookBook {
-    val MODID = "bookbook"
+    final val MODID = "bookbook"
 
     val eventBus: IEventBus = FMLJavaModLoadingContext.get().getModEventBus
 
