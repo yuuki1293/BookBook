@@ -3,6 +3,7 @@ package com.yuuki1293.bookbook.common.block
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.{BlockStateProperties, B
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
 import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectionalBlock}
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.{InteractionHand, InteractionResult, MenuProvider}
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
 class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
   this.registerDefaultState(
@@ -19,7 +20,7 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
   )
 
   override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
-    if(pLevel.isClientSide)
+    if (pLevel.isClientSide)
       null
     else
       (_, _, _, blockEntity) => blockEntity.asInstanceOf[BookGeneratorBlockEntity].tick()
@@ -39,6 +40,22 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
   else {
     this.openContainer(pLevel, pPos, pPlayer)
     InteractionResult.CONSUME
+  }
+
+  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
+    if (!pState.is(pNewState.getBlock)) {
+      val blockEntity = pLevel.getBlockEntity(pPos)
+      blockEntity match {
+        case entity: BookGeneratorBlockEntity =>
+          if (pLevel.isInstanceOf[ServerLevel]) {
+            Containers.dropContents(pLevel, pPos, entity)
+          }
+      }
+
+      pLevel.updateNeighbourForOutputSignal(pPos, this)
+    }
+
+    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
   }
 
   protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
