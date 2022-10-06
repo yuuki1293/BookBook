@@ -3,7 +3,6 @@ package com.yuuki1293.bookbook.common.register
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem}
 import net.minecraft.world.item.{BlockItem, Item}
-import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
 object Items extends AbstractRegister[Item] {
