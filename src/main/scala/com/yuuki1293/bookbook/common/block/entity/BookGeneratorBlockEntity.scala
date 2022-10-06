@@ -231,9 +231,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 }
 
 object BookGeneratorBlockEntity {
-  val SLOT_FUEL = 0
-  val DATA_BURN_TIME = 0
-  val DATA_BURN_DURATION = 1
-  val DATA_ENERGY_STORED = 2
-  val DATA_MAX_ENERGY = 3
+  final val SLOT_FUEL = 0
+  final val DATA_BURN_TIME = 0
+  final val DATA_BURN_DURATION = 1
+  final val DATA_ENERGY_STORED = 2
+  final val DATA_MAX_ENERGY = 3
 }
