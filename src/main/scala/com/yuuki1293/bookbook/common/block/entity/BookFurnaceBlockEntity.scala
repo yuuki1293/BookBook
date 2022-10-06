@@ -19,6 +19,6 @@ class BookFurnaceBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def getBurnDuration(pFuel: ItemStack): Int = super.getBurnDuration(pFuel) * 2
 
   override protected def createMenu(pContainerId: Int, pPlayer: Inventory): AbstractContainerMenu = {
-    new BookFurnaceMenu(pContainerId, pPlayer, this, this.dataAccess)
+    new BookFurnaceMenu(pContainerId, pPlayer, this, dataAccess)
   }
 }
