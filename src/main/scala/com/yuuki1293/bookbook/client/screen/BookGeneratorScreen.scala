@@ -40,5 +40,5 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
 }
 
 object BookGeneratorScreen {
-  private val TEXTURE = new ResourceLocation(BookBook.MODID, "textures/gui/container/book_generator.png")
+  private final val TEXTURE = new ResourceLocation(BookBook.MODID, "textures/gui/container/book_generator.png")
 }
