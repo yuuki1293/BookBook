@@ -5,7 +5,6 @@ import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.particles.ParticleTypes
 import net.minecraft.core.{BlockPos, Direction}
 import net.minecraft.sounds.{SoundEvents, SoundSource}
-import net.minecraft.stats.Stats
 import net.minecraft.world.MenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
