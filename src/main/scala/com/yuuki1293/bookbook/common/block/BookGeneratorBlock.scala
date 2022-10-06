@@ -14,8 +14,8 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
 class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
-  this.registerDefaultState(
-    this.stateDefinition.any()
+  registerDefaultState(
+    stateDefinition.any()
       .setValue(LIT, java.lang.Boolean.FALSE)
   )
 
@@ -38,7 +38,7 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = if (pLevel.isClientSide)
     InteractionResult.SUCCESS
   else {
-    this.openContainer(pLevel, pPos, pPlayer)
+    openContainer(pLevel, pPos, pPlayer)
     InteractionResult.CONSUME
   }
 
