@@ -67,6 +67,6 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
 }
 
 object BookGeneratorBlock {
-  val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
-  val LIT: BooleanProperty = BlockStateProperties.LIT
+  final val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
+  final val LIT: BooleanProperty = BlockStateProperties.LIT
 }
