@@ -13,12 +13,12 @@ class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: 
   val blockEntity: BlockEntity = pBlockEntity
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
-    this.blockEntity.setChanged()
+    blockEntity.setChanged()
     super.extractEnergy(maxExtract, simulate)
   }
 
   override def receiveEnergy(maxReceive: Int, simulate: Boolean): Int = {
-    this.blockEntity.setChanged()
+    blockEntity.setChanged()
     super.receiveEnergy(maxReceive, simulate)
   }
 
