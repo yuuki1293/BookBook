@@ -10,15 +10,13 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
-object Blocks {
+object Blocks extends AbstractRegister[Block] {
   private val default = () => BlockBehaviour.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD)
 
-  val BLOCKS: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MODID)
+  val REGISTER: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MODID)
 
-  val BOOKSHELF: RegistryObject[BookShelfBlock] = BLOCKS.register("bookshelf", () => new BookShelfBlock(default()))
-  val DROWNED_BOOKSHELF: RegistryObject[DrownedBookShelfBlock] = BLOCKS.register("drowned_bookshelf", () => new DrownedBookShelfBlock(default()))
-  val BOOK_FURNACE: RegistryObject[BookFurnaceBlock] = BLOCKS.register("book_furnace", () => new BookFurnaceBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
-  val BOOK_GENERATOR: RegistryObject[BookGeneratorBlock] = BLOCKS.register("book_generator", () => new BookGeneratorBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
-
-  def registry(implicit eventBus: IEventBus): Unit = BLOCKS.register(eventBus)
+  val BOOKSHELF: RegistryObject[BookShelfBlock] = REGISTER.register("bookshelf", () => new BookShelfBlock(default()))
+  val DROWNED_BOOKSHELF: RegistryObject[DrownedBookShelfBlock] = REGISTER.register("drowned_bookshelf", () => new DrownedBookShelfBlock(default()))
+  val BOOK_FURNACE: RegistryObject[BookFurnaceBlock] = REGISTER.register("book_furnace", () => new BookFurnaceBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
+  val BOOK_GENERATOR: RegistryObject[BookGeneratorBlock] = REGISTER.register("book_generator", () => new BookGeneratorBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
 }
