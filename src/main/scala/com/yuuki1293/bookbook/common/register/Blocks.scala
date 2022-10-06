@@ -2,12 +2,10 @@ package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.block.{BookFurnaceBlock, BookGeneratorBlock, BookShelfBlock, DrownedBookShelfBlock}
-import net.minecraft.world.level.block.{Block, SoundType}
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.{Block, SoundType}
 import net.minecraft.world.level.material.Material
-import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
 object Blocks extends AbstractRegister[Block] {
