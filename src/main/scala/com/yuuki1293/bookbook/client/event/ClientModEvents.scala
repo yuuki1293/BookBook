@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
-@Mod.EventBusSubscriber(modid = BookBook.MODID, bus = Bus.MOD, value = Array(Dist.CLIENT))
+@Mod.EventBusSubscriber(modid = BookBook.MOD_ID, bus = Bus.MOD, value = Array(Dist.CLIENT))
 object ClientModEvents {
   @SubscribeEvent
   def clientSetup(event: FMLClientSetupEvent): Unit = {

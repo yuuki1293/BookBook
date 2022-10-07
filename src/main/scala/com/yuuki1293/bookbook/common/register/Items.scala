@@ -9,7 +9,7 @@ object Items extends AbstractRegister[Item] {
   private val itemGroup = new BookBookItemGroup
   private val default = () => new Item.Properties().tab(itemGroup)
 
-  val REGISTER: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
+  val REGISTER: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MOD_ID)
 
   val BOOK: RegistryObject[BookItem] = REGISTER.register("book", () => new BookItem(default()))
   val DROWNED_BOOK: RegistryObject[Item] = REGISTER.register("drowned_book", () => new Item(default()))

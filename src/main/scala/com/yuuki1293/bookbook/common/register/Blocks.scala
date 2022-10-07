@@ -11,7 +11,7 @@ import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, Registr
 object Blocks extends AbstractRegister[Block] {
   private val default = () => BlockBehaviour.Properties.of(Material.WOOD).strength(1.5F).sound(SoundType.WOOD)
 
-  val REGISTER: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MODID)
+  val REGISTER: DeferredRegister[Block] = DeferredRegister.create(ForgeRegistries.BLOCKS, BookBook.MOD_ID)
 
   val BOOKSHELF: RegistryObject[BookShelfBlock] = REGISTER.register("bookshelf", () => new BookShelfBlock(default()))
   val DROWNED_BOOKSHELF: RegistryObject[Block] = REGISTER.register("drowned_bookshelf", () => new Block(default()))
