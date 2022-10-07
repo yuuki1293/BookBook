@@ -9,7 +9,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 object BookBook {
     final val MODID = "bookbook"
 
-    implicit val eventBus: IEventBus = FMLJavaModLoadingContext.get().getModEventBus
+    implicit private val eventBus: IEventBus = FMLJavaModLoadingContext.get().getModEventBus
 
     Items.registry
     Blocks.registry
