@@ -26,9 +26,9 @@ class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
     }
   }
 
-  override def createEntity(level: Level, location: Entity, stack: ItemStack): Entity = {
-    stack.getOrCreateTag().remove(TAG_AGE)
-    super.createEntity(level, location, stack)
+  override def onDroppedByPlayer(item: ItemStack, player: Player): Boolean = {
+    item.getOrCreateTag().remove(TAG_AGE)
+    true
   }
 }
 
