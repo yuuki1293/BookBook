@@ -25,6 +25,11 @@ class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
       explosion(pEntity)
     }
   }
+
+  override def createEntity(level: Level, location: Entity, stack: ItemStack): Entity = {
+    stack.getOrCreateTag().remove(TAG_AGE)
+    super.createEntity(level, location, stack)
+  }
 }
 
 object UnstableBookItem {
