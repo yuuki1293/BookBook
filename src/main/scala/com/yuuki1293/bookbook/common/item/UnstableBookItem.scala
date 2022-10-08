@@ -20,7 +20,7 @@ class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
       tag.putInt(TAG_AGE, 1)
     }
 
-    if (pStack.getOrCreateTag().getInt(TAG_AGE) >= 200 && canExplosion) {
+    if (pStack.getOrCreateTag().getInt(TAG_AGE) >= 200 && canExplosion(pStack, pEntity)) {
       deleteItem(pStack)
       explosion(pEntity)
     }
