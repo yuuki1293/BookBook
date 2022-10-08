@@ -33,7 +33,7 @@ class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
 }
 
 object UnstableBookItem {
-  final val TAG_AGE = "AGE"
+  final val TAG_AGE = "Age"
 
   /**
    * Cause unstable ingot explosion<br>
@@ -43,7 +43,7 @@ object UnstableBookItem {
    */
   def explosion(entity: Entity): Unit = {
     val pos = entity.position()
-    entity.level.explode(entity, DamageSource.badRespawnPointExplosion(), null, pos.x, pos.y, pos.z, 5.0F, true, Explosion.BlockInteraction.DESTROY)
+    entity.level.explode(null, DamageSource.badRespawnPointExplosion(), null, pos.x, pos.y, pos.z, 10.0F, true, Explosion.BlockInteraction.DESTROY)
   }
 
   def canExplosion(pStack: ItemStack, pEntity: Entity): Boolean = {
