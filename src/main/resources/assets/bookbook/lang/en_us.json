@@ -17,5 +17,7 @@
   "block.bookbook.book_generator": "Book Generator",
 
   "container.book_furnace": "Book Furnace",
-  "container.book_generator": "Book Generator"
+  "container.book_generator": "Book Generator",
+
+  "It will explode in 10 seconds!": "It will explode in 10 seconds!"
 }

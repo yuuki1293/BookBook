@@ -17,5 +17,7 @@
   "block.bookbook.book_generator": "本発電機",
 
   "container.book_furnace": "本かまど",
-  "container.book_generator": "本発電機"
+  "container.book_generator": "本発電機",
+
+  "It will explode in 10 seconds!": "10秒後に爆発します！"
 }
