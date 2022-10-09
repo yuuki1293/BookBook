@@ -7,7 +7,7 @@ import net.minecraft.world.inventory.MenuType
 import net.minecraftforge.registries.{DeferredRegister, RegistryObject}
 
 object MenuTypes extends AbstractRegister[MenuType[_]] {
-  val REGISTER: DeferredRegister[MenuType[_]] = DeferredRegister.create(Registry.MENU_REGISTRY, BookBook.MODID)
+  val REGISTER: DeferredRegister[MenuType[_]] = DeferredRegister.create(Registry.MENU_REGISTRY, BookBook.MOD_ID)
 
   val BOOK_GENERATOR: RegistryObject[MenuType[BookGeneratorMenu]] = REGISTER.register("book_generator_menu_type", () => new MenuType[BookGeneratorMenu](new BookGeneratorMenu(_, _)))
 }

@@ -5,14 +5,14 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext
 
-@Mod(BookBook.MODID)
+@Mod(BookBook.MOD_ID)
 object BookBook {
-    final val MODID = "bookbook"
+  final val MOD_ID = "bookbook"
 
-    implicit val eventBus: IEventBus = FMLJavaModLoadingContext.get().getModEventBus
+  implicit private val eventBus: IEventBus = FMLJavaModLoadingContext.get().getModEventBus
 
-    Items.registry
-    Blocks.registry
-    BlockEntities.registry
-    MenuTypes.registry
+  Items.registry
+  Blocks.registry
+  BlockEntities.registry
+  MenuTypes.registry
 }

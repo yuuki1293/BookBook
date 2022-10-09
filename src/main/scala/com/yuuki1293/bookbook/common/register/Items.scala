@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.BookBook
-import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem}
+import com.yuuki1293.bookbook.common.item.{BaseCompressedItem, BookItem, UnstableBookItem}
 import net.minecraft.world.item.{BlockItem, Item}
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
@@ -9,13 +9,14 @@ object Items extends AbstractRegister[Item] {
   private val itemGroup = new BookBookItemGroup
   private val default = () => new Item.Properties().tab(itemGroup)
 
-  val REGISTER: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MODID)
+  val REGISTER: DeferredRegister[Item] = DeferredRegister.create(ForgeRegistries.ITEMS, BookBook.MOD_ID)
 
   val BOOK: RegistryObject[BookItem] = REGISTER.register("book", () => new BookItem(default()))
   val DROWNED_BOOK: RegistryObject[Item] = REGISTER.register("drowned_book", () => new Item(default()))
   val COMPRESSED_BOOK_0: RegistryObject[BaseCompressedItem] = registryCBook(0, default())
   val COMPRESSED_BOOK_1: RegistryObject[BaseCompressedItem] = registryCBook(1, default())
   val COMPRESSED_BOOK_2: RegistryObject[BaseCompressedItem] = registryCBook(2, default())
+  val UNSTABLE_BOOK: RegistryObject[UnstableBookItem] = REGISTER.register("unstable_book", () => new UnstableBookItem(default()))
 
   val BOOKSHELF: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF.get(), default()))
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = REGISTER.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), default()))
