@@ -4,7 +4,7 @@ import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.block.{BookFurnaceBlock, BookGeneratorBlock, BookShelfBlock}
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
-import net.minecraft.world.level.block.{Block, SoundType}
+import net.minecraft.world.level.block.{Block, GlassBlock, SoundType}
 import net.minecraft.world.level.material.Material
 import net.minecraftforge.registries.{DeferredRegister, ForgeRegistries, RegistryObject}
 
@@ -17,5 +17,5 @@ object Blocks extends AbstractRegister[Block] {
   val DROWNED_BOOKSHELF: RegistryObject[Block] = REGISTER.register("drowned_bookshelf", () => new Block(default()))
   val BOOK_FURNACE: RegistryObject[BookFurnaceBlock] = REGISTER.register("book_furnace", () => new BookFurnaceBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
   val BOOK_GENERATOR: RegistryObject[BookGeneratorBlock] = REGISTER.register("book_generator", () => new BookGeneratorBlock(default().requiresCorrectToolForDrops().strength(3.5F).lightLevel(p => if (p.getValue(BlockStateProperties.LIT)) 13 else 0)))
-  val BOOKSHELF_FLAME: RegistryObject[Block] = REGISTER.register("bookshelf_flame", () => new Block(default()))
+  val BOOKSHELF_FLAME: RegistryObject[GlassBlock] = REGISTER.register("bookshelf_flame", () => new GlassBlock(default().strength(1.0F).noOcclusion()))
 }
