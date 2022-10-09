@@ -2,7 +2,8 @@
   "ambientocclusion": false,
   "textures": {
     "end": "minecraft:block/oak_planks",
-    "side": "bookbook:block/bookshelf_flame"
+    "side": "bookbook:block/bookshelf_flame",
+    "particle": "minecraft:block/oak_planks"
   },
   "elements": [
     {
