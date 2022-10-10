@@ -18,6 +18,6 @@ object ClientModEvents {
   def clientSetup(event: FMLClientSetupEvent): Unit = {
     MenuScreens.register(MenuTypes.BOOK_GENERATOR.get(), (menu: BookGeneratorMenu, inv, title) => new BookGeneratorScreen(menu, inv, title))
 
-    ItemBlockRenderTypes.setRenderLayer(Blocks.BOOKSHELF_FLAME.get(), RenderType.cutout())
+    ItemBlockRenderTypes.setRenderLayer(Blocks.BOOKSHELF_FRAME.get(), RenderType.cutout())
   }
 }

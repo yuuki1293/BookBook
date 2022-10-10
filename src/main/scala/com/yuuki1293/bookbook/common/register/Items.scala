@@ -22,7 +22,7 @@ object Items extends AbstractRegister[Item] {
   val DROWNED_BOOKSHELF: RegistryObject[BlockItem] = REGISTER.register(Blocks.DROWNED_BOOKSHELF.getId.getPath, () => new BlockItem(Blocks.DROWNED_BOOKSHELF.get(), default()))
   val BOOK_FURNACE: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_FURNACE.getId.getPath, () => new BlockItem(Blocks.BOOK_FURNACE.get(), default()))
   val BOOK_GENERATOR: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_GENERATOR.getId.getPath, () => new BlockItem(Blocks.BOOK_GENERATOR.get(), default()))
-  val BOOKSHELF_FLAME: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOKSHELF_FLAME.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF_FLAME.get(), default()))
+  val BOOKSHELF_FRAME: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOKSHELF_FRAME.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF_FRAME.get(), default()))
 
   def registryCompressed[T <: BaseCompressedItem](prefix: String)(tier: Int, properties: Item.Properties)(implicit tag: reflect.ClassTag[T]): RegistryObject[T] = {
     REGISTER.register(s"$prefix$tier", () => tag.runtimeClass.getDeclaredConstructors.head.newInstance(tier, properties).asInstanceOf[T])
