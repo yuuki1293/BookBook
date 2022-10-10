@@ -3,7 +3,8 @@ package com.yuuki1293.bookbook.common.block
 import com.yuuki1293.bookbook.common.block.BookCapacitorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity
 import net.minecraft.core.BlockPos
-import net.minecraft.world.{InteractionHand, InteractionResult, MenuProvider}
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
@@ -43,6 +44,22 @@ class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends Block(p
     if (blockEntity.isInstanceOf[BookCapacitorBlockEntity]) {
       player.openMenu(blockEntity.asInstanceOf[MenuProvider])
     }
+  }
+
+  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
+    if (!pState.is(pNewState.getBlock)) {
+      val blockEntity = pLevel.getBlockEntity(pPos)
+      blockEntity match {
+        case entity: BookCapacitorBlockEntity =>
+          if (pLevel.isInstanceOf[ServerLevel]) {
+            Containers.dropContents(pLevel, pPos, entity)
+          }
+      }
+
+      pLevel.updateNeighbourForOutputSignal(pPos, this)
+    }
+
+    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
   }
 }
 
