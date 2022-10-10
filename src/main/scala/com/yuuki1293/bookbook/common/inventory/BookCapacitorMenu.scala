@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
+import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY}
 import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
@@ -64,4 +65,19 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   }
 
   override def stillValid(pPlayer: Player): Boolean = container.stillValid(pPlayer)
+
+  /**
+   * 0 - Energy is empty<br>
+   * 100 - Energy is full
+   *
+   * @return The percentage of energy as a percentage of 100
+   */
+  def getEnergyProportion: Int = {
+    val energyStored = data.get(DATA_ENERGY_STORED)
+    val maxEnergy = data.get(DATA_MAX_ENERGY)
+
+    if (maxEnergy == 0)
+      return 0
+    energyStored * 100 / maxEnergy
+  }
 }
