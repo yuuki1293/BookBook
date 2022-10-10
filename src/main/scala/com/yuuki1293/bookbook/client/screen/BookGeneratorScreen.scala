@@ -26,12 +26,8 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
   override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
     super.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY)
 
-    RenderSystem.setShader(() => GameRenderer.getPositionTexShader)
-    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
-    RenderSystem.setShaderTexture(0, TEXTURE)
     val left = leftPos
     val top = topPos
-    blit(pPoseStack, left, top, 0, 0, imageWidth, imageHeight)
 
     if (menu.isBurn) {
       val progress = menu.getBurnProgress

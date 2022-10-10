@@ -33,10 +33,13 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
   }
 
   override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
+    RenderSystem.setShader(() => GameRenderer.getPositionTexShader)
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
     RenderSystem.setShaderTexture(0, TEXTURE)
     val left = leftPos
     val top = topPos
+
+    blit(pPoseStack, left, top, 0, 0, imageWidth, imageHeight)
 
     val proportion = (menu.getEnergyProportion.toDouble * (gaugeHeight.toDouble / 100.0D)).toInt
     blit(pPoseStack, left + gaugeBgLeft, top + gaugeBgTop + gaugeHeight - proportion, gaugeLeft, gaugeTop + gaugeHeight - proportion, gaugeWidth, proportion)
