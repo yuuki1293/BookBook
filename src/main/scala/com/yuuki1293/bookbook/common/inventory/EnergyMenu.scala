@@ -1,9 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
-import net.minecraft.world.inventory.{AbstractContainerMenu, MenuType}
-
-abstract class AbstractEnergyMenu(pMenuType: MenuType[_], pContainerId: Int)
-  extends AbstractContainerMenu(pMenuType, pContainerId) {
+trait EnergyMenu {
 
   def getEnergyStored: Int
 
