@@ -3,12 +3,11 @@ package com.yuuki1293.bookbook.client.screen
 import com.mojang.blaze3d.vertex.PoseStack
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
-import net.minecraft.client.gui.screens.inventory.MenuAccess
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 
-class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory, pTitle: Component) extends AbstractEnergyContainerScreen(pMenu, pPlayerInventory, pTitle) with MenuAccess[BookGeneratorMenu] {
+class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory, pTitle: Component) extends AbstractEnergyContainerScreen(pMenu, pPlayerInventory, pTitle) {
   val TEXTURE = new ResourceLocation(BookBook.MOD_ID, "textures/gui/container/book_generator.png")
 
   leftPos = 0
