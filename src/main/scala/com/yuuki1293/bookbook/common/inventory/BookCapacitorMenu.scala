@@ -62,4 +62,6 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
     itemStack
   }
+
+  override def stillValid(pPlayer: Player): Boolean = container.stillValid(pPlayer)
 }
