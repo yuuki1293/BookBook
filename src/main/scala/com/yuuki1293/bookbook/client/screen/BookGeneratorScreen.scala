@@ -1,11 +1,9 @@
 package com.yuuki1293.bookbook.client.screen
 
-import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import net.minecraft.client.gui.screens.inventory.MenuAccess
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
