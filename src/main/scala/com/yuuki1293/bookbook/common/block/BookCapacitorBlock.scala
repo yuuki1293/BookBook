@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectiona
 import net.minecraft.world.phys.BlockHitResult
 
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends Block(pProperties) with EntityBlock {
-  override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
+  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else

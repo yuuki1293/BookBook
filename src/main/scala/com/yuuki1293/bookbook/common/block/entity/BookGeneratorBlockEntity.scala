@@ -115,7 +115,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
 
-  override def getCapability[T](cap: Capability[T], side: Direction): LazyOptional[T] = {
+  override def getCapability[A](cap: Capability[A], side: Direction): LazyOptional[A] = {
     if (cap == CapabilityEnergy.ENERGY)
       energy.cast()
     else if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {

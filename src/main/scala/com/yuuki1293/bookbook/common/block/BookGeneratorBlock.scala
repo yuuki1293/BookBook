@@ -19,7 +19,7 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
       .setValue(LIT, java.lang.Boolean.FALSE)
   )
 
-  override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
+  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else
