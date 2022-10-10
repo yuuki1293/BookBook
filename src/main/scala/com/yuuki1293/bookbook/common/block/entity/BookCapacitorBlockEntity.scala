@@ -138,7 +138,7 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
           be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).ifPresent(storage => {
             if (be != this && storage.getEnergyStored < storage.getMaxEnergyStored) {
               val toSend = energyStorage.extractEnergy(maxTransfer, simulate = false)
-              val received = storage
+              val received = storage.receiveEnergy(toSend, false)
 
               energyStorage.setEnergy(
                 energyStorage.getEnergyStored + toSend - received
