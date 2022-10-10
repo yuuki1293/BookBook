@@ -171,3 +171,8 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     new BookCapacitorMenu(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
   }
 }
+
+object BookCapacitorBlockEntity {
+  final val DATA_ENERGY_STORED = 0
+  final val DATA_MAX_ENERGY = 1
+}
