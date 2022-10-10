@@ -1,22 +1,25 @@
 package com.yuuki1293.bookbook.common.block.entity
 
+import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
-import net.minecraft.world.{ContainerHelper, WorldlyContainer}
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntity}
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.CapabilityEnergy
-import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 import scala.jdk.CollectionConverters._
 
@@ -43,11 +46,10 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       }
     }
 
-    @Deprecated
-
     /**
      * Invalid
      */
+    @Deprecated
     override def set(pIndex: Int, pValue: Int): Unit = {
       throw new UnsupportedOperationException("Unable to get index: " + pIndex)
     }
@@ -170,9 +172,33 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
     new BookCapacitorMenu(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
   }
+
+  override def getSlotsForFace(pSide: Direction): Array[Int] = Array(SLOT_INPUT, SLOT_OUTPUT)
+
+  override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = {
+    pIndex match {
+      case SLOT_INPUT => false
+      case SLOT_OUTPUT => true
+    }
+  }
+
+  override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = {
+    pIndex match {
+      case SLOT_INPUT => true
+      case SLOT_OUTPUT => false
+    }
+  }
+
+  override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
+
+  def tick(): Unit = {
+    outputEnergy()
+  }
 }
 
 object BookCapacitorBlockEntity {
+  final val SLOT_INPUT = 0
+  final val SLOT_OUTPUT = 1
   final val DATA_ENERGY_STORED = 0
   final val DATA_MAX_ENERGY = 1
 }
