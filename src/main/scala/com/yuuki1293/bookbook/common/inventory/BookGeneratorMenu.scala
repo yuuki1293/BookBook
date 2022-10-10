@@ -11,24 +11,15 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraftforge.common.ForgeHooks
 
-class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData) extends AbstractContainerMenu(pMenuType, pContainerId) {
+class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData)
+  extends AbstractPlayerInventoryMenu(pMenuType, pContainerId, pPlayerInventory)
+    with EnergyMenu {
   checkContainerSize(pContainer, 1)
   checkContainerDataCount(pData, 4)
   private val container: Container = pContainer
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
   addSlot(new FuelSlot(pContainer, SLOT_FUEL, 80, 35))
-
-  for (i <- 0 until 3) {
-    for (j <- 0 until 9) {
-      addSlot(new Slot(pPlayerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18))
-    }
-  }
-
-  for (k <- 0 until 9) {
-    addSlot(new Slot(pPlayerInventory, k, 8 + k * 18, 142))
-  }
-
   addDataSlots(pData)
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
@@ -76,6 +67,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
    * 0% - 13<br>
    * 100% - 0<br>
    * n% - (100 - n) * 13 (rounded down)
+   *
    * @return BurnTime * 13 / BurnDuration
    */
   def getBurnProgress: Int = {
@@ -86,20 +78,9 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
     data.get(DATA_BURN_TIME) * 13 / i
   }
 
-  def isBurn: Boolean = data.get(0) > 0
+  def isBurn: Boolean = data.get(DATA_BURN_TIME) > 0
 
-  /**
-   * 0 - Energy is empty<br>
-   * 100 - Energy is full
-   *
-   * @return The percentage of energy as a percentage of 100
-   */
-  def getEnergyProportion: Int = {
-    val energyStored = data.get(DATA_ENERGY_STORED)
-    val maxEnergy = data.get(DATA_MAX_ENERGY)
+  override def getEnergyStored: Int = data.get(DATA_ENERGY_STORED)
 
-    if (maxEnergy == 0)
-      return 0
-    energyStored * 100 / maxEnergy
-  }
+  override def getMaxEnergy: Int = data.get(DATA_MAX_ENERGY)
 }

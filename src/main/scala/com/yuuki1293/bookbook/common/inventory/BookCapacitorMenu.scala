@@ -2,15 +2,16 @@ package com.yuuki1293.bookbook.common.inventory
 
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY}
 import com.yuuki1293.bookbook.common.register.MenuTypes
-import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.AbstractContainerMenu.{checkContainerDataCount, checkContainerSize}
-import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, SimpleContainerData, Slot}
+import net.minecraft.world.inventory.{ContainerData, MenuType, SimpleContainerData, Slot}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import net.minecraft.world.{Container, SimpleContainer}
 
 class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory, pContainer: Container, pData: ContainerData)
-  extends AbstractContainerMenu(pMenuType, pContainerId) {
+  extends AbstractPlayerInventoryMenu(pMenuType, pContainerId, pPlayerInventory)
+    with EnergyMenu {
   checkContainerSize(pContainer, 2)
   checkContainerDataCount(pData, 2)
   private val container: Container = pContainer
@@ -18,17 +19,6 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   protected val level: Level = pPlayerInventory.player.level
   addSlot(new Slot(pContainer, 0, 8, 16))
   addSlot(new Slot(pContainer, 1, 8, 32))
-
-  for (i <- 0 until 3) {
-    for (j <- 0 until 9) {
-      addSlot(new Slot(pPlayerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18))
-    }
-  }
-
-  for (k <- 0 until 9) {
-    addSlot(new Slot(pPlayerInventory, k, 8 + k * 18, 142))
-  }
-
   addDataSlots(pData)
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(2), new SimpleContainerData(2))
@@ -66,18 +56,7 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
 
   override def stillValid(pPlayer: Player): Boolean = container.stillValid(pPlayer)
 
-  /**
-   * 0 - Energy is empty<br>
-   * 100 - Energy is full
-   *
-   * @return The percentage of energy as a percentage of 100
-   */
-  def getEnergyProportion: Int = {
-    val energyStored = data.get(DATA_ENERGY_STORED)
-    val maxEnergy = data.get(DATA_MAX_ENERGY)
+  override def getEnergyStored: Int = data.get(DATA_ENERGY_STORED)
 
-    if (maxEnergy == 0)
-      return 0
-    energyStored * 100 / maxEnergy
-  }
+  override def getMaxEnergy: Int = data.get(DATA_MAX_ENERGY)
 }
