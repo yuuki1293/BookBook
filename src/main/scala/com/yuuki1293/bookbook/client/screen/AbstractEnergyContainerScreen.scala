@@ -41,6 +41,6 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
     val energyStored = menu.getEnergyStored
     val capacity = menu.getMaxEnergy
 
-    font.draw(pPoseStack, s"$energyStored/$capacity RF", gaugeTextLeft.toFloat, gaugeTextTop.toFloat, 0x404040)
+    font.draw(pPoseStack, s"$energyStored/$capacity RF", gaugeTextLeft.toFloat, gaugeTextTop.toFloat, 0x2f2f2f)
   }
 }
