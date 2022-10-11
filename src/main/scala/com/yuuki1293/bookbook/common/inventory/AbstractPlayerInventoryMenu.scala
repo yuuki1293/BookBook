@@ -1,8 +1,7 @@
 package com.yuuki1293.bookbook.common.inventory
 
-import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
-import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData, MenuType, Slot}
+import net.minecraft.world.inventory.{AbstractContainerMenu, MenuType, Slot}
 
 abstract class AbstractPlayerInventoryMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInventory: Inventory)
   extends AbstractContainerMenu(pMenuType, pContainerId) {
