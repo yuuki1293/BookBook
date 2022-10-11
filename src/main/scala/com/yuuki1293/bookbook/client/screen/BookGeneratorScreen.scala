@@ -21,8 +21,6 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
   }
 
   override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
-    super.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY)
-
     val left = leftPos
     val top = topPos
 
