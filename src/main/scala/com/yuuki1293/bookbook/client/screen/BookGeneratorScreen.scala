@@ -1,8 +1,10 @@
 package com.yuuki1293.bookbook.client.screen
 
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
+import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
@@ -21,6 +23,19 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
   }
 
   override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
+    RenderSystem.setShaderTexture(0, TEXTURE)
+    RenderSystem.setShader(() => GameRenderer.getPositionTexShader)
+    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+
+    val left = leftPos
+    val top = topPos
+
+    blit(pPoseStack, left, top, 0, 0, imageWidth, imageHeight)
+
+    renderFire(pPoseStack)
+  }
+
+  protected def renderFire(pPoseStack: PoseStack): Unit = {
     val left = leftPos
     val top = topPos
 
