@@ -3,6 +3,9 @@
   "values": [
     "bookbook:bookshelf",
     "bookbook:drowned_bookshelf",
-    "bookbook:book_generator"
+    "bookbook:book_furnace",
+    "bookbook:book_generator",
+    "bookbook:bookshelf_flame",
+    "bookbook:book_capacitor"
   ]
 }
