@@ -15,11 +15,11 @@ import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectiona
 import net.minecraft.world.phys.BlockHitResult
 
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends Block(pProperties) with EntityBlock {
-  override def getTicker[A <: BlockEntity with Ticked](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
+  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else
-      (_, _, _, blockEntity) => blockEntity.tick()
+      (_, _, _, blockEntity) => blockEntity.asInstanceOf[Ticked].tick()
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {

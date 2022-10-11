@@ -20,11 +20,11 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
       .setValue(LIT, java.lang.Boolean.FALSE)
   )
 
-  override def getTicker[A <: BlockEntity with Ticked](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
+  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else
-      (_, _, _, blockEntity) => blockEntity.tick()
+      (_, _, _, blockEntity) => blockEntity.asInstanceOf[Ticked].tick()
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
