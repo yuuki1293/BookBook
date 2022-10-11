@@ -20,6 +20,7 @@ class BookGeneratorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
   addSlot(new FuelSlot(pContainer, SLOT_FUEL, 80, 35))
+  addPlayerSlot()
   addDataSlots(pData)
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
