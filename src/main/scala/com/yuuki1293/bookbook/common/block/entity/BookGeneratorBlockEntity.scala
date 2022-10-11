@@ -5,6 +5,7 @@ import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.SLOT_
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
+import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -25,7 +26,8 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
-  extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState) with WorldlyContainer {
+  extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState)
+    with WorldlyContainer with Ticked {
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
 

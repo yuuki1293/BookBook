@@ -4,6 +4,7 @@ import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{SLOT
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
+import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -24,7 +25,8 @@ import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import scala.jdk.CollectionConverters._
 
 class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
-  extends BaseContainerBlockEntity(BlockEntities.BOOK_CAPACITOR.get(), worldPosition, blockState) with WorldlyContainer {
+  extends BaseContainerBlockEntity(BlockEntities.BOOK_CAPACITOR.get(), worldPosition, blockState)
+    with WorldlyContainer with Ticked {
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(2, ItemStack.EMPTY)
 

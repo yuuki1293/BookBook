@@ -2,6 +2,7 @@ package com.yuuki1293.bookbook.common.block
 
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity
+import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
@@ -19,11 +20,11 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
       .setValue(LIT, java.lang.Boolean.FALSE)
   )
 
-  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
+  override def getTicker[A <: BlockEntity with Ticked](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else
-      (_, _, _, blockEntity) => blockEntity.asInstanceOf[BookGeneratorBlockEntity].tick()
+      (_, _, _, blockEntity) => blockEntity.tick()
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {

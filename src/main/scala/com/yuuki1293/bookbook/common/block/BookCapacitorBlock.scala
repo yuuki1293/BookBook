@@ -2,6 +2,7 @@ package com.yuuki1293.bookbook.common.block
 
 import com.yuuki1293.bookbook.common.block.BookCapacitorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity
+import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
@@ -14,11 +15,11 @@ import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectiona
 import net.minecraft.world.phys.BlockHitResult
 
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends Block(pProperties) with EntityBlock {
-  override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
+  override def getTicker[A <: BlockEntity with Ticked](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null
     else
-      (_, _, _, blockEntity) => blockEntity.asInstanceOf[BookCapacitorBlockEntity].tick()
+      (_, _, _, blockEntity) => blockEntity.tick()
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
