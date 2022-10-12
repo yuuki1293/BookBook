@@ -19,12 +19,13 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
   protected var gaugeBgTop = 10
   protected var gaugeWidth = 16
   protected var gaugeHeight = 50
-  protected var gaugeTextLeft = 140
-  protected var gaugeTextTop = 5
+  protected var gaugeTextLeft = 0
+  protected var gaugeTextTop = 0
 
   override def init(): Unit = {
     super.init()
     titleLabelX = (imageWidth - font.width(title)) / 2
+    gaugeTextTop = -font.lineHeight
   }
 
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
@@ -59,6 +60,6 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
     val energyStored = menu.getEnergyStored
     val capacity = menu.getMaxEnergy
 
-    font.draw(pPoseStack, s"$energyStored/$capacity RF", gaugeTextLeft.toFloat, gaugeTextTop.toFloat, 0x2f2f2f)
+    font.draw(pPoseStack, s"$energyStored/$capacity RF", gaugeTextLeft.toFloat, gaugeTextTop.toFloat, 0xffffff)
   }
 }
