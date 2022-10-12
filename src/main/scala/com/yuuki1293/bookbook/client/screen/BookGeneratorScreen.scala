@@ -10,9 +10,10 @@ import net.minecraft.world.entity.player.Inventory
 class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory, pTitle: Component) extends AbstractEnergyContainerScreen(pMenu, pPlayerInventory, pTitle) {
   val TEXTURE = new ResourceLocation(BookBook.MOD_ID, "textures/gui/container/book_generator.png")
 
-  leftPos = 0
-  topPos = 0
-  gaugeTop = 14
+  override def init(): Unit = {
+    super.init()
+    gaugeTop = 14
+  }
 
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
     renderBackground(pPoseStack)

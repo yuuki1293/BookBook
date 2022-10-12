@@ -11,9 +11,6 @@ class BookCapacitorScreen(pMenu: BookCapacitorMenu, pPlayerInventory: Inventory,
   extends AbstractEnergyContainerScreen(pMenu, pPlayerInventory, pTitle) {
   val TEXTURE = new ResourceLocation(BookBook.MOD_ID, "textures/gui/container/book_capacitor.png")
 
-  leftPos = 0
-  topPos = 0
-
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
     renderBackground(pPoseStack)
     super.render(pPoseStack, pMouseX, pMouseY, pPartialTick)
