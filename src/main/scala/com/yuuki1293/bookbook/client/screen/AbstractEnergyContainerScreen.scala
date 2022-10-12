@@ -22,10 +22,14 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
   protected var gaugeTextLeft = 140
   protected var gaugeTextTop = 5
 
+  override def init(): Unit = {
+    super.init()
+    titleLabelX = (imageWidth - font.width(title)) / 2
+  }
+
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
     super.render(pPoseStack, pMouseX, pMouseY, pPartialTick)
     renderGauge(pPoseStack)
-    renderGaugeLabel(pPoseStack)
   }
 
   override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
@@ -35,6 +39,11 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
     val top = topPos
 
     blit(pPoseStack, left, top, 0, 0, imageWidth, imageHeight)
+  }
+
+  override def renderLabels(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int): Unit = {
+    super.renderLabels(pPoseStack, pMouseX, pMouseY)
+    renderGaugeLabel(pPoseStack)
   }
 
   protected def renderGauge(pPoseStack: PoseStack): Unit = {
