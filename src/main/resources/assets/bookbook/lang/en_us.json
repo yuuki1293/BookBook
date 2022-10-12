@@ -11,15 +11,18 @@
   "item.bookbook.book_generator": "Book Generator",
   "item.bookbook.unstable_book": "Unstable Book",
   "item.bookbook.bookshelf_frame": "Bookshelf Frame",
+  "item.bookbook.book_capacitor": "Book Capacitor",
 
   "block.bookbook.bookshelf": "Living Book Shelf",
   "block.bookbook.drowned_bookshelf": "Drowned Book Shelf",
   "block.bookbook.book_furnace": "Book Furnace",
   "block.bookbook.book_generator": "Book Generator",
   "block.bookbook.bookshelf_frame": "Bookshelf Frame",
+  "block.bookbook.book_capacitor": "Book Capacitor",
 
   "container.book_furnace": "Book Furnace",
   "container.book_generator": "Book Generator",
+  "container.book_capacitor": "Book Capacitor",
 
   "It will explode in 10 seconds!": "It will explode in 10 seconds!"
 }
