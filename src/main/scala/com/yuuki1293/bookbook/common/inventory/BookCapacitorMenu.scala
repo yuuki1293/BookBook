@@ -19,6 +19,7 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   protected val level: Level = pPlayerInventory.player.level
   addSlot(new Slot(pContainer, 0, 8, 16))
   addSlot(new Slot(pContainer, 1, 8, 32))
+  addPlayerSlot()
   addDataSlots(pData)
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(2), new SimpleContainerData(2))
