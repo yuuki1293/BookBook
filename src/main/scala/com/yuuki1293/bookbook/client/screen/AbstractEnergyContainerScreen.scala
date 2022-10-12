@@ -9,32 +9,22 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.AbstractContainerMenu
 
-import javax.annotation.Nullable
-
 abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with EnergyMenu](pMenu: A, pPlayerInventory: Inventory, pTitle: Component)
   extends AbstractContainerScreen(pMenu, pPlayerInventory, pTitle) {
 
   protected val TEXTURE: ResourceLocation
-  protected var gaugeLeft: Int = null
-  protected var gaugeTop: Int = null
-  protected var gaugeBgLeft: Int = null
-  protected var gaugeBgTop: Int = null
-  protected var gaugeWidth: Int = null
-  protected var gaugeHeight: Int = null
-  protected var gaugeTextLeft: Int = null
-  protected var gaugeTextTop: Int = null
+  protected var gaugeLeft = 176
+  protected var gaugeTop = 0
+  protected var gaugeBgLeft = 152
+  protected var gaugeBgTop = 10
+  protected var gaugeWidth = 16
+  protected var gaugeHeight = 50
+  protected var gaugeTextLeft = 140
+  protected var gaugeTextTop = 5
 
   override def init(): Unit = {
     super.init()
     titleLabelX = (imageWidth - font.width(title)) / 2
-    gaugeLeft = 176
-    gaugeTop = 0
-    gaugeBgLeft = 152
-    gaugeBgTop = 10
-    gaugeWidth = 16
-    gaugeHeight = 50
-    gaugeTextLeft = 140
-    gaugeTextTop = 5
   }
 
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
