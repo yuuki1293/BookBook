@@ -1,12 +1,15 @@
 package com.yuuki1293.bookbook.common.recipe
 
+import net.minecraft.core.NonNullList
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.{Recipe, RecipeSerializer, RecipeType}
+import net.minecraft.world.item.crafting.{Ingredient, Recipe, RecipeSerializer, RecipeType}
 import net.minecraft.world.level.Level
 
-class BookCraftingTableRecipe extends Recipe[SimpleContainer] {
+class BookCraftingTableRecipe(pId: ResourceLocation, pOutput: ItemStack, pRecipeItems: NonNullList[Ingredient])
+  extends Recipe[SimpleContainer] {
+
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = ???
 
   override def assemble(pContainer: SimpleContainer): ItemStack = ???
