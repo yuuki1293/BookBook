@@ -18,7 +18,9 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
   addSlot(new Slot(pContainer, 0, 16, 16))
-  addSlot(new Slot(pContainer, 1, 16, 53))
+  addSlot(new Slot(pContainer, 1, 16, 53) {
+    override def mayPlace(pStack: ItemStack): Boolean = false
+  })
   addPlayerSlot()
   addDataSlots(pData)
 
