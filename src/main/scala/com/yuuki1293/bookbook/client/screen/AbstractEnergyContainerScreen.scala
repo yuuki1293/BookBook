@@ -28,6 +28,15 @@ abstract class AbstractEnergyContainerScreen[A <: AbstractContainerMenu with Ene
     renderGaugeLabel(pPoseStack)
   }
 
+  override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
+    RenderSystem.setShaderTexture(0, TEXTURE)
+
+    val left = leftPos
+    val top = topPos
+
+    blit(pPoseStack, left, top, 0, 0, imageWidth, imageHeight)
+  }
+
   protected def renderGauge(pPoseStack: PoseStack): Unit = {
     RenderSystem.setShaderTexture(0, TEXTURE)
     val left = leftPos
