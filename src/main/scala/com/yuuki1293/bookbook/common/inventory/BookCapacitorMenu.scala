@@ -37,7 +37,7 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
           return ItemStack.EMPTY
         slot.onQuickCraft(itemStack1, itemStack)
       }
-      else if (pIndex < 29) {
+      else if (pIndex < 38) {
         if (!moveItemStackTo(itemStack1, 0, 1, false))
           return ItemStack.EMPTY
         else if (!moveItemStackTo(itemStack1, 29, 38, false))
