@@ -68,7 +68,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
 
-  def getProgress: Int = ???
+  def getProgress: Int = progress
 
   def getPowerCost: Int = ???
 
@@ -162,6 +162,8 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     pTag.putInt("Progress", getProgress)
     ContainerHelper.saveAllItems(pTag, items)
   }
+
+
 }
 
 object BookCraftingCoreBlockEntity {
