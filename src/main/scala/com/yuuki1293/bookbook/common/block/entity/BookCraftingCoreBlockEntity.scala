@@ -11,7 +11,12 @@ import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
+import net.minecraftforge.energy.CapabilityEnergy
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
+import net.minecraftforge.items.wrapper.SidedInvWrapper
+
 import scala.jdk.CollectionConverters._
 
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
@@ -110,4 +115,21 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 
   override def clearContent(): Unit = items.clear()
+
+  var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+
+  override def getCapability[A](cap: Capability[A], side: Direction): LazyOptional[A] = {
+    if (cap == CapabilityEnergy.ENERGY)
+      energy.cast()
+    else if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+      if (side == Direction.UP)
+        handlers(0).cast()
+      else if (side == Direction.DOWN)
+        handlers(1).cast()
+      else
+        handlers(2).cast()
+    }
+    else
+      super.getCapability(cap, side)
+  }
 }
