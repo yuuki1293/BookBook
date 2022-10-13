@@ -87,7 +87,12 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
 
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = ???
+  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
+    items.set(pSlot, pStack)
+    if (pStack.getCount > getMaxStackSize) {
+      pStack.setCount(getMaxStackSize)
+    }
+  }
 
   override def stillValid(pPlayer: Player): Boolean = ???
 
