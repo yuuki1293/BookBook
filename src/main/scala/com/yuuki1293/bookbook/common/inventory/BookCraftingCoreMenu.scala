@@ -26,5 +26,5 @@ class BookCraftingCoreMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInv
 
   override def getMaxEnergy: Int = data.get(DATA_MAX_ENERGY)
 
-  override def stillValid(pPlayer: Player): Boolean = ???
+  override def stillValid(pPlayer: Player): Boolean = container.stillValid(pPlayer)
 }
