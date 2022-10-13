@@ -109,5 +109,5 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  override def clearContent(): Unit = ???
+  override def clearContent(): Unit = items.clear()
 }
