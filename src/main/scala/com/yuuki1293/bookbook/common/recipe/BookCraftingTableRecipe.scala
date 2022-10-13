@@ -32,7 +32,7 @@ class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[I
 
   override def getId: ResourceLocation = recipeId
 
-  override def getSerializer: RecipeSerializer[_] = ???
+  override def getSerializer: RecipeSerializer[_] = BookCraftingTableRecipe.Serializer
 
   override def getType: RecipeType[_] = ???
 }
