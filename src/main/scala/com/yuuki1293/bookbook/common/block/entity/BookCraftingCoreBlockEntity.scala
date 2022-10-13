@@ -69,7 +69,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     new BookCraftingCoreMenu(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pInventory, this, dataAccess)
   }
 
-  override def getSlotsForFace(pSide: Direction): Array[Int] = ???
+  override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
 
   override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = ???
 
