@@ -154,4 +154,11 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     energyStorage.setEnergy(pTag.getInt("Energy"))
     progress = pTag.getInt("Progress")
   }
+
+  override def saveAdditional(pTag: CompoundTag): Unit = {
+    super.saveAdditional(pTag)
+    pTag.putInt("Energy", getEnergy)
+    pTag.putInt("Progress", getProgress)
+    ContainerHelper.saveAllItems(pTag, items)
+  }
 }
