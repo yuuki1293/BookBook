@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting._
 import net.minecraft.world.level.Level
 import net.minecraftforge.registries.ForgeRegistryEntry
 
-class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
+class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
   extends Recipe[SimpleContainer] {
   private final val recipeId = pId
   private final val output = pOutput
@@ -33,14 +33,14 @@ class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[I
 
   override def getId: ResourceLocation = recipeId
 
-  override def getSerializer: RecipeSerializer[_] = BookCraftingTableRecipe.Serializer
+  override def getSerializer: RecipeSerializer[_] = BookCraftingRecipe.Serializer
 
-  override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING_TABLE
+  override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING
 }
 
-object BookCraftingTableRecipe {
-  object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingTableRecipe] {
-    override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingTableRecipe = {
+object BookCraftingRecipe {
+  object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingRecipe] {
+    override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingRecipe = {
       val inputs: NonNullList[Ingredient] = NonNullList.create()
       val input = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "input"))
 
@@ -59,10 +59,10 @@ object BookCraftingTableRecipe {
 
       val powerCost = GsonHelper.getAsInt(pSerializedRecipe, "powerCost")
 
-      new BookCraftingTableRecipe(pRecipeId, inputs, output, powerCost)
+      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost)
     }
 
-    override def fromNetwork(pRecipeId: ResourceLocation, pBuffer: FriendlyByteBuf): BookCraftingTableRecipe = {
+    override def fromNetwork(pRecipeId: ResourceLocation, pBuffer: FriendlyByteBuf): BookCraftingRecipe = {
       val size = pBuffer.readVarInt()
       val inputs = NonNullList.withSize(size, Ingredient.EMPTY)
 
@@ -73,10 +73,10 @@ object BookCraftingTableRecipe {
       val output = pBuffer.readItem()
       val powerCost = pBuffer.readVarInt()
 
-      new BookCraftingTableRecipe(pRecipeId, inputs, output, powerCost)
+      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost)
     }
 
-    override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingTableRecipe): Unit = {
+    override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingRecipe): Unit = {
       import scala.jdk.CollectionConverters._
 
       pBuffer.writeVarInt(pRecipe.ingredients.size())
