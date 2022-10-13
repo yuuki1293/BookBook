@@ -163,3 +163,11 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     ContainerHelper.saveAllItems(pTag, items)
   }
 }
+
+object BookCraftingCoreBlockEntity {
+  final val SLOT = 0
+  final val DATA_ENERGY_STORED = 0
+  final val DATA_MAX_ENERGY = 1
+  final val DATA_PROGRESS = 2
+  final val DATA_POWER_COST = 3
+}
