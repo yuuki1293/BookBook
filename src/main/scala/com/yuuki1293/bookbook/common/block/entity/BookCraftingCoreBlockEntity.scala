@@ -5,7 +5,7 @@ import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.network.chat.{Component, TranslatableComponent}
-import net.minecraft.world.WorldlyContainer
+import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
@@ -83,7 +83,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ???
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ???
 
