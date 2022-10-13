@@ -61,7 +61,19 @@ object BookCraftingTableRecipe {
       new BookCraftingTableRecipe(pRecipeId, inputs, output, powerCost)
     }
 
-    override def fromNetwork(pRecipeId: ResourceLocation, pBuffer: FriendlyByteBuf): BookCraftingTableRecipe = ???
+    override def fromNetwork(pRecipeId: ResourceLocation, pBuffer: FriendlyByteBuf): BookCraftingTableRecipe = {
+      val size = pBuffer.readVarInt()
+      val inputs = NonNullList.withSize(size, Ingredient.EMPTY)
+
+      for (i <- 0 until size) {
+        inputs.set(i, Ingredient.fromNetwork(pBuffer))
+      }
+
+      val output = pBuffer.readItem()
+      val powerCost = pBuffer.readVarInt()
+
+      new BookCraftingTableRecipe(pRecipeId, inputs, output, powerCost)
+    }
 
     override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingTableRecipe): Unit = ???
 
