@@ -4,7 +4,7 @@ import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
-import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.world.WorldlyContainer
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
@@ -63,7 +63,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getGoal: Int = ???
 
-  override def getDefaultName: Component = ???
+  override def getDefaultName: Component = new TranslatableComponent("container.book_crafting_core")
 
   override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = ???
 
