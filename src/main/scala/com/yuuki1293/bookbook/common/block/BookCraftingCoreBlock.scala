@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block
 
 import net.minecraft.core.BlockPos
-import net.minecraft.world.{InteractionHand, InteractionResult}
+import net.minecraft.world.{InteractionHand, InteractionResult, MenuProvider}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -14,6 +14,18 @@ class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties) extends Bloc
     new BookCraftingCoreBlockEntity(pPos, pState)
 
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
+    if (pLevel.isClientSide)
+      InteractionResult.SUCCESS
+    else {
+      openContainer(pLevel, pPos, pPlayer)
+      InteractionResult.CONSUME
+    }
+  }
 
+  protected def openContainer(level: Level, pos: BlockPos, player: Player): Unit = {
+    val blockEntity = level.getBlockEntity(pos)
+    if (blockEntity.isInstanceOf[BookCraftingCoreBlockEntity]) {
+      player.openMenu(blockEntity.asInstanceOf[MenuProvider])
+    }
   }
 }
