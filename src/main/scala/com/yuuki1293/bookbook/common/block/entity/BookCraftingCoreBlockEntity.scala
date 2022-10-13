@@ -4,6 +4,7 @@ import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
@@ -22,18 +23,19 @@ import scala.jdk.CollectionConverters._
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
     with WorldlyContainer with Ticked {
-  private val items = NonNullList.withSize(1, ItemStack.EMPTY)
+  private var items = NonNullList.withSize(1, ItemStack.EMPTY)
   private val capacity = 100000000
   private val maxReceive = 10000000
 
   val energyStorage: BookEnergyStorage = createEnergyStorage
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
+  private var progress: Int = 0
   protected val dataAccess: ContainerData = new ContainerData {
     /**
      * @param pIndex 0 - [[getEnergy]]<br>
      *               1 - [[getMaxEnergy]]<br>
      *               2 - [[getProgress]]<br>
-     *               3 - [[getGoal]]
+     *               3 - [[getPowerCost]]
      * @return
      */
     override def get(pIndex: Int): Int = {
@@ -41,7 +43,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
         case 0 => getEnergy
         case 1 => getMaxEnergy
         case 2 => getProgress
-        case 3 => getGoal
+        case 3 => getPowerCost
         case _ => throw new UnsupportedOperationException("Unable to get index: " + pIndex)
       }
     }
@@ -67,7 +69,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getProgress: Int = ???
 
-  def getGoal: Int = ???
+  def getPowerCost: Int = ???
 
   override def getDefaultName: Component = new TranslatableComponent("container.book_crafting_core")
 
@@ -143,5 +145,13 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   override def reviveCaps(): Unit = {
     super.reviveCaps()
     handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+  }
+
+  override def load(pTag: CompoundTag): Unit = {
+    super.load(pTag)
+    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
+    ContainerHelper.loadAllItems(pTag, items)
+    energyStorage.setEnergy(pTag.getInt("Energy"))
+    progress = pTag.getInt("Progress")
   }
 }
