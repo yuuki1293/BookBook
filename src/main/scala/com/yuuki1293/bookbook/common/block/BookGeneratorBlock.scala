@@ -36,12 +36,13 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
     pBuilder.add(FACING, LIT)
   }
 
-  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = if (pLevel.isClientSide)
-    InteractionResult.SUCCESS
-  else {
-    openContainer(pLevel, pPos, pPlayer)
-    InteractionResult.CONSUME
-  }
+  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult =
+    if (pLevel.isClientSide)
+      InteractionResult.SUCCESS
+    else {
+      openContainer(pLevel, pPos, pPlayer)
+      InteractionResult.CONSUME
+    }
 
   override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
     if (!pState.is(pNewState.getBlock)) {
