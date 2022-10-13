@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
-import com.yuuki1293.bookbook.common.register.BlockEntities
+import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -65,7 +65,9 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def getDefaultName: Component = new TranslatableComponent("container.book_crafting_core")
 
-  override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = ???
+  override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = {
+    new BookCraftingCoreMenu(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pInventory, this, dataAccess)
+  }
 
   override def getSlotsForFace(pSide: Direction): Array[Int] = ???
 
