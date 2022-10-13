@@ -9,7 +9,7 @@ import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.{Ingredient, Recipe, RecipeSerializer, RecipeType, ShapedRecipe}
 import net.minecraft.world.level.Level
-import net.minecraftforge.registries.ForgeRegistry
+import net.minecraftforge.registries.{ForgeRegistry, ForgeRegistryEntry}
 
 class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
   extends Recipe[SimpleContainer] {
@@ -38,7 +38,7 @@ class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[I
 }
 
 object BookCraftingTableRecipe {
-  object Serializer extends ForgeRegistry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingTableRecipe] {
+  object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingTableRecipe] {
     override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingTableRecipe = {
       val inputs: NonNullList[Ingredient] = NonNullList.create()
       val input = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "input"))
@@ -75,10 +75,15 @@ object BookCraftingTableRecipe {
       new BookCraftingTableRecipe(pRecipeId, inputs, output, powerCost)
     }
 
-    override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingTableRecipe): Unit = ???
+    override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingTableRecipe): Unit = {
+      import scala.jdk.CollectionConverters._
 
-    override def setRegistryName(name: ResourceLocation): RecipeSerializer[_] = ???
+      pBuffer.writeVarInt(pRecipe.ingredients.size())
 
-    override def getRegistryType: Class[RecipeSerializer[_]] = ???
+      pRecipe.ingredients.asScala.foreach(_.toNetwork(pBuffer))
+
+      pBuffer.writeItem(pRecipe.output)
+      pBuffer.writeVarInt(pRecipe.powerCost)
+    }
   }
 }
