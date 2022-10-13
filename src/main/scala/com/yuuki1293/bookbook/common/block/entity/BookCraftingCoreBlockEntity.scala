@@ -55,6 +55,14 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     new BookEnergyStorage(this, capacity, maxReceive, 0)
   }
 
+  def getEnergy: Int = energyStorage.getEnergyStored
+
+  def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
+
+  def getProgress: Int = ???
+
+  def getGoal: Int = ???
+
   override def getDefaultName: Component = ???
 
   override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = ???
