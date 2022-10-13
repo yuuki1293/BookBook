@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.util.LazyOptional
+import scala.jdk.CollectionConverters._
 
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
@@ -79,7 +80,13 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def getContainerSize: Int = items.size()
 
-  override def isEmpty: Boolean = ???
+  override def isEmpty: Boolean = {
+    for (item: ItemStack <- items.asScala) {
+      if (!item.isEmpty)
+        return false
+    }
+    true
+  }
 
   override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
@@ -95,7 +102,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 
   override def stillValid(pPlayer: Player): Boolean = {
-    if (level.getBlockEntity(worldPosition) != this){
+    if (level.getBlockEntity(worldPosition) != this) {
       false
     } else {
       pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
