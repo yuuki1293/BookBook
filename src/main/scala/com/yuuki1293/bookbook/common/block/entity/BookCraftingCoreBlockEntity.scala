@@ -56,7 +56,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       throw new UnsupportedOperationException("Unable to get index: " + pIndex)
     }
 
-    override def getCount: Int = 2
+    override def getCount: Int = 4
   }
 
   private def createEnergyStorage = {
