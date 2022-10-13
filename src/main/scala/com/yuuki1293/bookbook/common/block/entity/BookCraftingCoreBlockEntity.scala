@@ -81,7 +81,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def isEmpty: Boolean = ???
 
-  override def getItem(pSlot: Int): ItemStack = ???
+  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ???
 
