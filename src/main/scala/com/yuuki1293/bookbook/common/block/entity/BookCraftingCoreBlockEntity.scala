@@ -94,7 +94,13 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  override def stillValid(pPlayer: Player): Boolean = ???
+  override def stillValid(pPlayer: Player): Boolean = {
+    if (level.getBlockEntity(worldPosition) != this){
+      false
+    } else {
+      pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
+    }
+  }
 
   override def clearContent(): Unit = ???
 }
