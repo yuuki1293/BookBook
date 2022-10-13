@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
+import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
