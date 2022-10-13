@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.block
 
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
