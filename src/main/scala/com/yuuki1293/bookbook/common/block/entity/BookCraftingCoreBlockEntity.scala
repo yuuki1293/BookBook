@@ -85,7 +85,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
-  override def removeItemNoUpdate(pSlot: Int): ItemStack = ???
+  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
 
   override def setItem(pSlot: Int, pStack: ItemStack): Unit = ???
 
