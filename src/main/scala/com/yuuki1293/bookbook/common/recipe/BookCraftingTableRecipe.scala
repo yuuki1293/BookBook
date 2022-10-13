@@ -1,15 +1,16 @@
 package com.yuuki1293.bookbook.common.recipe
 
-import com.google.gson.{JsonArray, JsonObject, JsonSyntaxException}
+import com.google.gson.{JsonObject, JsonSyntaxException}
+import com.yuuki1293.bookbook.common.register.RecipeTypes
 import net.minecraft.core.NonNullList
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.GsonHelper
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.crafting.{Ingredient, Recipe, RecipeSerializer, RecipeType, ShapedRecipe}
+import net.minecraft.world.item.crafting._
 import net.minecraft.world.level.Level
-import net.minecraftforge.registries.{ForgeRegistry, ForgeRegistryEntry}
+import net.minecraftforge.registries.ForgeRegistryEntry
 
 class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
   extends Recipe[SimpleContainer] {
@@ -34,7 +35,7 @@ class BookCraftingTableRecipe(pId: ResourceLocation, pIngredients: NonNullList[I
 
   override def getSerializer: RecipeSerializer[_] = BookCraftingTableRecipe.Serializer
 
-  override def getType: RecipeType[_] = ???
+  override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING_TABLE
 }
 
 object BookCraftingTableRecipe {
