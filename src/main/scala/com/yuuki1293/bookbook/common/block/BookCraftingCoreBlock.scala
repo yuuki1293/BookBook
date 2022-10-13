@@ -1,7 +1,8 @@
 package com.yuuki1293.bookbook.common.block
 
 import net.minecraft.core.BlockPos
-import net.minecraft.world.{InteractionHand, InteractionResult, MenuProvider}
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -27,5 +28,20 @@ class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties) extends Bloc
     if (blockEntity.isInstanceOf[BookCraftingCoreBlockEntity]) {
       player.openMenu(blockEntity.asInstanceOf[MenuProvider])
     }
+  }
+
+  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
+    if (!pState.is(pNewState.getBlock)) {
+      val blockEntity = pLevel.getBlockEntity(pPos)
+      blockEntity match {
+        case entity: BookCraftingCoreBlockEntity =>
+          if (pLevel.isInstanceOf[ServerLevel]) {
+            Containers.dropContents(pLevel, pPos, entity)
+          }
+      }
+
+      pLevel.updateNeighbourForOutputSignal(pPos, this)
+    }
+    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
   }
 }
