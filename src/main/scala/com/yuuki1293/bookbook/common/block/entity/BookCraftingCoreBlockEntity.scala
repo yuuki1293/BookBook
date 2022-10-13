@@ -77,7 +77,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def tick(): Unit = ???
 
-  override def getContainerSize: Int = ???
+  override def getContainerSize: Int = items.size()
 
   override def isEmpty: Boolean = ???
 
