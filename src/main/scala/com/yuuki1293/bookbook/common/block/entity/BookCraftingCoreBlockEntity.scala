@@ -132,4 +132,11 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     else
       super.getCapability(cap, side)
   }
+
+  override def invalidateCaps(): Unit = {
+    super.invalidateCaps()
+    energy.invalidate()
+    for (handler <- handlers)
+      handler.invalidate()
+  }
 }
