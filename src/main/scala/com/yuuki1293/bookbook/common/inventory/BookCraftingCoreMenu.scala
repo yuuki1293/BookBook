@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.inventory
 
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.DATA_ENERGY_STORED
 import com.yuuki1293.bookbook.common.register.MenuTypes
 import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
@@ -21,7 +22,7 @@ class BookCraftingCoreMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInv
 
   def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pPlayerInventory, new SimpleContainer(1), new SimpleContainerData(4))
 
-  override def getEnergyStored: Int = ???
+  override def getEnergyStored: Int = data.get(DATA_ENERGY_STORED)
 
   override def getMaxEnergy: Int = ???
 
