@@ -139,4 +139,9 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     for (handler <- handlers)
       handler.invalidate()
   }
+
+  override def reviveCaps(): Unit = {
+    super.reviveCaps()
+    handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+  }
 }
