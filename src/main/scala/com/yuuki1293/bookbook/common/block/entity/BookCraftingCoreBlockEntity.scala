@@ -11,6 +11,7 @@ import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.capabilities.Capability
@@ -19,6 +20,7 @@ import net.minecraftforge.energy.CapabilityEnergy
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
 
+import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
@@ -30,7 +32,8 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   val energyStorage: BookEnergyStorage = createEnergyStorage
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
-  private var progress: Int = 0
+  private var progress = 0
+  private var standCount = 0
   protected val dataAccess: ContainerData = new ContainerData {
     /**
      * @param pIndex 0 - [[getEnergy]]<br>
@@ -163,7 +166,34 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     ContainerHelper.saveAllItems(pTag, items)
   }
 
+  def getStandWithItems: Map[BlockPos, ItemStack] = {
+    val stands = mutable.HashMap[BlockPos, ItemStack]()
+    val level = getLevel
 
+    var standCount = 0
+    if (level != null) {
+      val pos = getBlockPos
+      val positions = BlockPos.betweenClosedStream(pos.offset(-3, 0, -3), pos.offset(3, 0, 3))
+
+      positions.forEach(
+        aoePos => {
+          val be = level.getBlockEntity(aoePos)
+
+          be match {
+            case stand: BookStandBlockEntity =>
+              val stack = stand.getItem(0)
+              standCount += 1
+              if (!stack.isEmpty) {
+                stands.put(aoePos.immutable(), stack)
+              }
+            case _ =>
+          }
+        })
+    }
+
+    this.standCount = standCount
+    stands.toMap
+  }
 }
 
 object BookCraftingCoreBlockEntity {
@@ -172,4 +202,8 @@ object BookCraftingCoreBlockEntity {
   final val DATA_MAX_ENERGY = 1
   final val DATA_PROGRESS = 2
   final val DATA_POWER_COST = 3
+
+  def tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: BookCraftingCoreBlockEntity): Unit = {
+    val standsWithItems = blockEntity.getStandWithItems
+  }
 }
