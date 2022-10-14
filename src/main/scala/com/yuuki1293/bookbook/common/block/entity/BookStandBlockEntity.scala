@@ -17,7 +17,7 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
 
-  override def getContainerSize: Int = ???
+  override def getContainerSize: Int = 1
 
   override def isEmpty: Boolean = ???
 
