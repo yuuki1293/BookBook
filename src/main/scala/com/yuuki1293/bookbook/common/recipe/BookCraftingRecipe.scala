@@ -13,12 +13,13 @@ import net.minecraft.world.level.Level
 import net.minecraftforge.common.util.RecipeMatcher
 import net.minecraftforge.registries.ForgeRegistryEntry
 
-class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
+class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int, pPowerRate: Int)
   extends Recipe[SimpleContainer] {
   private final val recipeId = pId
   private final val output = pOutput
   private final val ingredients = pIngredients
   private final val powerCost = pPowerCost
+  private final val powerRate = pPowerRate
   private final val inputsList = Array()
 
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = {
@@ -50,6 +51,8 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
   override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING
 
   def getPowerCost: Int = powerCost
+
+  def getPowerRate: Int = powerRate
 }
 
 object BookCraftingRecipe {
@@ -72,8 +75,9 @@ object BookCraftingRecipe {
         throw new JsonSyntaxException("powerCost is required")
 
       val powerCost = GsonHelper.getAsInt(pSerializedRecipe, "powerCost")
+      val powerRate = GsonHelper.getAsInt(pSerializedRecipe, "powerRate", 10000000)
 
-      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost)
+      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost, powerRate)
     }
 
     override def fromNetwork(pRecipeId: ResourceLocation, pBuffer: FriendlyByteBuf): BookCraftingRecipe = {
@@ -86,8 +90,9 @@ object BookCraftingRecipe {
 
       val output = pBuffer.readItem()
       val powerCost = pBuffer.readVarInt()
+      val powerRate = pBuffer.readVarInt()
 
-      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost)
+      new BookCraftingRecipe(pRecipeId, inputs, output, powerCost, powerRate)
     }
 
     override def toNetwork(pBuffer: FriendlyByteBuf, pRecipe: BookCraftingRecipe): Unit = {
@@ -99,6 +104,7 @@ object BookCraftingRecipe {
 
       pBuffer.writeItem(pRecipe.output)
       pBuffer.writeVarInt(pRecipe.powerCost)
+      pBuffer.writeVarInt(pRecipe.powerRate)
     }
   }
 }
