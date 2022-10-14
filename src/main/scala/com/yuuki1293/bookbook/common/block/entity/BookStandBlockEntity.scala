@@ -24,9 +24,15 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   override def isEmpty: Boolean = items.get(0).isEmpty
 
+  @Deprecated
   override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
+  def getItem: ItemStack = items.get(0)
+
+  @Deprecated
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
+
+  def removeItem(pAmount: Int): ItemStack = ContainerHelper.removeItem(items, 0, pAmount)
 
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ???
 
