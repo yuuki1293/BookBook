@@ -79,7 +79,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getProgress: Int = progress
 
-  def getPowerCost: Int = ???
+  def getPowerCost: Int = recipe.getPowerCost
 
   override def getDefaultName: Component = new TranslatableComponent("container.book_crafting_core")
 
