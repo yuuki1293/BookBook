@@ -19,7 +19,7 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(proper
     val be = pLevel.getBlockEntity(pPos)
 
     be match {
-      case stand: BookStandBlockEntity => {
+      case stand: BookStandBlockEntity =>
         val input = stand.getItem
         val held = pPlayer.getItemInHand(pHand)
 
@@ -33,7 +33,6 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(proper
           pLevel.addFreshEntity(item)
           stand.setItem(ItemStack.EMPTY)
         }
-      }
       case _ =>
     }
 
