@@ -2,12 +2,13 @@ package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
-import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
+import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
+import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes, RecipeTypes}
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
-import net.minecraft.world.{ContainerHelper, WorldlyContainer}
+import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
@@ -28,6 +29,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     with WorldlyContainer with Ticked {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
   private val recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
+  private var recipe: BookCraftingRecipe = _
   private val capacity = 100000000
   private val maxReceive = 10000000
 
@@ -221,6 +223,18 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       recipeItems.set(i + 1, stacks(i))
     }
   }
+
+  def process(recipe: BookCraftingRecipe): Boolean = {
+    val powerRate = recipe.getPowerRate
+    val difference = recipe.getPowerCost - progress
+
+    val extract = Math.min(powerRate, difference)
+
+    val extracted = energyStorage.extractEnergy(extract, simulate = false)
+    progress += extracted
+
+    progress >= recipe.getPowerCost
+  }
 }
 
 object BookCraftingCoreBlockEntity {
@@ -235,5 +249,18 @@ object BookCraftingCoreBlockEntity {
     val stacks = standsWithItems.values.toList
 
     blockEntity.updateRecipeInventory(stacks)
+
+    val recipeItemContainer = new SimpleContainer(blockEntity.recipeItems.asScala.toSeq: _*)
+    if (blockEntity.haveItemChanged && (blockEntity.recipe == null || !blockEntity.recipe.matches(recipeItemContainer, level))) {
+      blockEntity.recipe = level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null)
+    }
+
+    if (!level.isClientSide) {
+      if (blockEntity.recipe != null) {
+        if (blockEntity.energyStorage.getEnergyStored > 0) {
+          val done = blockEntity.process(blockEntity.recipe)
+        }
+      }
+    }
   }
 }
