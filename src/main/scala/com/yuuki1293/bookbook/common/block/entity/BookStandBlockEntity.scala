@@ -52,5 +52,5 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     }
   }
 
-  override def clearContent(): Unit = ???
+  override def clearContent(): Unit = items.clear()
 }
