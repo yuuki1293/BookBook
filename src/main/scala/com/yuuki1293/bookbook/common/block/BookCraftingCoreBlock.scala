@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 import net.minecraft.world.level.block.{Block, EntityBlock}
 import net.minecraft.world.phys.BlockHitResult
@@ -44,5 +44,12 @@ class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties) extends Bloc
       pLevel.updateNeighbourForOutputSignal(pPos, this)
     }
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
+  }
+
+  override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
+    if (pLevel.isClientSide)
+      null
+    else
+      (level, pos, state, blockEntity) => BookCraftingCoreBlockEntity.tick(level, pos, state, blockEntity.asInstanceOf[BookCraftingCoreBlockEntity])
   }
 }
