@@ -6,5 +6,5 @@ import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 import net.minecraft.world.level.block.{Block, EntityBlock}
 
 class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = ???
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
 }
