@@ -10,6 +10,7 @@ import net.minecraft.world.SimpleContainer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting._
 import net.minecraft.world.level.Level
+import net.minecraftforge.common.util.RecipeMatcher
 import net.minecraftforge.registries.ForgeRegistryEntry
 
 class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int)
@@ -21,8 +22,19 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
   private final val inputsList = Array()
 
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = {
+    var flag = false
+
     val input = pContainer.getItem(0)
-    ingredients.get(0).test(input)
+    flag = ingredients.get(0).test(input)
+
+    val inputs: NonNullList[ItemStack] = NonNullList.create()
+    if (flag) {
+      for (i <- 0 until pContainer.getContainerSize) {
+        inputs.add(pContainer.getItem(i))
+      }
+    }
+
+    RecipeMatcher.findMatches(inputs, ingredients) != null
   }
 
   override def assemble(pContainer: SimpleContainer): ItemStack = output.copy()
