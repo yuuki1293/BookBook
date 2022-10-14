@@ -24,6 +24,8 @@ object Items extends AbstractRegister[Item] {
   val BOOK_GENERATOR: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_GENERATOR.getId.getPath, () => new BlockItem(Blocks.BOOK_GENERATOR.get(), default()))
   val BOOKSHELF_FRAME: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOKSHELF_FRAME.getId.getPath, () => new BlockItem(Blocks.BOOKSHELF_FRAME.get(), default()))
   val BOOK_CAPACITOR: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_CAPACITOR.getId.getPath, () => new BlockItem(Blocks.BOOK_CAPACITOR.get(), default()))
+  val BOOK_CRAFTING_CORE: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_CRAFTING_CORE.getId.getPath, () => new BlockItem(Blocks.BOOK_CRAFTING_CORE.get(), default()))
+  val BOOK_STAND: RegistryObject[BlockItem] = REGISTER.register(Blocks.BOOK_STAND.getId.getPath, () => new BlockItem(Blocks.BOOK_STAND.get(), default()))
 
   def registryCompressed[A <: BaseCompressedItem](prefix: String)(tier: Int, properties: Item.Properties)(implicit tag: reflect.ClassTag[A]): RegistryObject[A] = {
     REGISTER.register(s"$prefix$tier", () => tag.runtimeClass.getDeclaredConstructors.head.newInstance(tier, properties).asInstanceOf[A])
