@@ -13,5 +13,6 @@ class BookCraftingCoreScreen(pMenu: BookCraftingCoreMenu, pPlayerInventory: Inve
   override def render(pPoseStack: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float): Unit = {
     renderBackground(pPoseStack)
     super.render(pPoseStack, pMouseX, pMouseY, pPartialTick)
+    renderTooltip(pPoseStack, pMouseX, pMouseY)
   }
 }
