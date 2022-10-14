@@ -20,9 +20,9 @@
   "block.bookbook.bookshelf_frame": "Bookshelf Frame",
   "block.bookbook.book_capacitor": "Book Capacitor",
 
-  "container.book_furnace": "Book Furnace",
-  "container.book_generator": "Book Generator",
-  "container.book_capacitor": "Book Capacitor",
+  "container.bookbook.book_furnace": "Book Furnace",
+  "container.bookbook.book_generator": "Book Generator",
+  "container.bookbook.book_capacitor": "Book Capacitor",
 
   "It will explode in 10 seconds!": "It will explode in 10 seconds!"
 }

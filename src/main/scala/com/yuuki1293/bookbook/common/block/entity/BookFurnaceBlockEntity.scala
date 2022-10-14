@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState
 class BookFurnaceBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends AbstractFurnaceBlockEntity(BlockEntities.BOOK_FURNACE.get(), worldPosition, blockState, RecipeType.SMELTING) {
 
-  override protected def getDefaultName: Component = new TranslatableComponent("container.book_furnace")
+  override protected def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_furnace")
 
   override def getBurnDuration(pFuel: ItemStack): Int = super.getBurnDuration(pFuel) * 2
 

@@ -80,7 +80,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getPowerCost: Int = recipe.getPowerCost
 
-  override def getDefaultName: Component = new TranslatableComponent("container.book_crafting_core")
+  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_crafting_core")
 
   override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = {
     new BookCraftingCoreMenu(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pInventory, this, dataAccess)

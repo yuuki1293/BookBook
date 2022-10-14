@@ -20,9 +20,9 @@
   "block.bookbook.bookshelf_frame": "本棚の枠",
   "block.bookbook.book_capacitor": "本蓄電器",
 
-  "container.book_furnace": "本かまど",
-  "container.book_generator": "本発電機",
-  "container.book_capacitor": "本蓄電器",
+  "container.bookbook.book_furnace": "本かまど",
+  "container.bookbook.book_generator": "本発電機",
+  "container.bookbook.book_capacitor": "本蓄電器",
 
   "It will explode in 10 seconds!": "10秒後に爆発します！"
 }
