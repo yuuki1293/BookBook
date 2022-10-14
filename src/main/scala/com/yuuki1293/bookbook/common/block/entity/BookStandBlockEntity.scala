@@ -27,6 +27,8 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   def getItem: ItemStack = items.get(0)
 
+  def getItems: NonNullList[ItemStack] = items
+
   @Deprecated
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
