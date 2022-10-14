@@ -48,6 +48,8 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
   override def getSerializer: RecipeSerializer[_] = BookCraftingRecipe.Serializer
 
   override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING
+
+  def getPowerCost: Int = powerCost
 }
 
 object BookCraftingRecipe {
