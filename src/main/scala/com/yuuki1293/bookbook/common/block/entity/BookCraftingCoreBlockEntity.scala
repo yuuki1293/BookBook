@@ -28,7 +28,7 @@ import scala.jdk.CollectionConverters._
 
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
-    with WorldlyContainer with Ticked {
+    with WorldlyContainer {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
   private val recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
   private var recipe: BookCraftingRecipe = _
@@ -92,8 +92,6 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = true
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = true
-
-  override def tick(): Unit = ???
 
   override def getContainerSize: Int = items.size()
 
