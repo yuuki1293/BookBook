@@ -39,7 +39,10 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   def removeItemNoUpdate(): ItemStack = ContainerHelper.takeItem(items, 0)
 
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = ???
+  @Deprecated
+  override def setItem(pSlot: Int, pStack: ItemStack): Unit = items.set(pSlot, pStack)
+
+  def setItem(pStack: ItemStack): Unit = items.set(0, pStack)
 
   override def stillValid(pPlayer: Player): Boolean = ???
 
