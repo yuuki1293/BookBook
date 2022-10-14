@@ -3,7 +3,7 @@ package com.yuuki1293.bookbook.common.block
 import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.{InteractionHand, InteractionResult}
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -37,5 +37,17 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(proper
     }
 
     InteractionResult.SUCCESS
+  }
+
+  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
+    if(pState.getBlock != pNewState.getBlock) {
+      val be = pLevel.getBlockEntity(pPos)
+
+      be match {
+        case entity: BookStandBlockEntity => Containers.dropContents(pLevel, pPos, entity.getItems)
+      }
+    }
+
+    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
   }
 }
