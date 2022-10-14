@@ -2,6 +2,7 @@ package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -10,7 +11,7 @@ import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
-  private val items = NonNullList.withSize(1, ItemStack.EMPTY)
+  private var items = NonNullList.withSize(1, ItemStack.EMPTY)
 
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
 
@@ -53,4 +54,15 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   }
 
   override def clearContent(): Unit = items.clear()
+
+  override def load(pTag: CompoundTag): Unit = {
+    super.load(pTag)
+    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
+    ContainerHelper.loadAllItems(pTag, items)
+  }
+
+  override def saveAdditional(pTag: CompoundTag): Unit = {
+    super.saveAdditional(pTag)
+    ContainerHelper.saveAllItems(pTag, items)
+  }
 }
