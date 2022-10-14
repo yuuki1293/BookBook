@@ -4,24 +4,23 @@ import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes, RecipeTypes}
-import com.yuuki1293.bookbook.common.util.Ticked
-import net.minecraft.core.particles.{ItemParticleOption, ParticleType, ParticleTypes}
+import net.minecraft.core.particles.{ItemParticleOption, ParticleTypes}
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.CapabilityEnergy
-import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
