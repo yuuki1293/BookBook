@@ -1,16 +1,19 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.register.BlockEntities
-import net.minecraft.core.{BlockPos, Direction}
-import net.minecraft.world.WorldlyContainer
+import net.minecraft.core.{BlockPos, Direction, NonNullList}
+import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 
+import scala.annotation.unused
+
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
-  private var item = ItemStack.EMPTY
+  private val items = NonNullList.withSize(1, ItemStack.EMPTY)
+
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
 
   override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = true
@@ -19,11 +22,11 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   override def getContainerSize: Int = 1
 
-  override def isEmpty: Boolean = item.isEmpty
+  override def isEmpty: Boolean = items.get(0).isEmpty
 
-  override def getItem(pSlot: Int): ItemStack = item
+  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ???
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ???
 
