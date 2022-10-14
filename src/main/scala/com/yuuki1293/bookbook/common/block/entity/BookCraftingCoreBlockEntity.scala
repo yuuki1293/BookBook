@@ -27,7 +27,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
     with WorldlyContainer with Ticked {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
-  private var recipeItems = NonNullList.withSize(49, ItemStack.EMPTY)
+  private val recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
   private val capacity = 100000000
   private val maxReceive = 10000000
 
@@ -175,7 +175,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     var standCount = 0
     if (level != null) {
       val pos = getBlockPos
-      val positions = BlockPos.betweenClosedStream(pos.offset(-3, 0, -3), pos.offset(3, 0, 3))
+      val positions = BlockPos.betweenClosedStream(pos.offset(-4, 0, -4), pos.offset(4, 0, 4))
 
       positions.forEach(
         aoePos => {
