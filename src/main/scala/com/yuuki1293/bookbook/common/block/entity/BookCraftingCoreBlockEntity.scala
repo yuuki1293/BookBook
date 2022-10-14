@@ -27,6 +27,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
     with WorldlyContainer with Ticked {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
+  private var recipeItems = NonNullList.withSize(49, ItemStack.EMPTY)
   private val capacity = 100000000
   private val maxReceive = 10000000
 
@@ -34,6 +35,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   private var progress = 0
   private var standCount = 0
+  private var haveItemChanged = true
   protected val dataAccess: ContainerData = new ContainerData {
     /**
      * @param pIndex 0 - [[getEnergy]]<br>
@@ -194,6 +196,31 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     this.standCount = standCount
     stands.toMap
   }
+
+  def updateRecipeInventory(stacks: List[ItemStack]): Unit = {
+    var flag = false
+
+    flag = recipeItems.size() != stacks.length + 1 || !ItemStack.isSame(recipeItems.get(0), items.get(0))
+
+    if (!flag) {
+      for (i <- stacks.indices) {
+        if (!flag && !ItemStack.isSame(recipeItems.get(i + 1), stacks(i))) {
+          flag = true
+        }
+      }
+    }
+
+    haveItemChanged = flag
+
+    if (!flag)
+      return
+
+    recipeItems.set(0, items.get(0))
+
+    for (i <- stacks.indices) {
+      recipeItems.set(i + 1, stacks(i))
+    }
+  }
 }
 
 object BookCraftingCoreBlockEntity {
@@ -205,5 +232,8 @@ object BookCraftingCoreBlockEntity {
 
   def tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: BookCraftingCoreBlockEntity): Unit = {
     val standsWithItems = blockEntity.getStandWithItems
+    val stacks = standsWithItems.values.toList
+
+    blockEntity.updateRecipeInventory(stacks)
   }
 }
