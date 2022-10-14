@@ -270,7 +270,7 @@ object BookCraftingCoreBlockEntity {
 
     craftingCore.updateRecipeInventory(stacks)
 
-    val recipeItemContainer = new SimpleContainer(craftingCore.recipeItems.asScala: _*)
+    val recipeItemContainer = new SimpleContainer(craftingCore.recipeItems.asScala.toSeq: _*)
     if (craftingCore.haveItemChanged && (craftingCore.recipe == null || !craftingCore.recipe.matches(recipeItemContainer, level))) {
       craftingCore.recipe = level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null)
     }
