@@ -1,7 +1,8 @@
 package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.BookBook
-import com.yuuki1293.bookbook.common.block.{BookCapacitorBlock, BookCraftingCoreBlock, BookFurnaceBlock, BookGeneratorBlock, BookShelfBlock}
+import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
+import com.yuuki1293.bookbook.common.block.{BookCapacitorBlock, BookCraftingCoreBlock, BookFurnaceBlock, BookGeneratorBlock, BookShelfBlock, BookStandBlock}
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.{Block, SoundType}
@@ -20,4 +21,5 @@ object Blocks extends AbstractRegister[Block] {
   val BOOKSHELF_FRAME: RegistryObject[Block] = REGISTER.register("bookshelf_frame", () => new Block(default().strength(1.0F).noOcclusion()))
   val BOOK_CAPACITOR: RegistryObject[BookCapacitorBlock] = REGISTER.register("book_capacitor", () => new BookCapacitorBlock(default().requiresCorrectToolForDrops().strength(3.5F)))
   val BOOK_CRAFTING_CORE: RegistryObject[BookCraftingCoreBlock] = REGISTER.register("book_crafting_core", () => new BookCraftingCoreBlock(default().requiresCorrectToolForDrops().strength(5.0F)))
+  val BOOK_STAND: RegistryObject[BookStandBlock] = REGISTER.register("book_stand", () => new BookStandBlock(default().requiresCorrectToolForDrops().strength(3.0F)))
 }
