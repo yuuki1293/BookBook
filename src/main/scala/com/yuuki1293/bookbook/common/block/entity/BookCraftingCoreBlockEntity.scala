@@ -15,7 +15,7 @@ import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
+import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
@@ -255,14 +255,14 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 }
 
-object BookCraftingCoreBlockEntity {
+object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlockEntity] {
   final val SLOT = 0
   final val DATA_ENERGY_STORED = 0
   final val DATA_MAX_ENERGY = 1
   final val DATA_PROGRESS = 2
   final val DATA_POWER_COST = 3
 
-  def tick(level: Level, pos: BlockPos, state: BlockState, craftingCore: BookCraftingCoreBlockEntity): Unit = {
+  override def tick(level: Level, pos: BlockPos, state: BlockState, craftingCore: BookCraftingCoreBlockEntity): Unit = {
     val standsWithItems = craftingCore.getStandWithItems
     val stacks = standsWithItems.values.toList
 
