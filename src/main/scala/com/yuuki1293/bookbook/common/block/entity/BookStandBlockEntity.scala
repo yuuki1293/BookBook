@@ -19,7 +19,7 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   override def getContainerSize: Int = 1
 
-  override def isEmpty: Boolean = ???
+  override def isEmpty: Boolean = item.isEmpty
 
   override def getItem(pSlot: Int): ItemStack = ???
 
