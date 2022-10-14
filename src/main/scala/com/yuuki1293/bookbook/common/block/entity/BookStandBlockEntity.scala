@@ -2,13 +2,11 @@ package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
-import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
-
-import scala.annotation.unused
+import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
