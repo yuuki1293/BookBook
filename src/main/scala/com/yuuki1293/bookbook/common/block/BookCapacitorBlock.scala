@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
-import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock, RenderShape}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
@@ -61,6 +61,10 @@ class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends BaseEnt
     }
 
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
+  }
+
+  override def getRenderShape(pState: BlockState): RenderShape = {
+    RenderShape.MODEL
   }
 }
 

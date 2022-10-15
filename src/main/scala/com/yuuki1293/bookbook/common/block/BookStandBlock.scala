@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
-import net.minecraft.world.level.block.{BaseEntityBlock, Block}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block, RenderShape}
 import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
@@ -56,5 +56,9 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBl
 
   override def getShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos, pContext: CollisionContext): VoxelShape = {
     SHAPE
+  }
+
+  override def getRenderShape(pState: BlockState): RenderShape = {
+    RenderShape.MODEL
   }
 }
