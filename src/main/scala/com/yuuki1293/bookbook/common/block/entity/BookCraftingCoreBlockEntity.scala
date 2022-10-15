@@ -233,7 +233,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
     recipeItems = NonNullList.withSize(stacks.length + 1, ItemStack.EMPTY)
 
-    recipeItems.set(0, items.get(0))
+    recipeItems.set(0, items.get(SLOT_INPUT))
 
     for (i <- stacks.indices) {
       recipeItems.set(i + 1, stacks(i))
