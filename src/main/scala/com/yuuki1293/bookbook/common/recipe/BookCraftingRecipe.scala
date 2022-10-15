@@ -20,7 +20,6 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
   private final val ingredients = pIngredients
   private final val powerCost = pPowerCost
   private final val powerRate = pPowerRate
-  private final val inputsList = Array()
 
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = {
     var flag = false

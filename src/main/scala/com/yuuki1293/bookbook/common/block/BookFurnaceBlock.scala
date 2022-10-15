@@ -41,7 +41,6 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties) extends AbstractFu
 
       val direction = pState.getValue(FACING)
       val direction$axis = direction.getAxis
-      val d3 = 0.52D
       val d4 = pRand.nextDouble * 0.6D - 0.3D
       val d5 = if (direction$axis eq Direction.Axis.X) direction.getStepX.toDouble * 0.52D else d4
       val d6 = pRand.nextDouble * 6.0D / 16.0D

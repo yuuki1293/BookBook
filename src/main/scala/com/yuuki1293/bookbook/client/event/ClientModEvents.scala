@@ -14,10 +14,13 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 
+import scala.annotation.unused
+
 @Mod.EventBusSubscriber(modid = BookBook.MOD_ID, bus = Bus.MOD, value = Array(Dist.CLIENT))
+@unused
 object ClientModEvents {
   @SubscribeEvent
-  def clientSetup(event: FMLClientSetupEvent): Unit = {
+  def clientSetup(@unused event: FMLClientSetupEvent): Unit = {
     MenuScreens.register(MenuTypes.BOOK_GENERATOR.get(), (menu: BookGeneratorMenu, inv, title) => new BookGeneratorScreen(menu, inv, title))
     MenuScreens.register(MenuTypes.BOOK_CAPACITOR.get(), (menu: BookCapacitorMenu, inv, title) => new BookCapacitorScreen(menu, inv, title))
     MenuScreens.register(MenuTypes.BOOK_CRAFTING_CORE.get(), (menu: BookCraftingCoreMenu, inv, title) => new BookCraftingCoreScreen(menu, inv, title))
