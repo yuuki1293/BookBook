@@ -297,11 +297,10 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
               val be = level.getBlockEntity(standPos)
 
               be match {
-                case stand: BookStandBlockEntity => {
+                case stand: BookStandBlockEntity =>
                   val itemStack = stand.getItem(0)
 
                   craftingCore.spawnItemParticles(standPos, itemStack)
-                }
               }
             }
           }
