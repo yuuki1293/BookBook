@@ -9,7 +9,9 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context
 import net.minecraft.world.item.BlockItem
 
-class BookStandRenderer(context: Context) extends BlockEntityRenderer[BookStandBlockEntity] {
+import scala.annotation.unused
+
+class BookStandRenderer(@unused context: Context) extends BlockEntityRenderer[BookStandBlockEntity] {
   override def render(pBlockEntity: BookStandBlockEntity,
                       pPartialTick: Float,
                       pPoseStack: PoseStack,
