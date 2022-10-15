@@ -30,7 +30,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     with WorldlyContainer {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
   private var recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
-  private var recipe: BookCraftingRecipe = _
+  private var recipe: Option[BookCraftingRecipe] = None
   private val capacity = 100000000
   private val maxReceive = 10000000
 
@@ -78,7 +78,9 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def getProgress: Int = progress
 
-  def getPowerCost: Int = recipe.getPowerCost
+  def getPowerCost: Int = {
+    recipe.map(_.getPowerCost).getOrElse(0)
+  }
 
   override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_crafting_core")
 
@@ -270,42 +272,43 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
     craftingCore.updateRecipeInventory(stacks)
 
     val recipeItemContainer = new SimpleContainer(craftingCore.recipeItems.asScala.toSeq: _*)
-    if (craftingCore.haveItemChanged && (craftingCore.recipe == null || !craftingCore.recipe.matches(recipeItemContainer, level))) {
-      craftingCore.recipe = level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null)
+    if (craftingCore.haveItemChanged && (craftingCore.recipe.isEmpty || !craftingCore.recipe.exists(_.matches(recipeItemContainer, level)))) {
+      craftingCore.recipe = Some(level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null))
     }
 
     if (!level.isClientSide) {
-      if (craftingCore.recipe != null) {
-        if (craftingCore.energyStorage.getEnergyStored > 0) {
-          val done = craftingCore.process(craftingCore.recipe)
+      craftingCore.recipe match {
+        case Some(recipe) =>
+          if (craftingCore.energyStorage.getEnergyStored > 0) {
+            val done = craftingCore.process(recipe)
 
-          if (done) {
-            for (standPos <- standsWithItems.keySet) {
-              val be = level.getBlockEntity(standPos)
+            if (done) {
+              for (standPos <- standsWithItems.keySet) {
+                val be = level.getBlockEntity(standPos)
 
-              be match {
-                case stand: BookStandBlockEntity =>
-                  stand.removeItem(0, 1)
+                be match {
+                  case stand: BookStandBlockEntity =>
+                    stand.removeItem(0, 1)
+                }
               }
-            }
 
-            craftingCore.setItem(0, craftingCore.recipe.assemble(recipeItemContainer))
-            craftingCore.progress = 0
-          } else {
-            for (standPos <- standsWithItems.keySet) {
-              val be = level.getBlockEntity(standPos)
+              craftingCore.setItem(0, recipe.assemble(recipeItemContainer))
+              craftingCore.progress = 0
+            } else {
+              for (standPos <- standsWithItems.keySet) {
+                val be = level.getBlockEntity(standPos)
 
-              be match {
-                case stand: BookStandBlockEntity =>
-                  val itemStack = stand.getItem(0)
+                be match {
+                  case stand: BookStandBlockEntity =>
+                    val itemStack = stand.getItem(0)
 
-                  craftingCore.spawnItemParticles(standPos, itemStack)
+                    craftingCore.spawnItemParticles(standPos, itemStack)
+                }
               }
             }
           }
-        }
-      } else {
-        craftingCore.progress = 0
+        case None =>
+          craftingCore.progress = 0
       }
     }
   }
