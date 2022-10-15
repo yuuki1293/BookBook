@@ -287,7 +287,7 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
 
     val recipeItemContainer = new SimpleContainer(craftingCore.recipeItems.asScala.toSeq: _*)
     if (craftingCore.haveItemChanged && (craftingCore.recipe.isEmpty || !craftingCore.recipe.exists(_.matches(recipeItemContainer, level)))) {
-      craftingCore.recipe = Some(level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null))
+      craftingCore.recipe = Option(level.getRecipeManager.getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeItemContainer, level).orElse(null))
     }
 
     if (!level.isClientSide) {
