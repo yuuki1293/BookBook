@@ -69,7 +69,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 
   private def createEnergyStorage = {
-    new BookEnergyStorage(this, capacity, maxReceive, 0)
+    new BookEnergyStorage(this, capacity, maxReceive, 10000000)
   }
 
   def getEnergy: Int = energyStorage.getEnergyStored
@@ -247,7 +247,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
     val extracted = energyStorage.extractEnergy(extract, simulate = false)
     progress += extracted
-
+    LogUtils.getLogger.debug(s"$powerRate $difference $extract $extracted $getEnergy $getMaxEnergy $getPowerCost")
     progress >= recipe.getPowerCost
   }
 }
