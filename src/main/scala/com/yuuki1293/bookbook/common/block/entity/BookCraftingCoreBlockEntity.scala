@@ -29,7 +29,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
     with WorldlyContainer {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
-  private val recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
+  private var recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
   private var recipe: BookCraftingRecipe = _
   private val capacity = 100000000
   private val maxReceive = 10000000
@@ -215,6 +215,8 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
     if (!flag)
       return
+
+    recipeItems = NonNullList.withSize(stacks.length + 1, ItemStack.EMPTY)
 
     recipeItems.set(0, items.get(0))
 
