@@ -1,8 +1,7 @@
 package com.yuuki1293.bookbook.common.register
 
 import com.yuuki1293.bookbook.common.BookBook
-import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
-import com.yuuki1293.bookbook.common.block.{BookCapacitorBlock, BookCraftingCoreBlock, BookFurnaceBlock, BookGeneratorBlock, BookShelfBlock, BookStandBlock}
+import com.yuuki1293.bookbook.common.block._
 import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.{Block, SoundType}
