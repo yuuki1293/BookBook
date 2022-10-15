@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.client.renderer
 
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Vector3f
 import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -28,6 +29,7 @@ class BookStandRenderer(@unused context: Context) extends BlockEntityRenderer[Bo
       pPoseStack.scale(scale, scale, scale)
       val tick = System.currentTimeMillis() / 800.0D
       pPoseStack.translate(0.0D, Math.sin(tick % (2 * Math.PI)) * 0.065D, 0.0D)
+      pPoseStack.mulPose(Vector3f.YP.rotationDegrees(((tick * 40.0D) % 360).toFloat))
       minecraft.getItemRenderer.renderStatic(itemStack, ItemTransforms.TransformType.GROUND, pPackedLight, pPackedOverlay, pPoseStack, pBufferSource, 0)
       pPoseStack.popPose()
     }
