@@ -6,13 +6,16 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
+import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 import net.minecraft.world.level.block.{Block, EntityBlock}
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
 
 class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
+  protected val SHAPE: VoxelShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)
+
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
 
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
@@ -40,7 +43,7 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(proper
   }
 
   override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
-    if(pState.getBlock != pNewState.getBlock) {
+    if (pState.getBlock != pNewState.getBlock) {
       val be = pLevel.getBlockEntity(pPos)
 
       be match {
@@ -49,5 +52,9 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(proper
     }
 
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
+  }
+
+  override def getShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos, pContext: CollisionContext): VoxelShape = {
+    SHAPE
   }
 }
