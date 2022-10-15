@@ -16,8 +16,4 @@ class BookCapacitorScreen(pMenu: BookCapacitorMenu, pPlayerInventory: Inventory,
     super.render(pPoseStack, pMouseX, pMouseY, pPartialTick)
     renderTooltip(pPoseStack, pMouseX, pMouseY)
   }
-
-  override def renderBg(pPoseStack: PoseStack, pPartialTick: Float, pMouseX: Int, pMouseY: Int): Unit = {
-    super.renderBg(pPoseStack, pPartialTick, pMouseX, pMouseY)
-  }
 }
