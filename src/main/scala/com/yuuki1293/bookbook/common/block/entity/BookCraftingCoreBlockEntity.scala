@@ -284,9 +284,8 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
               val be = level.getBlockEntity(standPos)
 
               be match {
-                case stand: BookStandBlockEntity => {
+                case stand: BookStandBlockEntity =>
                   stand.removeItem(0, 1)
-                }
               }
             }
 
