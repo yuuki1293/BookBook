@@ -3,6 +3,8 @@ package com.yuuki1293.bookbook.common.block.entity
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -65,4 +67,6 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     super.saveAdditional(pTag)
     ContainerHelper.saveAllItems(pTag, items)
   }
+
+  override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
 }
