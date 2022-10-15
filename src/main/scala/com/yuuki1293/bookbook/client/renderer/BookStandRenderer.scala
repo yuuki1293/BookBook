@@ -24,7 +24,7 @@ class BookStandRenderer(@unused context: Context) extends BlockEntityRenderer[Bo
 
     if (!itemStack.isEmpty) {
       pPoseStack.pushPose()
-      pPoseStack.translate(0.5D, 1.2D, 0.5D)
+      pPoseStack.translate(0.5D, 1.0D, 0.5D)
       val scale = if (itemStack.getItem.isInstanceOf[BlockItem]) 0.9F else 0.65F
       pPoseStack.scale(scale, scale, scale)
       val tick = System.currentTimeMillis() / 800.0D
