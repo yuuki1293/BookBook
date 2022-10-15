@@ -280,20 +280,19 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
             if (!done)
               done = craftingCore.process(recipe)
 
-            if (done) {
+            if (done && craftingCore.getItem(SLOT_OUTPUT).isEmpty) {
               for (standPos <- standsWithItems.keySet) {
                 val be = level.getBlockEntity(standPos)
 
                 be match {
                   case stand: BookStandBlockEntity =>
-                    stand.removeItem(SLOT_INPUT, 1)
+                    stand.removeItem(0, 1)
                 }
               }
 
-              if (craftingCore.getItem(SLOT_OUTPUT).isEmpty) {
-                craftingCore.setItem(SLOT_OUTPUT, recipe.assemble(recipeItemContainer))
-                craftingCore.progress = 0
-              }
+              craftingCore.removeItem(SLOT_INPUT, 1)
+              craftingCore.setItem(SLOT_OUTPUT, recipe.assemble(recipeItemContainer))
+              craftingCore.progress = 0
             }
           }
         case None =>
