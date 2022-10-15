@@ -275,7 +275,10 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
       craftingCore.recipe match {
         case Some(recipe) =>
           if (craftingCore.energyStorage.getEnergyStored > 0) {
-            val done = craftingCore.process(recipe)
+            var done = craftingCore.progress >= recipe.getPowerCost
+
+            if (!done)
+              done = craftingCore.process(recipe)
 
             if (done) {
               for (standPos <- standsWithItems.keySet) {
@@ -283,12 +286,14 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
 
                 be match {
                   case stand: BookStandBlockEntity =>
-                    stand.removeItem(0, 1)
+                    stand.removeItem(SLOT_INPUT, 1)
                 }
               }
 
-              craftingCore.setItem(0, recipe.assemble(recipeItemContainer))
-              craftingCore.progress = 0
+              if (craftingCore.getItem(SLOT_OUTPUT).isEmpty) {
+                craftingCore.setItem(SLOT_OUTPUT, recipe.assemble(recipeItemContainer))
+                craftingCore.progress = 0
+              }
             }
           }
         case None =>
