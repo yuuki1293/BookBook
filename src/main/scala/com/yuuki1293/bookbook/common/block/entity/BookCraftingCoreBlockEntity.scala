@@ -247,7 +247,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
     val extracted = energyStorage.extractEnergy(extract, simulate = false)
     progress += extracted
-    LogUtils.getLogger.debug(s"$powerRate $difference $extract $extracted $getEnergy $getMaxEnergy $getPowerCost")
+
     progress >= recipe.getPowerCost
   }
 }
