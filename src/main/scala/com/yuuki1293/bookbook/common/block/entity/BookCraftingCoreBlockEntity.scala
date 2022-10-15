@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.block.entity
 
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
@@ -28,7 +29,7 @@ import scala.jdk.CollectionConverters._
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
     with WorldlyContainer {
-  private var items = NonNullList.withSize(1, ItemStack.EMPTY)
+  private var items = NonNullList.withSize(2, ItemStack.EMPTY)
   private var recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
   private var recipe: Option[BookCraftingRecipe] = None
   private val capacity = 100000000
@@ -88,11 +89,23 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     new BookCraftingCoreMenu(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pInventory, this, dataAccess)
   }
 
-  override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
+  override def getSlotsForFace(pSide: Direction): Array[Int] = Array(SLOT_INPUT, SLOT_OUTPUT)
 
-  override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = true
+  override def canPlaceItemThroughFace(pIndex: Int, pItemStack: ItemStack, pDirection: Direction): Boolean = {
+    pIndex match {
+      case SLOT_INPUT => true
+      case SLOT_OUTPUT => false
+      case _ => false
+    }
+  }
 
-  override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = true
+  override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = {
+    pIndex match {
+      case SLOT_INPUT => false
+      case SLOT_OUTPUT => true
+      case _ => false
+    }
+  }
 
   override def getContainerSize: Int = items.size()
 
@@ -259,7 +272,8 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 }
 
 object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlockEntity] {
-  final val SLOT = 0
+  final val SLOT_INPUT = 0
+  final val SLOT_OUTPUT = 1
   final val DATA_ENERGY_STORED = 0
   final val DATA_MAX_ENERGY = 1
   final val DATA_PROGRESS = 2
