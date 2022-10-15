@@ -10,11 +10,11 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.{BlockStateProperties, BooleanProperty, DirectionProperty}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
-import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectionalBlock}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
-class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
+class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
   registerDefaultState(
     stateDefinition.any()
       .setValue(LIT, java.lang.Boolean.FALSE)

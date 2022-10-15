@@ -5,16 +5,16 @@ import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
-import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
 import net.minecraft.world.level.block.state.properties.DirectionProperty
-import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectionalBlock}
+import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock}
 import net.minecraft.world.phys.BlockHitResult
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
-class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends Block(pProperties) with EntityBlock {
+class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends BaseEntityBlock(pProperties) {
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     if (pLevel.isClientSide)
       null

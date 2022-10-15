@@ -3,17 +3,17 @@ package com.yuuki1293.bookbook.common.block
 import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
-import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
-import net.minecraft.world.level.block.{Block, EntityBlock}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block}
+import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
+import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
 
-class BookStandBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
+class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
   protected val SHAPE: VoxelShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
