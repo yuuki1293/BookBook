@@ -19,6 +19,7 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBl
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
 
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
+    var flag = false
     val be = pLevel.getBlockEntity(pPos)
 
     be match {
@@ -29,15 +30,20 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBl
         if (input.isEmpty && !held.isEmpty) {
           stand.setItem(held)
           pPlayer.setItemInHand(pHand, ItemStack.EMPTY)
+          flag = true
         } else if (!input.isEmpty) {
           val item = new ItemEntity(pLevel, pPlayer.getX, pPlayer.getY, pPlayer.getZ, input)
 
           item.setNoPickUpDelay()
           pLevel.addFreshEntity(item)
           stand.setItem(ItemStack.EMPTY)
+          flag = true
         }
       case _ =>
     }
+
+    if(flag)
+      be.setChanged()
 
     InteractionResult.SUCCESS
   }
