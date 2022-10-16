@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import com.mojang.logging.LogUtils
 import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
@@ -12,10 +11,11 @@ import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.{ContainerHelper, SimpleContainer, WorldlyContainer}
+import net.minecraft.world.{Container, ContainerHelper, SimpleContainer, WorldlyContainer}
 import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.CapabilityEnergy
@@ -280,7 +280,9 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
             if (!done)
               done = craftingCore.process(recipe)
 
-            if (done && craftingCore.getItem(SLOT_OUTPUT).isEmpty) {
+            if (done && assemble(recipe, recipeItemContainer, craftingCore, SLOT_OUTPUT)) {
+              craftingCore.removeItem(SLOT_INPUT, 1)
+
               for (standPos <- standsWithItems.keySet) {
                 val be = level.getBlockEntity(standPos)
 
@@ -290,8 +292,6 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
                 }
               }
 
-              craftingCore.removeItem(SLOT_INPUT, 1)
-              craftingCore.setItem(SLOT_OUTPUT, recipe.assemble(recipeItemContainer))
               craftingCore.progress = 0
             }
           }
@@ -299,5 +299,31 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
           craftingCore.progress = 0
       }
     }
+  }
+
+  /**
+   * containerのslotとrecipeのgetResultItemを比較してレシピを格納可能なら格納する
+   * @param recipe          レシピ
+   * @param recipeContainer レシピが格納されているコンテナ
+   * @param container       結果を格納するべきコンテナ
+   * @param slot            containerのスロット
+   * @return 結果が格納できた場合true、失敗した場合falseを返す
+   */
+  protected def assemble[A <: Container, B <: Container](recipe: Recipe[A], recipeContainer: A, container: B, slot: Int): Boolean = {
+    val containerItem = container.getItem(slot)
+
+    if (containerItem.isEmpty) {
+      container.setItem(slot, recipe.assemble(recipeContainer))
+      return true
+    }
+
+    val total = containerItem.getCount + recipe.getResultItem.getCount
+    if (ItemStack.isSameItemSameTags(containerItem, recipe.getResultItem)
+      && total <= containerItem.getMaxStackSize) {
+      containerItem.setCount(total)
+      return true
+    }
+
+    false
   }
 }
