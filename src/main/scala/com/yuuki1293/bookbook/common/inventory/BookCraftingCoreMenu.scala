@@ -17,8 +17,8 @@ class BookCraftingCoreMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInv
   private val container: Container = pContainer
   val data: ContainerData = pData
   protected val level: Level = pPlayerInventory.player.level
-  addSlot(new Slot(pContainer, 0, 80, 27))
-  addSlot(new Slot(pContainer, 1, 80, 43))
+  addSlot(new Slot(pContainer, 0, 80, 26))
+  addSlot(new Slot(pContainer, 1, 80, 44))
   addPlayerSlot()
   addDataSlots(pData)
 
