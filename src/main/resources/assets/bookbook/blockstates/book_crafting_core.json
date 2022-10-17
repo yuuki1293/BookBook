@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bookbook:block/book_crafting_core"
+    }
+  }
+}
