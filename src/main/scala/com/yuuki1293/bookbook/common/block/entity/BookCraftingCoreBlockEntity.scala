@@ -261,6 +261,7 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
   final val DATA_POWER_COST = 3
 
   override def tick(level: Level, pos: BlockPos, state: BlockState, craftingCore: BookCraftingCoreBlockEntity): Unit = {
+    var flag = false
     val standsWithItems = craftingCore.getStandWithItems
     val stacks = standsWithItems.values.toList
 
@@ -293,16 +294,28 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
               }
 
               craftingCore.progress = 0
+
+              flag = true
             }
           }
         case None =>
           craftingCore.progress = 0
       }
     }
+
+    if (flag) {
+      craftingCore.setChanged()
+
+      standsWithItems
+        .keySet
+        .map(pos => Option(level.getBlockEntity(pos)))
+        .foreach(_.foreach(_.setChanged()))
+    }
   }
 
   /**
    * containerのslotとrecipeのgetResultItemを比較してレシピを格納可能なら格納する
+   *
    * @param recipe          レシピ
    * @param recipeContainer レシピが格納されているコンテナ
    * @param container       結果を格納するべきコンテナ
