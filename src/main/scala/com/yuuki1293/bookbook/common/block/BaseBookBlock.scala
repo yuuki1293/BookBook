@@ -6,6 +6,6 @@ import net.minecraft.world.level.block.state.BlockState
 
 import scala.annotation.unused
 
-abstract class BaseBookBlock {
+trait BaseBookBlock {
   def getEnchantPowerBonus(@unused state: BlockState, @unused level: LevelReader, @unused pos: BlockPos): Float = 1
 }
