@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.{Container, Containers, MenuProvider}
-import net.minecraft.world.level.Level
+import net.minecraft.world.level.{Level, LevelReader}
 import net.minecraft.world.level.block.{BaseEntityBlock, RenderShape}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
@@ -42,4 +42,6 @@ abstract class BaseBookContainerBlock[A <: BlockEntity with Container](propertie
   override def getRenderShape(pState: BlockState): RenderShape = {
     RenderShape.MODEL
   }
+
+  override def getEnchantPowerBonus(state: BlockState, level: LevelReader, pos: BlockPos): Float = super[BaseBookBlock].getEnchantPowerBonus(state, level, pos)
 }

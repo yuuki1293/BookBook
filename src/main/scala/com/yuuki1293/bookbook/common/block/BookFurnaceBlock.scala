@@ -7,7 +7,7 @@ import net.minecraft.core.{BlockPos, Direction}
 import net.minecraft.sounds.{SoundEvents, SoundSource}
 import net.minecraft.world.MenuProvider
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.level.Level
+import net.minecraft.world.level.{Level, LevelReader}
 import net.minecraft.world.level.block.{AbstractFurnaceBlock, RenderShape}
 import net.minecraft.world.level.block.AbstractFurnaceBlock.{FACING, LIT, createFurnaceTicker}
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
@@ -54,4 +54,6 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties)
   override def getRenderShape(pState: BlockState): RenderShape = {
     RenderShape.MODEL
   }
+
+  override def getEnchantPowerBonus(state: BlockState, level: LevelReader, pos: BlockPos): Float = super[BaseBookBlock].getEnchantPowerBonus(state, level, pos)
 }
