@@ -3,13 +3,15 @@ package com.yuuki1293.bookbook.common.block
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.{Container, Containers, MenuProvider}
-import net.minecraft.world.level.{Level, LevelReader}
-import net.minecraft.world.level.block.{BaseEntityBlock, RenderShape}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
+import net.minecraft.world.level.block.{BaseEntityBlock, RenderShape}
+import net.minecraft.world.level.{Level, LevelReader}
+import net.minecraft.world.{Container, Containers, MenuProvider}
 
-abstract class BaseBookContainerBlock[A <: BlockEntity with Container](properties: BlockBehaviour.Properties)
+import scala.reflect.{ClassTag, classTag}
+
+abstract class BaseBookContainerBlock[A <: BlockEntity with Container : ClassTag](properties: BlockBehaviour.Properties)
   extends BaseEntityBlock(properties) with BaseBookBlock {
   override def onRemove(pState: BlockState,
                         pLevel: Level,
@@ -34,7 +36,7 @@ abstract class BaseBookContainerBlock[A <: BlockEntity with Container](propertie
 
   protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
     val blockEntity = pLevel.getBlockEntity(pPos)
-    if (blockEntity.isInstanceOf[A]) {
+    if (classTag[A].runtimeClass.isInstance(blockEntity)) {
       pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
     }
   }

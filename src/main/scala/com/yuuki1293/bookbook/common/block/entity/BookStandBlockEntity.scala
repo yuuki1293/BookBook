@@ -33,9 +33,13 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   def getItems: NonNullList[ItemStack] = items
 
   @Deprecated
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = {
+    val itemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
+    requestModelDataUpdate()
+    itemStack
+  }
 
-  def removeItem(pAmount: Int): ItemStack = ContainerHelper.removeItem(items, 0, pAmount)
+  def removeItem(pAmount: Int): ItemStack = removeItem(0, pAmount)
 
   @Deprecated
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
@@ -43,9 +47,12 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   def removeItemNoUpdate(): ItemStack = ContainerHelper.takeItem(items, 0)
 
   @Deprecated
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = items.set(pSlot, pStack)
+  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
+    items.set(pSlot, pStack)
+    requestModelDataUpdate()
+  }
 
-  def setItem(pStack: ItemStack): Unit = items.set(0, pStack)
+  def setItem(pStack: ItemStack): Unit = setItem(0, pStack)
 
   override def stillValid(pPlayer: Player): Boolean = {
     if (level.getBlockEntity(worldPosition) != this) {
@@ -55,12 +62,16 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     }
   }
 
-  override def clearContent(): Unit = items.clear()
+  override def clearContent(): Unit = {
+    items.clear()
+    requestModelDataUpdate()
+  }
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
     items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
     ContainerHelper.loadAllItems(pTag, items)
+    requestModelDataUpdate()
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
