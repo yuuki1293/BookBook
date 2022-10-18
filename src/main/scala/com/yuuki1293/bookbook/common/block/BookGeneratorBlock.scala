@@ -14,7 +14,8 @@ import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirect
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
-class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
+class BookGeneratorBlock(properties: BlockBehaviour.Properties)
+  extends BaseBookContainerBlock[BookGeneratorBlockEntity](properties) {
   registerDefaultState(
     stateDefinition.any()
       .setValue(LIT, java.lang.Boolean.FALSE)
@@ -36,39 +37,13 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEnti
     pBuilder.add(FACING, LIT)
   }
 
-  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult =
+  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
     if (pLevel.isClientSide)
       InteractionResult.SUCCESS
     else {
       openContainer(pLevel, pPos, pPlayer)
       InteractionResult.CONSUME
     }
-
-  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
-    if (!pState.is(pNewState.getBlock)) {
-      val blockEntity = pLevel.getBlockEntity(pPos)
-      blockEntity match {
-        case entity: BookGeneratorBlockEntity =>
-          if (pLevel.isInstanceOf[ServerLevel]) {
-            Containers.dropContents(pLevel, pPos, entity)
-          }
-      }
-
-      pLevel.updateNeighbourForOutputSignal(pPos, this)
-    }
-
-    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
-  }
-
-  protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
-    val blockEntity = pLevel.getBlockEntity(pPos)
-    if (blockEntity.isInstanceOf[BookGeneratorBlockEntity]) {
-      pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
-    }
-  }
-
-  override def getRenderShape(pState: BlockState): RenderShape = {
-    RenderShape.MODEL
   }
 }
 
