@@ -2,11 +2,13 @@ package com.yuuki1293.bookbook.common.block
 
 import com.yuuki1293.bookbook.common.block.BookCapacitorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity
+import com.yuuki1293.bookbook.common.register.BlockEntities
 import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
@@ -16,10 +18,7 @@ import net.minecraft.world.{Containers, InteractionHand, InteractionResult, Menu
 
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends BaseEntityBlock(pProperties) {
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
-    if (pLevel.isClientSide)
-      null
-    else
-      (_, _, _, blockEntity) => blockEntity.asInstanceOf[Ticked].tick()
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CAPACITOR.get(), BookCapacitorBlockEntity.tick)
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
