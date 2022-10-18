@@ -16,7 +16,8 @@ import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirect
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
-class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends BaseEntityBlock(pProperties) {
+class BookCapacitorBlock(pProperties: BlockBehaviour.Properties)
+  extends BaseBookContainerBlock[BookCapacitorBlockEntity](pProperties) {
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CAPACITOR.get(), BookCapacitorBlockEntity.tick)
   }
@@ -37,33 +38,6 @@ class BookCapacitorBlock(pProperties: BlockBehaviour.Properties) extends BaseEnt
       openContainer(pLevel, pPos, pPlayer)
       InteractionResult.CONSUME
     }
-  }
-
-  protected def openContainer(level: Level, pos: BlockPos, player: Player): Unit = {
-    val blockEntity = level.getBlockEntity(pos)
-    if (blockEntity.isInstanceOf[BookCapacitorBlockEntity]) {
-      player.openMenu(blockEntity.asInstanceOf[MenuProvider])
-    }
-  }
-
-  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
-    if (!pState.is(pNewState.getBlock)) {
-      val blockEntity = pLevel.getBlockEntity(pPos)
-      blockEntity match {
-        case entity: BookCapacitorBlockEntity =>
-          if (pLevel.isInstanceOf[ServerLevel]) {
-            Containers.dropContents(pLevel, pPos, entity)
-          }
-      }
-
-      pLevel.updateNeighbourForOutputSignal(pPos, this)
-    }
-
-    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
-  }
-
-  override def getRenderShape(pState: BlockState): RenderShape = {
-    RenderShape.MODEL
   }
 }
 
