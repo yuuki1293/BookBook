@@ -10,11 +10,11 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.{BlockStateProperties, BooleanProperty, DirectionProperty}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
-import net.minecraft.world.level.block.{Block, EntityBlock, HorizontalDirectionalBlock}
+import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock, RenderShape}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
 
-class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(properties) with EntityBlock {
+class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
   registerDefaultState(
     stateDefinition.any()
       .setValue(LIT, java.lang.Boolean.FALSE)
@@ -36,12 +36,13 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
     pBuilder.add(FACING, LIT)
   }
 
-  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = if (pLevel.isClientSide)
-    InteractionResult.SUCCESS
-  else {
-    openContainer(pLevel, pPos, pPlayer)
-    InteractionResult.CONSUME
-  }
+  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult =
+    if (pLevel.isClientSide)
+      InteractionResult.SUCCESS
+    else {
+      openContainer(pLevel, pPos, pPlayer)
+      InteractionResult.CONSUME
+    }
 
   override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
     if (!pState.is(pNewState.getBlock)) {
@@ -64,6 +65,10 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends Block(pr
     if (blockEntity.isInstanceOf[BookGeneratorBlockEntity]) {
       pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
     }
+  }
+
+  override def getRenderShape(pState: BlockState): RenderShape = {
+    RenderShape.MODEL
   }
 }
 

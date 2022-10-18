@@ -188,7 +188,7 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     new BookEnergyStorage(this, capacity, maxTransfer)
   }
 
-  override def getDefaultName: Component = new TranslatableComponent("container.book_capacitor")
+  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_capacitor")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
     new BookCapacitorMenu(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, this, dataAccess)

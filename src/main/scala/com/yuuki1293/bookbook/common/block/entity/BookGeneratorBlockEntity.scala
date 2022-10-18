@@ -190,7 +190,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     new BookEnergyStorage(this, capacity, 0, maxExtract, 0)
   }
 
-  override def getDefaultName: Component = new TranslatableComponent("container.book_generator")
+  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
     new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, dataAccess)

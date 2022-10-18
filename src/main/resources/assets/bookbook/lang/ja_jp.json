@@ -12,6 +12,8 @@
   "item.bookbook.unstable_book": "不安定な本",
   "item.bookbook.bookshelf_frame": "本棚の枠",
   "item.bookbook.book_capacitor": "本蓄電器",
+  "item.bookbook.book_stand": "本立て",
+  "item.bookbook.book_crafting_core": "本作業台",
 
   "block.bookbook.bookshelf": "生きている本棚",
   "block.bookbook.drowned_bookshelf": "溺れた本棚",
@@ -19,10 +21,13 @@
   "block.bookbook.book_generator": "本発電機",
   "block.bookbook.bookshelf_frame": "本棚の枠",
   "block.bookbook.book_capacitor": "本蓄電器",
+  "block.bookbook.book_stand": "本立て",
+  "block.bookbook.book_crafting_core": "本作業台",
 
-  "container.book_furnace": "本かまど",
-  "container.book_generator": "本発電機",
-  "container.book_capacitor": "本蓄電器",
+  "container.bookbook.book_furnace": "本かまど",
+  "container.bookbook.book_generator": "本発電機",
+  "container.bookbook.book_capacitor": "本蓄電器",
+  "container.bookbook.book_crafting_core": "本作業台",
 
   "It will explode in 10 seconds!": "10秒後に爆発します！"
 }

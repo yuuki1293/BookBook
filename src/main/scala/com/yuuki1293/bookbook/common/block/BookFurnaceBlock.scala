@@ -8,7 +8,7 @@ import net.minecraft.sounds.{SoundEvents, SoundSource}
 import net.minecraft.world.MenuProvider
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.AbstractFurnaceBlock
+import net.minecraft.world.level.block.{AbstractFurnaceBlock, RenderShape}
 import net.minecraft.world.level.block.AbstractFurnaceBlock.{FACING, LIT, createFurnaceTicker}
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
@@ -41,7 +41,6 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties) extends AbstractFu
 
       val direction = pState.getValue(FACING)
       val direction$axis = direction.getAxis
-      val d3 = 0.52D
       val d4 = pRand.nextDouble * 0.6D - 0.3D
       val d5 = if (direction$axis eq Direction.Axis.X) direction.getStepX.toDouble * 0.52D else d4
       val d6 = pRand.nextDouble * 6.0D / 16.0D
@@ -49,5 +48,9 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties) extends AbstractFu
       pLevel.addParticle(ParticleTypes.SMOKE, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D)
       pLevel.addParticle(ParticleTypes.FLAME, d0 + d5, d1 + d6, d2 + d7, 0.0D, 0.0D, 0.0D)
     }
+  }
+
+  override def getRenderShape(pState: BlockState): RenderShape = {
+    RenderShape.MODEL
   }
 }
