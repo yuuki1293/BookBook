@@ -181,7 +181,6 @@ dependencies {
 
     compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     compileOnly(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.2-kotori')
-    compileOnly(group: 'org.typelevel', name: "cats-free_${scala_major}", version: '2.8.2-kotori')
 
     // The language loader. You can put the jar to the mods dir instead of declaring in `build.gradle`.
     // This file is needed as the scala library will not be loaded in dev environment due to change of classpath by Forge.
