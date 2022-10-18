@@ -3,18 +3,16 @@ package com.yuuki1293.bookbook.common.block
 import com.yuuki1293.bookbook.common.block.BookCapacitorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity
 import com.yuuki1293.bookbook.common.register.BlockEntities
-import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
-import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock, RenderShape}
+import net.minecraft.world.level.block.{Block, HorizontalDirectionalBlock}
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
+import net.minecraft.world.{InteractionHand, InteractionResult}
 
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties)
   extends BaseBookContainerBlock[BookCapacitorBlockEntity](pProperties) {

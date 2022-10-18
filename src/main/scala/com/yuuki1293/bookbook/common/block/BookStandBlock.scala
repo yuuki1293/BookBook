@@ -5,13 +5,13 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
-import net.minecraft.world.level.block.{BaseEntityBlock, Block, RenderShape}
 import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
-import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
+import net.minecraft.world.{InteractionHand, InteractionResult}
 
 class BookStandBlock(properties: BlockBehaviour.Properties)
   extends BaseBookContainerBlock[BookStandBlockEntity](properties) {
