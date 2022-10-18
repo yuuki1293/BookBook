@@ -13,7 +13,8 @@ import net.minecraft.network.protocol.game.{ClientGamePacketListener, Clientboun
 import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraftforge.common.capabilities.Capability
@@ -146,7 +147,7 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
             )
           }
 
-          if(storage.getEnergyStored >= storage.getMaxEnergyStored && items.get(SLOT_OUTPUT).isEmpty){
+          if (storage.getEnergyStored >= storage.getMaxEnergyStored && items.get(SLOT_OUTPUT).isEmpty) {
             items.set(SLOT_OUTPUT, item)
             items.remove(SLOT_INPUT)
           }
@@ -217,9 +218,13 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 }
 
-object BookCapacitorBlockEntity {
+object BookCapacitorBlockEntity extends BlockEntityTicker[BookCapacitorBlockEntity] {
   final val SLOT_INPUT = 0
   final val SLOT_OUTPUT = 1
   final val DATA_ENERGY_STORED = 0
   final val DATA_MAX_ENERGY = 1
+
+  override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookCapacitorBlockEntity): Unit = {
+    pBlockEntity.outputEnergy()
+  }
 }

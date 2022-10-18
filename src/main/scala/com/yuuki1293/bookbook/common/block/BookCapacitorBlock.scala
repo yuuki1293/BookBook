@@ -17,7 +17,7 @@ import net.minecraft.world.{InteractionHand, InteractionResult}
 class BookCapacitorBlock(pProperties: BlockBehaviour.Properties)
   extends BaseBookContainerBlock[BookCapacitorBlockEntity](pProperties) {
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
-    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CAPACITOR.get(), BookCapacitorBlockEntity.tick)
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CAPACITOR.get(), BookCapacitorBlockEntity)
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
