@@ -22,7 +22,7 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties)
   )
 
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
-    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_GENERATOR.get(), BookGeneratorBlockEntity.tick)
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_GENERATOR.get(), BookGeneratorBlockEntity)
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {

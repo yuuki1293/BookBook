@@ -5,7 +5,6 @@ import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.SLOT_
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
-import com.yuuki1293.bookbook.common.util.Ticked
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -15,7 +14,8 @@ import net.minecraft.world.entity.player.{Inventory, Player}
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeType
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraftforge.common.ForgeHooks
@@ -27,7 +27,7 @@ import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseContainerBlockEntity(BlockEntities.BOOK_GENERATOR.get(), worldPosition, blockState)
-    with WorldlyContainer with Ticked {
+    with WorldlyContainer {
 
   protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
 
@@ -205,37 +205,39 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   def isFuel(itemStack: ItemStack): Boolean = getBurnDuration(itemStack) > 0
 
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
-
-  def tick(): Unit = {
-    val burnFlag = isBurn
-
-    if (canBurn) {
-      if (isFuel(items.get(SLOT_FUEL)) && !isBurn) {
-        burnDuration = getEnergyForStack(items.get(SLOT_FUEL))
-        burnTime = burnDuration
-        items.get(SLOT_FUEL).shrink(1)
-      } else if (isBurn) {
-        burnTime -= 1
-        energyStorage.increase(10)
-      } else {
-        burnTime = 0
-        burnDuration = 0
-      }
-    }
-
-    if (burnFlag != isBurn) {
-      val state = blockState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(isBurn))
-      level.setBlock(worldPosition, state, 3)
-    }
-
-    outputEnergy()
-  }
 }
 
-object BookGeneratorBlockEntity {
+object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEntity] {
   final val SLOT_FUEL = 0
   final val DATA_BURN_TIME = 0
   final val DATA_BURN_DURATION = 1
   final val DATA_ENERGY_STORED = 2
   final val DATA_MAX_ENERGY = 3
+
+  override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookGeneratorBlockEntity): Unit = {
+    val be = pBlockEntity
+
+    val burnFlag = be.isBurn
+
+    if (be.canBurn) {
+      if (be.isFuel(be.items.get(SLOT_FUEL)) && !be.isBurn) {
+        be.burnDuration = be.getEnergyForStack(be.items.get(SLOT_FUEL))
+        be.burnTime = be.burnDuration
+        be.items.get(SLOT_FUEL).shrink(1)
+      } else if (be.isBurn) {
+        be.burnTime -= 1
+        be.energyStorage.increase(10)
+      } else {
+        be.burnTime = 0
+        be.burnDuration = 0
+      }
+    }
+
+    if (burnFlag != be.isBurn) {
+      val state = pState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(be.isBurn))
+      be.level.setBlock(be.worldPosition, state, 3)
+    }
+
+    be.outputEnergy()
+  }
 }
