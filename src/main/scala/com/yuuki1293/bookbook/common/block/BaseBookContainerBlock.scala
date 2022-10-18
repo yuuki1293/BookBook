@@ -2,7 +2,8 @@ package com.yuuki1293.bookbook.common.block
 
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.{Container, Containers}
+import net.minecraft.world.entity.player.Player
+import net.minecraft.world.{Container, Containers, MenuProvider}
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -24,5 +25,12 @@ abstract class BaseBookContainerBlock[A <: BlockEntity with Container](propertie
     }
 
     super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
+  }
+
+  protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
+    val blockEntity = pLevel.getBlockEntity(pPos)
+    if (blockEntity.isInstanceOf[A]) {
+      pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
+    }
   }
 }
