@@ -13,7 +13,8 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
 import net.minecraft.world.{Containers, InteractionHand, InteractionResult}
 
-class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
+class BookStandBlock(properties: BlockBehaviour.Properties)
+  extends BaseBookContainerBlock[BookStandBlockEntity](properties) {
   protected val SHAPE: VoxelShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
@@ -48,23 +49,7 @@ class BookStandBlock(properties: BlockBehaviour.Properties) extends BaseEntityBl
     InteractionResult.SUCCESS
   }
 
-  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
-    if (pState.getBlock != pNewState.getBlock) {
-      val be = pLevel.getBlockEntity(pPos)
-
-      be match {
-        case entity: BookStandBlockEntity => Containers.dropContents(pLevel, pPos, entity.getItems)
-      }
-    }
-
-    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
-  }
-
   override def getShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos, pContext: CollisionContext): VoxelShape = {
     SHAPE
-  }
-
-  override def getRenderShape(pState: BlockState): RenderShape = {
-    RenderShape.MODEL
   }
 }
