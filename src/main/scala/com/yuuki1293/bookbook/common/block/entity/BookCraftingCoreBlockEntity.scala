@@ -289,7 +289,7 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
 
                 be match {
                   case stand: BookStandBlockEntity =>
-                    stand.removeItem(0, 1)
+                    stand.removeItem(1)
                 }
               }
 
