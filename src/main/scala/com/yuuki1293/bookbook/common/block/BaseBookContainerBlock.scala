@@ -9,8 +9,13 @@ import net.minecraft.world.level.block.{BaseEntityBlock, RenderShape}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 
-abstract class BaseBookContainerBlock[A <: BlockEntity with Container](properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
-  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
+abstract class BaseBookContainerBlock[A <: BlockEntity with Container](properties: BlockBehaviour.Properties)
+  extends BaseEntityBlock(properties) with BaseBookBlock {
+  override def onRemove(pState: BlockState,
+                        pLevel: Level,
+                        pPos: BlockPos,
+                        pNewState: BlockState,
+                        pIsMoving: Boolean): Unit = {
     if (!pState.is(pNewState.getBlock)) {
       val blockEntity = pLevel.getBlockEntity(pPos)
       blockEntity match {
