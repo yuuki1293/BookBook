@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.{Container, Containers, MenuProvider}
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.BaseEntityBlock
+import net.minecraft.world.level.block.{BaseEntityBlock, RenderShape}
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 
@@ -32,5 +32,9 @@ abstract class BaseBookContainerBlock[A <: BlockEntity with Container](propertie
     if (blockEntity.isInstanceOf[A]) {
       pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
     }
+  }
+
+  override def getRenderShape(pState: BlockState): RenderShape = {
+    RenderShape.MODEL
   }
 }
