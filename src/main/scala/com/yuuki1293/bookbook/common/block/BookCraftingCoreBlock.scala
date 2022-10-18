@@ -26,6 +26,6 @@ class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties)
   }
 
   override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
-    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CRAFTING_CORE.get(), BookCraftingCoreBlockEntity.tick)
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CRAFTING_CORE.get(), BookCraftingCoreBlockEntity)
   }
 }
