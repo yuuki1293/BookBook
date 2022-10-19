@@ -44,4 +44,6 @@ trait BaseBookContainerBlockEntity
       return false
     pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
   }
+
+  override def clearContent(): Unit = items.clear()
 }
