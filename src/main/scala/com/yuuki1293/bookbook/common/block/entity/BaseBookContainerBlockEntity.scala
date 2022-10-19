@@ -66,4 +66,9 @@ trait BaseBookContainerBlockEntity
     else
       super.getCapability(cap)
   }
+
+  def invalidateCaps(): Unit = {
+    for (handler <- handlers)
+      handler.invalidate()
+  }
 }
