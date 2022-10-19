@@ -2,7 +2,6 @@ package com.yuuki1293.bookbook.common.block.entity
 
 import net.minecraft.core.{BlockPos, Direction}
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.world.{MenuProvider, Nameable}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.entity._
 import net.minecraft.world.level.block.state.BlockState
@@ -12,7 +11,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 abstract class BaseBookContainerBlockEntity(pType: BlockEntityType[_], pWorldPosition: BlockPos, pBlockState: BlockState)
-  extends BaseContainerBlockEntity(pType, pWorldPosition, pBlockState) with IBookContainerBlockEntity with MenuProvider with Nameable {
+  extends BaseContainerBlockEntity(pType, pWorldPosition, pBlockState) with IBookContainerBlockEntity {
   override def load(pTag: CompoundTag): Unit = {
     super[BaseContainerBlockEntity].load(pTag)
     super[IBookContainerBlockEntity].load(pTag)
