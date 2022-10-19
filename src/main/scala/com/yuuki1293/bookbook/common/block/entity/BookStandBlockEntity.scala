@@ -3,17 +3,19 @@ package com.yuuki1293.bookbook.common.block.entity
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
 import net.minecraft.world.ContainerHelper
-import net.minecraft.world.entity.player.Player
+import net.minecraft.world.entity.player.{Inventory, Player}
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker}
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
-  extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with IBookContainerBlockEntity  {
+  extends BaseBookContainerBlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) {
   override protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
   private var oldItem = ItemStack.EMPTY
 
@@ -48,6 +50,10 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   }
 
   override def stillValid(pPlayer: Player): Boolean = stillValid(pPlayer, level, worldPosition)
+
+  override def getDefaultName: Component = null
+
+  override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = null
 }
 
 object BookStandBlockEntity extends BlockEntityTicker[BookStandBlockEntity] {
