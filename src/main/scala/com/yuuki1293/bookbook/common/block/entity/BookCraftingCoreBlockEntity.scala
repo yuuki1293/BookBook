@@ -64,7 +64,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 
   private def createEnergyStorage = {
-    new BookEnergyStorage(this, capacity, maxReceive, 10000000)
+    BookEnergyStorage(this, capacity, maxReceive, 10000000)
   }
 
   def getEnergy: Int = energyStorage.getEnergyStored
@@ -199,6 +199,9 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
   final val DATA_MAX_ENERGY = 1
   final val DATA_PROGRESS = 2
   final val DATA_POWER_COST = 3
+
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookCraftingCoreBlockEntity(worldPosition, blockState)
 
   override def tick(level: Level, pos: BlockPos, state: BlockState, craftingCore: BookCraftingCoreBlockEntity): Unit = {
     var flag = false
