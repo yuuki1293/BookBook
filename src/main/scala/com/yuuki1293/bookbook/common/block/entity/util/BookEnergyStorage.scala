@@ -11,7 +11,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
                         pMaxExtract: Int,
                         pEnergy: Int, pEject: Array[Direction] = Direction.values())
   extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
-  val blockEntity: BlockEntity = pBlockEntity
+  private val blockEntity: BlockEntity = pBlockEntity
   var eject: Array[Direction] = pEject
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
@@ -31,7 +31,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
   def increase(inc: Int): Unit = energy = Math.min(capacity, energy + inc)
 
   def outputEnergy(): Unit = {
-    if(getEnergyStored <= 0 || !canExtract)
+    if (getEnergyStored <= 0 || !canExtract)
       return
 
     val level = blockEntity.getLevel
@@ -47,6 +47,10 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
         getEnergyStored + toSend - received
       )
     }
+  }
+
+  def setEject(eject: Array[Direction]): Unit = {
+    this.eject = eject
   }
 }
 
