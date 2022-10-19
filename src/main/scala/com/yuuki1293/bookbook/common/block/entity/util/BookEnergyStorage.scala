@@ -24,7 +24,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
     super.receiveEnergy(maxReceive, simulate)
   }
 
-  def setEnergy(energy: Int): Unit = {
+  def energy_=(energy: Int): Unit = {
     this.energy = Math.max(0, Math.min(energy, capacity))
   }
 
@@ -43,9 +43,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
       val toSend = extractEnergy(maxExtract, simulate = false)
       val received = storage.receiveEnergy(toSend, false)
 
-      setEnergy(
-        getEnergyStored + toSend - received
-      )
+      energy = getEnergyStored + toSend - received
     }
   }
 }
