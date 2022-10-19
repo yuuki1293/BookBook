@@ -15,7 +15,6 @@ trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
   @Nullable
   protected var level: Level
-  @Nullable
   protected var worldPosition: BlockPos
 
   var items: NonNullList[ItemStack]
