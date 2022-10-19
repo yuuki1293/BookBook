@@ -12,10 +12,12 @@ import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
 
+import javax.annotation.Nullable
 import scala.jdk.CollectionConverters._
 
 trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
+  @Nullable
   protected var level: Level
   protected var worldPosition: BlockPos
   protected var remove: Boolean
