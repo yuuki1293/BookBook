@@ -49,7 +49,7 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     tag
   }
 
-  override def stillValid(pPlayer: Player): Boolean = stillValid(pPlayer, level, worldPosition)
+  override def stillValid(pPlayer: Player): Boolean = false
 
   override def getDefaultName: Component = null
 
