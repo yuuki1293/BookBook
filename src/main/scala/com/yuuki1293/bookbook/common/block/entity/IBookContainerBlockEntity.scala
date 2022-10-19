@@ -14,7 +14,7 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper
 
 import scala.jdk.CollectionConverters._
 
-trait BaseBookContainerBlockEntity
+trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
   protected var level: Level
   protected var worldPosition: BlockPos
