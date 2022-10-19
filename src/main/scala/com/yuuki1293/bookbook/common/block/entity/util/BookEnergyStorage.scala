@@ -48,10 +48,6 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
       )
     }
   }
-
-  def setEject(eject: Array[Direction]): Unit = {
-    this.eject = eject
-  }
 }
 
 object BookEnergyStorage {
