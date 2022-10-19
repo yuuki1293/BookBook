@@ -1,16 +1,12 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import net.minecraft.core.{BlockPos, Direction, NonNullList}
+import net.minecraft.core.{BlockPos, NonNullList}
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world._
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world._
-import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.extensions.IForgeBlockEntity
-import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
-import net.minecraftforge.items.wrapper.SidedInvWrapper
 
 import javax.annotation.Nullable
 import scala.jdk.CollectionConverters._
@@ -19,8 +15,8 @@ trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
   @Nullable
   protected var level: Level
+  @Nullable
   protected var worldPosition: BlockPos
-  protected var remove: Boolean
 
   var items: NonNullList[ItemStack]
 
