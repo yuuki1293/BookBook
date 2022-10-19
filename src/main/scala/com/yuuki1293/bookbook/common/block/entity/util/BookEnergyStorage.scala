@@ -12,7 +12,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
                         pEnergy: Int, pEject: Array[Direction] = Direction.values())
   extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
   val blockEntity: BlockEntity = pBlockEntity
-  val eject: Array[Direction] = pEject
+  var eject: Array[Direction] = pEject
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
     blockEntity.setChanged()
