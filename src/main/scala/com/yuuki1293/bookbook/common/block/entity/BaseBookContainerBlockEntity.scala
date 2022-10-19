@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -74,5 +75,10 @@ trait BaseBookContainerBlockEntity
 
   def reviveCaps(): Unit = {
     handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+  }
+
+  def load(pTag: CompoundTag): Unit ={
+    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
+    ContainerHelper.loadAllItems(pTag, items)
   }
 }
