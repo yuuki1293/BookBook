@@ -7,13 +7,16 @@ import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.{ContainerHelper, WorldlyContainer}
+import net.minecraftforge.client.model.data.{EmptyModelData, IModelData}
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
   private var items = NonNullList.withSize(1, ItemStack.EMPTY)
+  private var oldItem = ItemStack.EMPTY
 
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
 
@@ -33,9 +36,11 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   def getItems: NonNullList[ItemStack] = items
 
   @Deprecated
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = {
+    ContainerHelper.removeItem(items, pSlot, pAmount)
+  }
 
-  def removeItem(pAmount: Int): ItemStack = ContainerHelper.removeItem(items, 0, pAmount)
+  def removeItem(pAmount: Int): ItemStack = removeItem(0, pAmount)
 
   @Deprecated
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
@@ -43,9 +48,11 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   def removeItemNoUpdate(): ItemStack = ContainerHelper.takeItem(items, 0)
 
   @Deprecated
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = items.set(pSlot, pStack)
+  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
+    items.set(pSlot, pStack)
+  }
 
-  def setItem(pStack: ItemStack): Unit = items.set(0, pStack)
+  def setItem(pStack: ItemStack): Unit = setItem(0, pStack)
 
   override def stillValid(pPlayer: Player): Boolean = {
     if (level.getBlockEntity(worldPosition) != this) {
@@ -55,7 +62,9 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     }
   }
 
-  override def clearContent(): Unit = items.clear()
+  override def clearContent(): Unit = {
+    items.clear()
+  }
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
@@ -68,5 +77,31 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     ContainerHelper.saveAllItems(pTag, items)
   }
 
+  private def isItemChanged: Boolean = {
+    if (getItem.isEmpty && oldItem.isEmpty)
+      return false
+    if (getItem.getItem == oldItem.getItem)
+      return false
+    true
+  }
+
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
+
+  override def getUpdateTag: CompoundTag = {
+    val tag = new CompoundTag()
+    ContainerHelper.saveAllItems(tag, this.items, true)
+    tag
+  }
+
+  override def getModelData: IModelData = EmptyModelData.INSTANCE
+}
+
+object BookStandBlockEntity extends BlockEntityTicker[BookStandBlockEntity] {
+  override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookStandBlockEntity): Unit = {
+    if (pBlockEntity.isItemChanged) {
+      pBlockEntity.setChanged()
+      pLevel.sendBlockUpdated(pPos, pState, pState, 2)
+      pBlockEntity.oldItem = pBlockEntity.getItem
+    }
+  }
 }

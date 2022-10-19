@@ -2,29 +2,27 @@ package com.yuuki1293.bookbook.common.block
 
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock._
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity
-import com.yuuki1293.bookbook.common.util.Ticked
+import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.BlockPos
-import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.properties.{BlockStateProperties, BooleanProperty, DirectionProperty}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState, StateDefinition}
-import net.minecraft.world.level.block.{BaseEntityBlock, Block, HorizontalDirectionalBlock, RenderShape}
+import net.minecraft.world.level.block.{Block, HorizontalDirectionalBlock}
 import net.minecraft.world.phys.BlockHitResult
-import net.minecraft.world.{Containers, InteractionHand, InteractionResult, MenuProvider}
+import net.minecraft.world.{InteractionHand, InteractionResult}
 
-class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEntityBlock(properties) {
+class BookGeneratorBlock(properties: BlockBehaviour.Properties)
+  extends BaseBookContainerBlock[BookGeneratorBlockEntity](properties) {
   registerDefaultState(
     stateDefinition.any()
       .setValue(LIT, java.lang.Boolean.FALSE)
   )
 
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
-    if (pLevel.isClientSide)
-      null
-    else
-      (_, _, _, blockEntity) => blockEntity.asInstanceOf[Ticked].tick()
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_GENERATOR.get(), BookGeneratorBlockEntity)
   }
 
   override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
@@ -36,39 +34,13 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties) extends BaseEnti
     pBuilder.add(FACING, LIT)
   }
 
-  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult =
+  override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
     if (pLevel.isClientSide)
       InteractionResult.SUCCESS
     else {
       openContainer(pLevel, pPos, pPlayer)
       InteractionResult.CONSUME
     }
-
-  override def onRemove(pState: BlockState, pLevel: Level, pPos: BlockPos, pNewState: BlockState, pIsMoving: Boolean): Unit = {
-    if (!pState.is(pNewState.getBlock)) {
-      val blockEntity = pLevel.getBlockEntity(pPos)
-      blockEntity match {
-        case entity: BookGeneratorBlockEntity =>
-          if (pLevel.isInstanceOf[ServerLevel]) {
-            Containers.dropContents(pLevel, pPos, entity)
-          }
-      }
-
-      pLevel.updateNeighbourForOutputSignal(pPos, this)
-    }
-
-    super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving)
-  }
-
-  protected def openContainer(pLevel: Level, pPos: BlockPos, pPlayer: Player): Unit = {
-    val blockEntity = pLevel.getBlockEntity(pPos)
-    if (blockEntity.isInstanceOf[BookGeneratorBlockEntity]) {
-      pPlayer.openMenu(blockEntity.asInstanceOf[MenuProvider])
-    }
-  }
-
-  override def getRenderShape(pState: BlockState): RenderShape = {
-    RenderShape.MODEL
   }
 }
 
