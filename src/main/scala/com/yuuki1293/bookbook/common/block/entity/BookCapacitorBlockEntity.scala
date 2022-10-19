@@ -66,7 +66,7 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     if (cap == CapabilityEnergy.ENERGY)
       energy.cast()
     else
-      super.getCapability(cap)
+      super.getCapability(cap, side)
   }
 
   def getEnergy: Int = energyStorage.getEnergyStored
