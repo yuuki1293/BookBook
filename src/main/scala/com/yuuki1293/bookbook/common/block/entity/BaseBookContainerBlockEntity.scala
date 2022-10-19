@@ -27,4 +27,11 @@ trait BaseBookContainerBlockEntity
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 
   override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
+
+  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
+    items.set(pSlot, pStack)
+    if (pStack.getCount > getMaxStackSize) {
+      pStack.setCount(getMaxStackSize)
+    }
+  }
 }
