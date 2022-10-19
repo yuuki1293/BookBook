@@ -20,4 +20,6 @@ trait BaseBookContainerBlockEntity
     }
     true
   }
+
+  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 }
