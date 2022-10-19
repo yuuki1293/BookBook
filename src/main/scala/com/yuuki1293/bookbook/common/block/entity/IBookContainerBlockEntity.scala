@@ -1,22 +1,15 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import net.minecraft.core.{BlockPos, NonNullList}
+import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world._
-import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.Level
 import net.minecraftforge.common.extensions.IForgeBlockEntity
 
-import javax.annotation.Nullable
 import scala.jdk.CollectionConverters._
 
 trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
-  @Nullable
-  protected var level: Level
-  protected var worldPosition: BlockPos
-
   var items: NonNullList[ItemStack]
 
   override def getContainerSize: Int = items.size()
@@ -40,12 +33,6 @@ trait IBookContainerBlockEntity
     if (pStack.getCount > getMaxStackSize) {
       pStack.setCount(getMaxStackSize)
     }
-  }
-
-  override def stillValid(pPlayer: Player): Boolean = {
-    if (level.getBlockEntity(worldPosition) != this)
-      return false
-    pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
   }
 
   override def clearContent(): Unit = items.clear()
