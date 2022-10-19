@@ -1,12 +1,14 @@
 package com.yuuki1293.bookbook.common.block
 
 import com.yuuki1293.bookbook.common.block.entity.BookStandBlockEntity
+import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.BaseEntityBlock.createTickerHelper
 import net.minecraft.world.level.block.Block
-import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker, BlockEntityType}
 import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 import net.minecraft.world.level.{BlockGetter, Level}
 import net.minecraft.world.phys.BlockHitResult
@@ -51,5 +53,9 @@ class BookStandBlock(properties: BlockBehaviour.Properties)
 
   override def getShape(pState: BlockState, pLevel: BlockGetter, pPos: BlockPos, pContext: CollisionContext): VoxelShape = {
     SHAPE
+  }
+
+  override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
+    createTickerHelper(pBlockEntityType, BlockEntities.BOOK_STAND.get(), BookStandBlockEntity)
   }
 }
