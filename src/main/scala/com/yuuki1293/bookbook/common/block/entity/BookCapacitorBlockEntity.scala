@@ -133,7 +133,7 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 
   private def createEnergyStorage: BookEnergyStorage = {
-    new BookEnergyStorage(this, capacity, maxTransfer)
+    BookEnergyStorage(this, capacity, maxTransfer)
   }
 
   override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_capacitor")
@@ -166,6 +166,9 @@ object BookCapacitorBlockEntity extends BlockEntityTicker[BookCapacitorBlockEnti
   final val SLOT_OUTPUT = 1
   final val DATA_ENERGY_STORED = 0
   final val DATA_MAX_ENERGY = 1
+
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookCapacitorBlockEntity(worldPosition, blockState)
 
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookCapacitorBlockEntity): Unit = {
     pBlockEntity.outputEnergy()
