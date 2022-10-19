@@ -1,6 +1,6 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{SLOT_INPUT, SLOT_OUTPUT}
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, DATA_POWER_COST, DATA_PROGRESS, SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
@@ -8,34 +8,29 @@ import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes, RecipeT
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
-import net.minecraft.world.entity.player.{Inventory, Player}
+import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.{AbstractContainerMenu, ContainerData}
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.{BaseContainerBlockEntity, BlockEntityTicker}
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.{Container, ContainerHelper, SimpleContainer, WorldlyContainer}
-import net.minecraftforge.common.capabilities.Capability
+import net.minecraft.world.{Container, SimpleContainer}
 import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.energy.CapabilityEnergy
-import net.minecraftforge.items.wrapper.SidedInvWrapper
-import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
 
 class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockState)
-  extends BaseContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState)
-    with WorldlyContainer {
-  private var items = NonNullList.withSize(2, ItemStack.EMPTY)
+  extends BaseBookContainerBlockEntity(BlockEntities.BOOK_CRAFTING_CORE.get(), worldPosition, blockState) {
+  override var items: NonNullList[ItemStack] = NonNullList.withSize(2, ItemStack.EMPTY)
   private var recipeItems = NonNullList.withSize(81, ItemStack.EMPTY)
   private var recipe: Option[BookCraftingRecipe] = None
   private val capacity = 100000000
   private val maxReceive = 10000000
 
   val energyStorage: BookEnergyStorage = createEnergyStorage
-  private val energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
+  private var energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   private var progress = 0
   private var standCount = 0
   private var haveItemChanged = true
@@ -49,10 +44,10 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
      */
     override def get(pIndex: Int): Int = {
       pIndex match {
-        case 0 => getEnergy
-        case 1 => getMaxEnergy
-        case 2 => getProgress
-        case 3 => getPowerCost
+        case DATA_ENERGY_STORED => getEnergy
+        case DATA_MAX_ENERGY => getMaxEnergy
+        case DATA_PROGRESS => getProgress
+        case DATA_POWER_COST => getPowerCost
         case _ => throw new UnsupportedOperationException("Unable to get index: " + pIndex)
       }
     }
@@ -106,72 +101,18 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  override def getContainerSize: Int = items.size()
-
-  override def isEmpty: Boolean = {
-    for (item: ItemStack <- items.asScala) {
-      if (!item.isEmpty)
-        return false
-    }
-    true
-  }
-
-  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
-
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
-
-  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
-
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
-    items.set(pSlot, pStack)
-    if (pStack.getCount > getMaxStackSize) {
-      pStack.setCount(getMaxStackSize)
-    }
-  }
-
-  override def stillValid(pPlayer: Player): Boolean = {
-    if (level.getBlockEntity(worldPosition) != this) {
-      false
-    } else {
-      pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
-    }
-  }
-
-  override def clearContent(): Unit = items.clear()
-
-  var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
-
-  override def getCapability[A](cap: Capability[A], side: Direction): LazyOptional[A] = {
-    if (cap == CapabilityEnergy.ENERGY)
-      energy.cast()
-    else if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-      if (side == Direction.UP)
-        handlers(0).cast()
-      else if (side == Direction.DOWN)
-        handlers(1).cast()
-      else
-        handlers(2).cast()
-    }
-    else
-      super.getCapability(cap, side)
-  }
-
   override def invalidateCaps(): Unit = {
     super.invalidateCaps()
     energy.invalidate()
-    for (handler <- handlers)
-      handler.invalidate()
   }
 
   override def reviveCaps(): Unit = {
     super.reviveCaps()
-    handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+    energy = LazyOptional.of(() => energyStorage)
   }
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
-    ContainerHelper.loadAllItems(pTag, items)
     energyStorage.setEnergy(pTag.getInt("Energy"))
     progress = pTag.getInt("Progress")
   }
@@ -180,7 +121,6 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     super.saveAdditional(pTag)
     pTag.putInt("Energy", getEnergy)
     pTag.putInt("Progress", getProgress)
-    ContainerHelper.saveAllItems(pTag, items)
   }
 
   def getStandWithItems: Map[BlockPos, ItemStack] = {
