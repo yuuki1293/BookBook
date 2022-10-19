@@ -3,8 +3,9 @@ package com.yuuki1293.bookbook.common.block.entity
 import net.minecraft.core.NonNullList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.{Container, MenuProvider, Nameable, WorldlyContainer}
+import net.minecraft.world.{Container, ContainerHelper, MenuProvider, Nameable, WorldlyContainer}
 import net.minecraftforge.common.extensions.IForgeBlockEntity
+
 import scala.jdk.CollectionConverters._
 
 trait BaseBookContainerBlockEntity
@@ -22,4 +23,6 @@ trait BaseBookContainerBlockEntity
   }
 
   override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
+
+  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
 }
