@@ -22,3 +22,8 @@ class BookFurnaceBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     new BookFurnaceMenu(pContainerId, pPlayer, this, dataAccess)
   }
 }
+
+object BookFurnaceBlockEntity {
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookFurnaceBlockEntity(worldPosition, blockState)
+}
