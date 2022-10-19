@@ -5,9 +5,10 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world._
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.extensions.IForgeBlockEntity
 import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.items.IItemHandlerModifiable
+import net.minecraftforge.items.{CapabilityItemHandler, IItemHandlerModifiable}
 import net.minecraftforge.items.wrapper.SidedInvWrapper
 
 import scala.jdk.CollectionConverters._
@@ -16,6 +17,7 @@ trait BaseBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
   protected var level: Level
   protected var worldPosition: BlockPos
+  protected var remove: Boolean
 
   var items: NonNullList[ItemStack]
 
@@ -51,4 +53,17 @@ trait BaseBookContainerBlockEntity
   override def clearContent(): Unit = items.clear()
 
   protected var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+
+  override def getCapability[T](cap: Capability[T], side: Direction): LazyOptional[T] = {
+    if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+      if (side == Direction.UP)
+        handlers(0).cast()
+      else if (side == Direction.DOWN)
+        handlers(1).cast()
+      else
+        handlers(2).cast()
+    }
+    else
+      super.getCapability(cap)
+  }
 }
