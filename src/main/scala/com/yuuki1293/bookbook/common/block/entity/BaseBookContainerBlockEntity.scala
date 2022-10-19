@@ -71,4 +71,8 @@ trait BaseBookContainerBlockEntity
     for (handler <- handlers)
       handler.invalidate()
   }
+
+  def reviveCaps(): Unit = {
+    handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
+  }
 }
