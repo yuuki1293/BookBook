@@ -55,30 +55,6 @@ trait IBookContainerBlockEntity
 
   override def clearContent(): Unit = items.clear()
 
-  protected var handlers: Array[LazyOptional[IItemHandlerModifiable]] = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
-
-  override def getCapability[T](cap: Capability[T], side: Direction): LazyOptional[T] = {
-    if (!remove && side != null && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-      if (side == Direction.UP)
-        handlers(0).cast()
-      else if (side == Direction.DOWN)
-        handlers(1).cast()
-      else
-        handlers(2).cast()
-    }
-    else
-      super.getCapability(cap)
-  }
-
-  def invalidateCaps(): Unit = {
-    for (handler <- handlers)
-      handler.invalidate()
-  }
-
-  def reviveCaps(): Unit = {
-    handlers = SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH)
-  }
-
   def load(pTag: CompoundTag): Unit ={
     items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
     ContainerHelper.loadAllItems(pTag, items)
