@@ -81,4 +81,8 @@ trait BaseBookContainerBlockEntity
     items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
     ContainerHelper.loadAllItems(pTag, items)
   }
+
+  protected def saveAdditional(pTag: CompoundTag): Unit = {
+    ContainerHelper.saveAllItems(pTag, items)
+  }
 }
