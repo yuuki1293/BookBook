@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker}
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.{ContainerHelper, WorldlyContainer}
 import net.minecraftforge.client.model.data.{EmptyModelData, IModelData}
-import org.apache.logging.log4j.LogManager
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
   extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
