@@ -97,6 +97,9 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 }
 
 object BookStandBlockEntity extends BlockEntityTicker[BookStandBlockEntity] {
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookStandBlockEntity(worldPosition, blockState)
+
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookStandBlockEntity): Unit = {
     if (pBlockEntity.isItemChanged) {
       pBlockEntity.setChanged()
