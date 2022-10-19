@@ -235,7 +235,7 @@ object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEnti
 
     if (burnFlag != be.isBurn) {
       val state = pState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(be.isBurn))
-      be.level.setBlock(be.worldPosition, state, 3)
+      be.getLevel.setBlock(be.getBlockPos, state, 3)
     }
 
     be.outputEnergy()
