@@ -10,7 +10,7 @@ import scala.jdk.CollectionConverters._
 
 trait IBookContainerBlockEntity
   extends IForgeBlockEntity with Container with MenuProvider with Nameable with WorldlyContainer {
-  var items: NonNullList[ItemStack]
+  protected var items: NonNullList[ItemStack]
 
   override def getContainerSize: Int = items.size()
 
