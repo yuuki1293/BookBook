@@ -25,4 +25,6 @@ trait BaseBookContainerBlockEntity
   override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
 
   override def removeItem(pSlot: Int, pAmount: Int): ItemStack = ContainerHelper.removeItem(items, pSlot, pAmount)
+
+  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
 }
