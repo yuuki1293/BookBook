@@ -306,10 +306,13 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
     if (flag) {
       craftingCore.setChanged()
 
-      standsWithItems
-        .keySet
-        .map(pos => Option(level.getBlockEntity(pos)))
-        .foreach(_.foreach(_.setChanged()))
+      for (
+        pos <- standsWithItems.keySet;
+        be <- Option(level.getBlockEntity(pos))
+      ) {
+        be.setChanged()
+        level.sendBlockUpdated(pos, be.getBlockState, be.getBlockState, 2)
+      }
     }
   }
 
