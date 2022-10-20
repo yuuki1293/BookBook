@@ -1,15 +1,18 @@
 package com.yuuki1293.bookbook.common.block.entity.util
 
 import net.minecraft.core.Direction
+import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage}
+import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorage}
+
 import scala.jdk.OptionConverters._
 
 class BookEnergyStorage(pBlockEntity: BlockEntity,
                         pCapacity: Int,
                         pMaxReceive: Int,
                         pMaxExtract: Int,
-                        pEnergy: Int, pEject: Array[Direction] = Direction.values())
+                        pEnergy: Int,
+                        pEject: Array[Direction] = Direction.values())
   extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
   private val blockEntity: BlockEntity = pBlockEntity
   var eject: Array[Direction] = pEject
@@ -40,11 +43,31 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
     for (direction <- eject;
          be <- Option(level.getBlockEntity(worldPos.relative(direction)));
          storage <- be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).resolve().toScala) {
-      val toSend = extractEnergy(maxExtract, simulate = false)
-      val received = storage.receiveEnergy(toSend, false)
-
-      energy = getEnergyStored + toSend - received
+      transfer(storage)
     }
+  }
+
+  def chargeItems(container: Container, startIndex: Int, endIndex: Int): Unit = {
+    if (getEnergyStored <= 0
+      || !canExtract
+      || startIndex >= endIndex
+      || container.getContainerSize < endIndex)
+      return
+
+    for (i <- startIndex until endIndex) {
+      val item = Option(container.getItem(i))
+      for (item <- item;
+           storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala) {
+        transfer(storage)
+      }
+    }
+  }
+
+  protected def transfer(receiver: IEnergyStorage): Unit = {
+    val toSend = extractEnergy(maxExtract, simulate = false)
+    val received = receiver.receiveEnergy(toSend, false)
+
+    energy = getEnergyStored + toSend - received
   }
 }
 
