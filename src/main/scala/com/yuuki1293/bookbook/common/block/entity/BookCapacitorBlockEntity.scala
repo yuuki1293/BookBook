@@ -84,42 +84,16 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 
   def outputEnergy(): Unit = {
-    if (energyStorage.getEnergyStored >= maxTransfer && energyStorage.canExtract) {
-      val item = items.get(SLOT_INPUT)
-      if (item != null) {
-        item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage => {
-          if (storage.getEnergyStored < storage.getMaxEnergyStored) {
-            val toSend = energyStorage.extractEnergy(maxTransfer, simulate = false)
-            val received = storage.receiveEnergy(toSend, false)
+    energyStorage.chargeItems(this, 0, 1)
 
-            energyStorage.setEnergy(
-              energyStorage.getEnergyStored + toSend - received
-            )
-          }
+    val item = items.get(SLOT_INPUT)
+    item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
+      if (storage.getEnergyStored >= storage.getMaxEnergyStored && items.get(SLOT_OUTPUT).isEmpty) {
+        items.set(SLOT_OUTPUT, item)
+        items.remove(SLOT_INPUT)
+      })
 
-          if (storage.getEnergyStored >= storage.getMaxEnergyStored && items.get(SLOT_OUTPUT).isEmpty) {
-            items.set(SLOT_OUTPUT, item)
-            items.remove(SLOT_INPUT)
-          }
-        })
-      }
-
-      for (direction <- Direction.values()) {
-        val be = level.getBlockEntity(worldPosition.relative(direction))
-        if (be != null) {
-          be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).ifPresent(storage => {
-            if (be != this && storage.getEnergyStored < storage.getMaxEnergyStored) {
-              val toSend = energyStorage.extractEnergy(maxTransfer, simulate = false)
-              val received = storage.receiveEnergy(toSend, false)
-
-              energyStorage.setEnergy(
-                energyStorage.getEnergyStored + toSend - received
-              )
-            }
-          })
-        }
-      }
-    }
+    energyStorage.outputEnergy()
   }
 
   override def load(pTag: CompoundTag): Unit = {
