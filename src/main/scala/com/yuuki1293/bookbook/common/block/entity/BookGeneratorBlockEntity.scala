@@ -115,23 +115,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 
   def outputEnergy(): Unit = {
-    if (energyStorage.getEnergyStored >= maxExtract && energyStorage.canExtract) {
-      for (direction <- Direction.values()) {
-        val be = level.getBlockEntity(worldPosition.relative(direction))
-        if (be != null) {
-          be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).ifPresent(storage => {
-            if (be != this && storage.getEnergyStored < storage.getMaxEnergyStored) {
-              val toSend = energyStorage.extractEnergy(maxExtract, simulate = false)
-              val received = storage.receiveEnergy(toSend, false)
-
-              energyStorage.setEnergy(
-                energyStorage.getEnergyStored + toSend - received
-              )
-            }
-          })
-        }
-      }
-    }
+    energyStorage.outputEnergy()
   }
 
   private def createEnergyStorage: BookEnergyStorage = {
