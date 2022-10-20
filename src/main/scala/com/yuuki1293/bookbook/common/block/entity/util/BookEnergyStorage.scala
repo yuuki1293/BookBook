@@ -7,15 +7,9 @@ import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorag
 
 import scala.jdk.OptionConverters._
 
-class BookEnergyStorage(pBlockEntity: BlockEntity,
-                        pCapacity: Int,
-                        pMaxReceive: Int,
-                        pMaxExtract: Int,
-                        pEnergy: Int,
-                        pEject: Array[Direction] = Direction.values())
+class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int)
   extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
   private val blockEntity: BlockEntity = pBlockEntity
-  var eject: Array[Direction] = pEject
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
     blockEntity.setChanged()
@@ -33,7 +27,7 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
 
   def increase(inc: Int): Unit = energy = Math.min(capacity, energy + inc)
 
-  def outputEnergy(): Unit = {
+  def outputEnergy(eject: Array[Direction] = Direction.values()): Unit = {
     if (getEnergyStored <= 0 || !canExtract)
       return
 
@@ -72,22 +66,12 @@ class BookEnergyStorage(pBlockEntity: BlockEntity,
 }
 
 object BookEnergyStorage {
-  def apply(blockEntity: BlockEntity,
-            capacity: Int,
-            maxReceive: Int,
-            maxExtract: Int,
-            energy: Int = 0,
-            eject: Array[Direction] = Direction.values()): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, maxReceive, maxExtract, energy, eject)
+  def apply(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int, energy: Int = 0): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, maxReceive, maxExtract, energy)
 
-  def apply(blockEntity: BlockEntity,
-            capacity: Int,
-            eject: Array[Direction] = Direction.values()): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, capacity, capacity, 0, eject)
+  def apply(blockEntity: BlockEntity, capacity: Int): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, capacity, capacity, 0)
 
-  def apply(blockEntity: BlockEntity,
-            capacity: Int,
-            maxTransfer: Int,
-            eject: Array[Direction] = Direction.values()): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, maxTransfer, maxTransfer, 0, eject)
+  def apply(blockEntity: BlockEntity, capacity: Int, maxTransfer: Int): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, maxTransfer, maxTransfer, 0)
 }
