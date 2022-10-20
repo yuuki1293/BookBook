@@ -2,14 +2,13 @@ package com.yuuki1293.bookbook.common.item
 
 import com.yuuki1293.bookbook.common.item.UnstableBookItem._
 import net.minecraft.ChatFormatting
-import net.minecraft.network.chat.{Component, Style, TranslatableComponent}
+import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.{Item, ItemStack, TooltipFlag}
 import net.minecraft.world.level.{Explosion, Level}
 
-import scala.jdk.CollectionConverters._
 import java.util
 
 class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
@@ -43,6 +42,8 @@ class UnstableBookItem(pProperties: Item.Properties) extends Item(pProperties) {
 
 object UnstableBookItem {
   final val TAG_AGE = "Age"
+
+  def apply(properties: Item.Properties) = new UnstableBookItem(properties)
 
   /**
    * Cause unstable ingot explosion<br>

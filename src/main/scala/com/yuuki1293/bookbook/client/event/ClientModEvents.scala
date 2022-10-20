@@ -21,12 +21,12 @@ import scala.annotation.unused
 object ClientModEvents {
   @SubscribeEvent
   def clientSetup(@unused event: FMLClientSetupEvent): Unit = {
-    MenuScreens.register(MenuTypes.BOOK_GENERATOR.get(), (menu: BookGeneratorMenu, inv, title) => new BookGeneratorScreen(menu, inv, title))
-    MenuScreens.register(MenuTypes.BOOK_CAPACITOR.get(), (menu: BookCapacitorMenu, inv, title) => new BookCapacitorScreen(menu, inv, title))
-    MenuScreens.register(MenuTypes.BOOK_CRAFTING_CORE.get(), (menu: BookCraftingCoreMenu, inv, title) => new BookCraftingCoreScreen(menu, inv, title))
+    MenuScreens.register(MenuTypes.BOOK_GENERATOR.get(), (menu: BookGeneratorMenu, inv, title) => BookGeneratorScreen(menu, inv, title))
+    MenuScreens.register(MenuTypes.BOOK_CAPACITOR.get(), (menu: BookCapacitorMenu, inv, title) => BookCapacitorScreen(menu, inv, title))
+    MenuScreens.register(MenuTypes.BOOK_CRAFTING_CORE.get(), (menu: BookCraftingCoreMenu, inv, title) => BookCraftingCoreScreen(menu, inv, title))
 
     ItemBlockRenderTypes.setRenderLayer(Blocks.BOOKSHELF_FRAME.get(), RenderType.cutout())
 
-    BlockEntityRenderers.register(BlockEntities.BOOK_STAND.get(), new BookStandRenderer(_))
+    BlockEntityRenderers.register(BlockEntities.BOOK_STAND.get(), BookStandRenderer(_))
   }
 }

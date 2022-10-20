@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.Mod
 import scala.annotation.unused
 
 @Mod.EventBusSubscriber
-@unused
 class RecipeSerializers {
   @SubscribeEvent
   def onRegisterSerializers(event: RegistryEvent.Register[RecipeSerializer[_]]): Unit = {
@@ -27,4 +26,6 @@ class RecipeSerializers {
 
 object RecipeSerializers {
   val BOOK_CRAFTING: RecipeSerializer[BookCraftingRecipe] = BookCraftingRecipe.Serializer
+
+  def apply = new RecipeSerializers
 }

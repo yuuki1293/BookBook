@@ -35,3 +35,7 @@ class BookStandRenderer(@unused context: Context) extends BlockEntityRenderer[Bo
     }
   }
 }
+
+object BookStandRenderer {
+  def apply(context: Context) = new BookStandRenderer(context)
+}

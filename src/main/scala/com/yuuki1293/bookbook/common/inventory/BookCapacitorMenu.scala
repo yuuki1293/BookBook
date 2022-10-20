@@ -24,8 +24,6 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   addPlayerSlot()
   addDataSlots(pData)
 
-  def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, new SimpleContainer(2), new SimpleContainerData(2))
-
   override def quickMoveStack(pPlayer: Player, pIndex: Int): ItemStack = {
     var itemStack = ItemStack.EMPTY
     val slot = slots.get(pIndex)
@@ -64,4 +62,12 @@ class BookCapacitorMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInvent
   override def getEnergyStored: Int = data.get(DATA_ENERGY_STORED)
 
   override def getMaxEnergy: Int = data.get(DATA_MAX_ENERGY)
+}
+
+object BookCapacitorMenu {
+  def apply(menuType: MenuType[_], containerId: Int, playerInventory: Inventory, container: Container, data: ContainerData) =
+    new BookCapacitorMenu(menuType, containerId, playerInventory, container, data)
+
+  def apply(containerId: Int, playerInventory: Inventory) =
+    new BookCapacitorMenu(MenuTypes.BOOK_CAPACITOR.get(), containerId, playerInventory, new SimpleContainer(2), new SimpleContainerData(2))
 }

@@ -55,6 +55,9 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
 }
 
 object BookCraftingRecipe {
+  def apply(id: ResourceLocation, ingredients: NonNullList[Ingredient], output: ItemStack, powerCost: Int, powerRate: Int) =
+    new BookCraftingRecipe(id, ingredients, output, powerCost, powerRate)
+
   object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingRecipe] {
     override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingRecipe = {
       val inputs: NonNullList[Ingredient] = NonNullList.create()

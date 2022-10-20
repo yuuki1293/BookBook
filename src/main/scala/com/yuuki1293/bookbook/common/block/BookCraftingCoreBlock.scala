@@ -13,8 +13,7 @@ import net.minecraft.world.{InteractionHand, InteractionResult}
 
 class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties)
   extends BaseBookContainerBlock[BookCraftingCoreBlockEntity](pProperties) {
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity =
-    new BookCraftingCoreBlockEntity(pPos, pState)
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = BookCraftingCoreBlockEntity(pPos, pState)
 
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
     if (pLevel.isClientSide)
@@ -28,4 +27,8 @@ class BookCraftingCoreBlock(pProperties: BlockBehaviour.Properties)
   override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
     createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CRAFTING_CORE.get(), BookCraftingCoreBlockEntity)
   }
+}
+
+object BookCraftingCoreBlock {
+  def apply(properties: BlockBehaviour.Properties) = new BookCraftingCoreBlock(properties)
 }

@@ -15,11 +15,11 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.{CollisionContext, VoxelShape}
 import net.minecraft.world.{InteractionHand, InteractionResult}
 
-class BookStandBlock(properties: BlockBehaviour.Properties)
-  extends BaseBookContainerBlock[BookStandBlockEntity](properties) {
+class BookStandBlock(pProperties: BlockBehaviour.Properties)
+  extends BaseBookContainerBlock[BookStandBlockEntity](pProperties) {
   protected val SHAPE: VoxelShape = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D)
 
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = new BookStandBlockEntity(pPos, pState)
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = BookStandBlockEntity(pPos, pState)
 
   override def use(pState: BlockState, pLevel: Level, pPos: BlockPos, pPlayer: Player, pHand: InteractionHand, pHit: BlockHitResult): InteractionResult = {
     var flag = false
@@ -45,7 +45,7 @@ class BookStandBlock(properties: BlockBehaviour.Properties)
       case _ =>
     }
 
-    if(flag)
+    if (flag)
       be.setChanged()
 
     InteractionResult.SUCCESS
@@ -58,4 +58,8 @@ class BookStandBlock(properties: BlockBehaviour.Properties)
   override def getTicker[T <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[T]): BlockEntityTicker[T] = {
     createTickerHelper(pBlockEntityType, BlockEntities.BOOK_STAND.get(), BookStandBlockEntity)
   }
+}
+
+object BookStandBlock {
+  def apply(properties: BlockBehaviour.Properties) = new BookStandBlock(properties)
 }

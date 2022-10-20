@@ -37,3 +37,8 @@ class BookGeneratorScreen(pMenu: BookGeneratorMenu, pPlayerInventory: Inventory,
     }
   }
 }
+
+object BookGeneratorScreen {
+  def apply(menu: BookGeneratorMenu, playerInventory: Inventory, title: Component) =
+    new BookGeneratorScreen(menu, playerInventory, title)
+}

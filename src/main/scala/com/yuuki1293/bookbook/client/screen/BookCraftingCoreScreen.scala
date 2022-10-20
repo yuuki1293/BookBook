@@ -17,3 +17,8 @@ class BookCraftingCoreScreen(pMenu: BookCraftingCoreMenu, pPlayerInventory: Inve
     renderTooltip(pPoseStack, pMouseX, pMouseY)
   }
 }
+
+object BookCraftingCoreScreen {
+  def apply(menu: BookCraftingCoreMenu, playerInventory: Inventory, title: Component) =
+    new BookCraftingCoreScreen(menu, playerInventory, title)
+}

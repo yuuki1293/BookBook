@@ -20,9 +20,7 @@ class BookCapacitorBlock(pProperties: BlockBehaviour.Properties)
     createTickerHelper(pBlockEntityType, BlockEntities.BOOK_CAPACITOR.get(), BookCapacitorBlockEntity)
   }
 
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
-    new BookCapacitorBlockEntity(pPos, pState)
-  }
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = BookCapacitorBlockEntity(pPos, pState)
 
   override def createBlockStateDefinition(pBuilder: StateDefinition.Builder[Block, BlockState]): Unit = {
     super.createBlockStateDefinition(pBuilder)
@@ -41,4 +39,6 @@ class BookCapacitorBlock(pProperties: BlockBehaviour.Properties)
 
 object BookCapacitorBlock {
   final val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
+
+  def apply(properties: BlockBehaviour.Properties) = new BookCapacitorBlock(properties)
 }

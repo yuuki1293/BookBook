@@ -25,9 +25,7 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties)
     createTickerHelper(pBlockEntityType, BlockEntities.BOOK_GENERATOR.get(), BookGeneratorBlockEntity)
   }
 
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
-    new BookGeneratorBlockEntity(pPos, pState)
-  }
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = BookGeneratorBlockEntity(pPos, pState)
 
   override def createBlockStateDefinition(pBuilder: StateDefinition.Builder[Block, BlockState]): Unit = {
     super.createBlockStateDefinition(pBuilder)
@@ -47,4 +45,6 @@ class BookGeneratorBlock(properties: BlockBehaviour.Properties)
 object BookGeneratorBlock {
   final val FACING: DirectionProperty = HorizontalDirectionalBlock.FACING
   final val LIT: BooleanProperty = BlockStateProperties.LIT
+
+  def apply(properties: BlockBehaviour.Properties) = new BookGeneratorBlock(properties)
 }

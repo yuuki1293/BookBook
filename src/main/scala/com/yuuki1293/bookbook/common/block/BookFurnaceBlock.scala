@@ -15,11 +15,9 @@ import net.minecraft.world.level.block.state.{BlockBehaviour, BlockState}
 
 import java.util.Random
 
-class BookFurnaceBlock(properties: BlockBehaviour.Properties)
-  extends AbstractFurnaceBlock(properties) with BaseBookBlock {
-  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = {
-    new BookFurnaceBlockEntity(pPos, pState)
-  }
+class BookFurnaceBlock(pProperties: BlockBehaviour.Properties)
+  extends AbstractFurnaceBlock(pProperties) with BaseBookBlock {
+  override def newBlockEntity(pPos: BlockPos, pState: BlockState): BlockEntity = BookFurnaceBlockEntity(pPos, pState)
 
   override def getTicker[A <: BlockEntity](pLevel: Level, pState: BlockState, pBlockEntityType: BlockEntityType[A]): BlockEntityTicker[A] = {
     createFurnaceTicker(pLevel, pBlockEntityType, BlockEntities.BOOK_FURNACE.get())
@@ -56,4 +54,8 @@ class BookFurnaceBlock(properties: BlockBehaviour.Properties)
   }
 
   override def getEnchantPowerBonus(state: BlockState, level: LevelReader, pos: BlockPos): Float = super[BaseBookBlock].getEnchantPowerBonus(state, level, pos)
+}
+
+object BookFurnaceBlock {
+  def apply(properties: BlockBehaviour.Properties) = new BookFurnaceBlock(properties)
 }
