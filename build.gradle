@@ -153,5 +153,5 @@ publishing {
 }
 
 tasks.withType(ScalaCompile) {
-    scalaCompileOptions.additionalParameters = [ "-Ywarn-unused" ]
+    scalaCompileOptions.additionalParameters = [ "-Ywarn-unused", '-Yno-adapted-args' ]
 }
