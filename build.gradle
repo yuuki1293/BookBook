@@ -13,6 +13,7 @@ buildscript {
 plugins {
     id 'eclipse'
     id 'maven-publish'
+    id 'io.github.cosmicsilence.scalafix' version '0.1.14'
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'scala'
@@ -149,4 +150,8 @@ publishing {
             url "file://${project.projectDir}/mcmodsrepo"
         }
     }
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = [ "-Ywarn-unused" ]
 }
