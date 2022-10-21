@@ -10,8 +10,6 @@ import net.minecraftforge.event.RegistryEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 
-import scala.annotation.unused
-
 @Mod.EventBusSubscriber
 class RecipeSerializers {
   @SubscribeEvent

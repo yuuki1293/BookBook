@@ -32,7 +32,6 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   val energyStorage: BookEnergyStorage = createEnergyStorage
   private var energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   private var progress = 0
-  private var standCount = 0
   private var haveItemChanged = true
   protected val dataAccess: ContainerData = new ContainerData {
     /**
@@ -148,7 +147,6 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
         })
     }
 
-    this.standCount = standCount
     stands.toMap
   }
 
