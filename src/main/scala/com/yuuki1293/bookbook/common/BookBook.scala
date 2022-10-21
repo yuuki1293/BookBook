@@ -16,5 +16,5 @@ object BookBook {
   BlockEntities.registry
   MenuTypes.registry
 
-  eventBus.register(new RecipeSerializers)
+  eventBus.register(RecipeSerializers)
 }

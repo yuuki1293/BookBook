@@ -24,8 +24,6 @@ class BookCraftingCoreMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInv
   addPlayerSlot()
   addDataSlots(pData)
 
-  def this(pContainerId: Int, pPlayerInventory: Inventory) = this(MenuTypes.BOOK_CRAFTING_CORE.get(), pContainerId, pPlayerInventory, new SimpleContainer(2), new SimpleContainerData(4))
-
   override def getEnergyStored: Int = data.get(DATA_ENERGY_STORED)
 
   override def getMaxEnergy: Int = data.get(DATA_MAX_ENERGY)
@@ -62,4 +60,12 @@ class BookCraftingCoreMenu(pMenuType: MenuType[_], pContainerId: Int, pPlayerInv
 
     itemStack
   }
+}
+
+object BookCraftingCoreMenu {
+  def apply(menuType: MenuType[_], containerId: Int, playerInventory: Inventory, container: Container, data: ContainerData) =
+    new BookCraftingCoreMenu(menuType, containerId, playerInventory, container, data)
+
+  def apply(containerId: Int, playerInventory: Inventory) =
+    new BookCraftingCoreMenu(MenuTypes.BOOK_CRAFTING_CORE.get(), containerId, playerInventory, new SimpleContainer(2), new SimpleContainerData(4))
 }

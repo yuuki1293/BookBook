@@ -3,19 +3,20 @@ package com.yuuki1293.bookbook.common.block.entity
 import com.yuuki1293.bookbook.common.register.BlockEntities
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.chat.Component
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.{ClientGamePacketListener, ClientboundBlockEntityDataPacket}
-import net.minecraft.world.entity.player.Player
+import net.minecraft.world.ContainerHelper
+import net.minecraft.world.entity.player.{Inventory, Player}
+import net.minecraft.world.inventory.AbstractContainerMenu
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import net.minecraft.world.level.block.entity.{BlockEntity, BlockEntityTicker}
+import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.{ContainerHelper, WorldlyContainer}
-import net.minecraftforge.client.model.data.{EmptyModelData, IModelData}
 
 class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
-  extends BlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) with WorldlyContainer {
-  private var items = NonNullList.withSize(1, ItemStack.EMPTY)
+  extends BaseBookContainerBlockEntity(BlockEntities.BOOK_STAND.get(), pPos, pState) {
+  override protected var items: NonNullList[ItemStack] = NonNullList.withSize(1, ItemStack.EMPTY)
   private var oldItem = ItemStack.EMPTY
 
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(0)
@@ -24,58 +25,13 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
 
-  override def getContainerSize: Int = items.size()
-
-  override def isEmpty: Boolean = items.get(0).isEmpty
-
-  @Deprecated
-  override def getItem(pSlot: Int): ItemStack = items.get(pSlot)
-
   def getItem: ItemStack = items.get(0)
-
-  def getItems: NonNullList[ItemStack] = items
-
-  @Deprecated
-  override def removeItem(pSlot: Int, pAmount: Int): ItemStack = {
-    ContainerHelper.removeItem(items, pSlot, pAmount)
-  }
 
   def removeItem(pAmount: Int): ItemStack = removeItem(0, pAmount)
 
-  @Deprecated
-  override def removeItemNoUpdate(pSlot: Int): ItemStack = ContainerHelper.takeItem(items, pSlot)
-
   def removeItemNoUpdate(): ItemStack = ContainerHelper.takeItem(items, 0)
 
-  @Deprecated
-  override def setItem(pSlot: Int, pStack: ItemStack): Unit = {
-    items.set(pSlot, pStack)
-  }
-
   def setItem(pStack: ItemStack): Unit = setItem(0, pStack)
-
-  override def stillValid(pPlayer: Player): Boolean = {
-    if (level.getBlockEntity(worldPosition) != this) {
-      false
-    } else {
-      pPlayer.distanceToSqr(worldPosition.getX.toDouble + 0.5D, worldPosition.getY.toDouble + 0.5D, worldPosition.getZ.toDouble + 0.5D) <= 64.0D
-    }
-  }
-
-  override def clearContent(): Unit = {
-    items.clear()
-  }
-
-  override def load(pTag: CompoundTag): Unit = {
-    super.load(pTag)
-    items = NonNullList.withSize(getContainerSize, ItemStack.EMPTY)
-    ContainerHelper.loadAllItems(pTag, items)
-  }
-
-  override def saveAdditional(pTag: CompoundTag): Unit = {
-    super.saveAdditional(pTag)
-    ContainerHelper.saveAllItems(pTag, items)
-  }
 
   private def isItemChanged: Boolean = {
     if (getItem.isEmpty && oldItem.isEmpty)
@@ -93,10 +49,17 @@ class BookStandBlockEntity(pPos: BlockPos, pState: BlockState)
     tag
   }
 
-  override def getModelData: IModelData = EmptyModelData.INSTANCE
+  override def stillValid(pPlayer: Player): Boolean = false
+
+  override def getDefaultName: Component = null
+
+  override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = null
 }
 
 object BookStandBlockEntity extends BlockEntityTicker[BookStandBlockEntity] {
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookStandBlockEntity(worldPosition, blockState)
+
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookStandBlockEntity): Unit = {
     if (pBlockEntity.isItemChanged) {
       pBlockEntity.setChanged()

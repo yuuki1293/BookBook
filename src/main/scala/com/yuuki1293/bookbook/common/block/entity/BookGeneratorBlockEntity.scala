@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock
-import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.SLOT_FUEL
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_FUEL}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
@@ -41,10 +41,10 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
      */
     override def get(pIndex: Int): Int = {
       pIndex match {
-        case 0 => burnTime
-        case 1 => burnDuration
-        case 2 => getEnergy
-        case 3 => getMaxEnergy
+        case DATA_BURN_TIME => burnTime
+        case DATA_BURN_DURATION => burnDuration
+        case DATA_ENERGY_STORED => getEnergy
+        case DATA_MAX_ENERGY => getMaxEnergy
         case _ => throw new UnsupportedOperationException("Unable to get index: '" + pIndex)
       }
     }
@@ -115,23 +115,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   }
 
   def outputEnergy(): Unit = {
-    if (energyStorage.getEnergyStored >= maxExtract && energyStorage.canExtract) {
-      for (direction <- Direction.values()) {
-        val be = level.getBlockEntity(worldPosition.relative(direction))
-        if (be != null) {
-          be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).ifPresent(storage => {
-            if (be != this && storage.getEnergyStored < storage.getMaxEnergyStored) {
-              val toSend = energyStorage.extractEnergy(maxExtract, simulate = false)
-              val received = storage.receiveEnergy(toSend, false)
-
-              energyStorage.setEnergy(
-                energyStorage.getEnergyStored + toSend - received
-              )
-            }
-          })
-        }
-      }
-    }
+    energyStorage.outputEnergy()
   }
 
   private def createEnergyStorage: BookEnergyStorage = {
@@ -161,6 +145,9 @@ object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEnti
   final val DATA_BURN_DURATION = 1
   final val DATA_ENERGY_STORED = 2
   final val DATA_MAX_ENERGY = 3
+
+  def apply(worldPosition: BlockPos, blockState: BlockState) =
+    new BookGeneratorBlockEntity(worldPosition, blockState)
 
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookGeneratorBlockEntity): Unit = {
     val be = pBlockEntity

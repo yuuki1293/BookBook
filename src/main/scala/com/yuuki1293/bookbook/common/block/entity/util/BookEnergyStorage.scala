@@ -1,16 +1,15 @@
 package com.yuuki1293.bookbook.common.block.entity.util
 
+import net.minecraft.core.Direction
+import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraftforge.energy.EnergyStorage
+import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorage}
 
-class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int) extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
-  def this(pBlockEntity: BlockEntity, pCapacity: Int) = this(pBlockEntity, pCapacity, pCapacity, pCapacity, 0)
+import scala.jdk.OptionConverters._
 
-  def this(pBlockEntity: BlockEntity, pCapacity: Int, pMaxTransfer: Int) = this(pBlockEntity, pCapacity, pMaxTransfer, pMaxTransfer, 0)
-
-  def this(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int) = this(pBlockEntity, pCapacity, pMaxReceive, pMaxExtract, 0)
-
-  val blockEntity: BlockEntity = pBlockEntity
+class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int)
+  extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
+  private val blockEntity: BlockEntity = pBlockEntity
 
   override def extractEnergy(maxExtract: Int, simulate: Boolean): Int = {
     blockEntity.setChanged()
@@ -27,4 +26,52 @@ class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: 
   }
 
   def increase(inc: Int): Unit = energy = Math.min(capacity, energy + inc)
+
+  def outputEnergy(eject: Array[Direction] = Direction.values()): Unit = {
+    if (getEnergyStored <= 0 || !canExtract)
+      return
+
+    val level = blockEntity.getLevel
+    val worldPos = blockEntity.getBlockPos
+
+    for (direction <- eject;
+         be <- Option(level.getBlockEntity(worldPos.relative(direction)));
+         storage <- be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).resolve().toScala) {
+      transfer(storage)
+    }
+  }
+
+  def chargeItems(container: Container, startIndex: Int, endIndex: Int): Unit = {
+    if (getEnergyStored <= 0
+      || !canExtract
+      || startIndex >= endIndex
+      || container.getContainerSize < endIndex)
+      return
+
+    for (i <- startIndex until endIndex) {
+      val item = Option(container.getItem(i))
+      for (item <- item;
+           storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala) {
+        transfer(storage)
+      }
+    }
+  }
+
+  protected def transfer(receiver: IEnergyStorage): Unit = {
+    val toSend = extractEnergy(maxExtract, simulate = false)
+    val received = receiver.receiveEnergy(toSend, false)
+
+    energy = getEnergyStored + toSend - received
+  }
+}
+
+object BookEnergyStorage {
+  def apply(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int, energy: Int = 0): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, maxReceive, maxExtract, energy)
+
+  def apply(blockEntity: BlockEntity, capacity: Int): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, capacity, capacity, 0)
+
+  def apply(blockEntity: BlockEntity, capacity: Int, maxTransfer: Int): BookEnergyStorage =
+    new BookEnergyStorage(blockEntity, capacity, maxTransfer, maxTransfer, 0)
 }

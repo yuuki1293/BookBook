@@ -17,3 +17,8 @@ class BookCapacitorScreen(pMenu: BookCapacitorMenu, pPlayerInventory: Inventory,
     renderTooltip(pPoseStack, pMouseX, pMouseY)
   }
 }
+
+object BookCapacitorScreen {
+  def apply(menu: BookCapacitorMenu, playerInventory: Inventory, title: Component) =
+    new BookCapacitorScreen(menu, playerInventory, title)
+}

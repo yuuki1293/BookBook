@@ -49,3 +49,11 @@ class BookItemEntity(entityType: EntityType[_ <: ItemEntity], level: Level) exte
     }
   }
 }
+
+object BookItemEntity {
+  def apply(entityType: EntityType[_ <: ItemEntity], level: Level) =
+    new BookItemEntity(entityType, level)
+
+  def apply(entityType: EntityType[_ <: ItemEntity], level: Level, posX: Double, posY: Double, posZ: Double, itemStack: ItemStack) =
+    new BookItemEntity(entityType, level, posX, posY, posZ, itemStack)
+}
