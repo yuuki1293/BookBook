@@ -63,7 +63,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   }
 
   private def createEnergyStorage = {
-    BookEnergyStorage(this, capacity, maxReceive, 10000000)
+    BookEnergyStorage(capacity, maxReceive, 10000000)
   }
 
   def getEnergy: Int = energyStorage.getEnergyStored

@@ -7,7 +7,9 @@ import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorag
 
 import scala.jdk.OptionConverters._
 
-class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int)
+class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEnergy: Int)(
+  implicit pBlockEntity: BlockEntity
+)
   extends EnergyStorage(pCapacity, pMaxReceive, pMaxExtract, pEnergy) {
   private val blockEntity: BlockEntity = pBlockEntity
 
@@ -66,12 +68,18 @@ class BookEnergyStorage(pBlockEntity: BlockEntity, pCapacity: Int, pMaxReceive: 
 }
 
 object BookEnergyStorage {
-  def apply(blockEntity: BlockEntity, capacity: Int, maxReceive: Int, maxExtract: Int, energy: Int = 0): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, maxReceive, maxExtract, energy)
+  def apply(capacity: Int, maxReceive: Int, maxExtract: Int, energy: Int = 0)(
+    implicit blockEntity: BlockEntity
+  ): BookEnergyStorage =
+    new BookEnergyStorage(capacity, maxReceive, maxExtract, energy)
 
-  def apply(blockEntity: BlockEntity, capacity: Int): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, capacity, capacity, 0)
+  def apply(capacity: Int)(
+    implicit blockEntity: BlockEntity
+  ): BookEnergyStorage =
+    new BookEnergyStorage(capacity, capacity, capacity, 0)
 
-  def apply(blockEntity: BlockEntity, capacity: Int, maxTransfer: Int): BookEnergyStorage =
-    new BookEnergyStorage(blockEntity, capacity, maxTransfer, maxTransfer, 0)
+  def apply(capacity: Int, maxTransfer: Int)(
+    implicit blockEntity: BlockEntity
+  ): BookEnergyStorage =
+    new BookEnergyStorage(capacity, maxTransfer, maxTransfer, 0)
 }
