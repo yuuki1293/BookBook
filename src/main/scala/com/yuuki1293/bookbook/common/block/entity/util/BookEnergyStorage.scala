@@ -38,25 +38,20 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
   }
 
   def outputEnergy(eject: Array[Direction] = Direction.values()): IO[Unit] = {
-    //import cats.implicits._
-
     IO {
-      if (getEnergyStored <= 0 || !canExtract)
-        return IO.unit
+      if (getEnergyStored > 0 && canExtract) {
+        val level = blockEntity.getLevel
+        val worldPos = blockEntity.getBlockPos
 
-      val level = blockEntity.getLevel
-      val worldPos = blockEntity.getBlockPos
-
-      for {
-        direction <- eject
-        relative = worldPos.relative(direction)
-        be <- Option(level.getBlockEntity(relative))
-        cap <- IO(
-          be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
-        )
-        storage <- cap.resolve().toScala
-      } yield
-        transfer(storage)
+        for {
+          direction <- eject
+          relative = worldPos.relative(direction)
+          be <- Option(level.getBlockEntity(relative))
+          cap = be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
+          storage <- cap.resolve().toScala
+        }
+          transfer(storage)
+      } else IO.unit
     }
   }
 
