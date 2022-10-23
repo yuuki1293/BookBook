@@ -1,8 +1,10 @@
 package com.yuuki1293.bookbook.common.block.entity.util
 
+import cats.effect._
 import net.minecraft.core.Direction
 import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorage}
 
 import scala.jdk.OptionConverters._
@@ -23,23 +25,38 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
     super.receiveEnergy(maxReceive, simulate)
   }
 
-  def setEnergy(energy: Int): Unit = {
-    this.energy = Math.max(0, Math.min(energy, capacity))
+  def setEnergy(energy: Int): IO[Unit] = {
+    IO {
+      this.energy = Math.max(0, Math.min(energy, capacity))
+    }
   }
 
-  def increase(inc: Int): Unit = energy = Math.min(capacity, energy + inc)
+  def increase(inc: Int): IO[Unit] = {
+    IO {
+      energy = Math.min(capacity, energy + inc)
+    }
+  }
 
-  def outputEnergy(eject: Array[Direction] = Direction.values()): Unit = {
-    if (getEnergyStored <= 0 || !canExtract)
-      return
+  def outputEnergy(eject: Array[Direction] = Direction.values()): IO[Unit] = {
+    //import cats.implicits._
 
-    val level = blockEntity.getLevel
-    val worldPos = blockEntity.getBlockPos
+    IO {
+      if (getEnergyStored <= 0 || !canExtract)
+        return IO.unit
 
-    for (direction <- eject;
-         be <- Option(level.getBlockEntity(worldPos.relative(direction)));
-         storage <- be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite).resolve().toScala) {
-      transfer(storage)
+      val level = blockEntity.getLevel
+      val worldPos = blockEntity.getBlockPos
+
+      for {
+        direction <- eject
+        relative = worldPos.relative(direction)
+        be <- Option(level.getBlockEntity(relative))
+        cap <- IO(
+          be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
+        )
+        storage <- cap.resolve().toScala
+      } yield
+        transfer(storage)
     }
   }
 
@@ -59,11 +76,13 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
     }
   }
 
-  protected def transfer(receiver: IEnergyStorage): Unit = {
-    val toSend = extractEnergy(maxExtract, simulate = false)
-    val received = receiver.receiveEnergy(toSend, false)
+  protected def transfer(receiver: IEnergyStorage): IO[Unit] = {
+    IO {
+      val toSend = extractEnergy(maxExtract, simulate = false)
+      val received = receiver.receiveEnergy(toSend, false)
 
-    energy = getEnergyStored + toSend - received
+      energy = getEnergyStored + toSend - received
+    }
   }
 }
 
