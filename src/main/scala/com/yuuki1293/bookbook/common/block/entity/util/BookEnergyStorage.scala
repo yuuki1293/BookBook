@@ -56,18 +56,21 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
   }
 
   def chargeItems(container: Container, startIndex: Int, endIndex: Int): Unit = {
-    if (getEnergyStored <= 0
-      || !canExtract
-      || startIndex >= endIndex
-      || container.getContainerSize < endIndex)
-      return
-
-    for (i <- startIndex until endIndex) {
-      val item = Option(container.getItem(i))
-      for (item <- item;
-           storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala) {
-        transfer(storage)
-      }
+    IO {
+      if (getEnergyStored <= 0
+        || !canExtract
+        || startIndex >= endIndex
+        || container.getContainerSize < endIndex)
+        ()
+      else
+        for (i <- startIndex until endIndex) {
+          val item = Option(container.getItem(i))
+          for {
+            item <- item
+            storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala
+          }
+            transfer(storage)
+        }
     }
   }
 
