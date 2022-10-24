@@ -4,7 +4,6 @@ import cats.effect._
 import net.minecraft.core.Direction
 import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorage}
 
 import scala.jdk.OptionConverters._
