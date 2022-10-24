@@ -24,62 +24,52 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
     super.receiveEnergy(maxReceive, simulate)
   }
 
-  def setEnergy(energy: Int): IO[Unit] = {
-    IO {
-      this.energy = Math.max(0, Math.min(energy, capacity))
-    }
+  def setEnergy(energy: Int): IO[Unit] = IO {
+    this.energy = Math.max(0, Math.min(energy, capacity))
   }
 
-  def increase(inc: Int): IO[Unit] = {
-    IO {
-      energy = Math.min(capacity, energy + inc)
-    }
+  def increase(inc: Int): IO[Unit] = IO {
+    energy = Math.min(capacity, energy + inc)
   }
 
-  def outputEnergy(eject: Array[Direction] = Direction.values()): IO[Unit] = {
-    IO {
-      if (getEnergyStored > 0 && canExtract) {
-        val level = blockEntity.getLevel
-        val worldPos = blockEntity.getBlockPos
+  def outputEnergy(eject: Array[Direction] = Direction.values()): IO[Unit] = IO {
+    if (getEnergyStored > 0 && canExtract) {
+      val level = blockEntity.getLevel
+      val worldPos = blockEntity.getBlockPos
 
+      for {
+        direction <- eject
+        relative = worldPos.relative(direction)
+        be <- Option(level.getBlockEntity(relative))
+        cap = be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
+        storage <- cap.resolve().toScala
+      }
+        transfer(storage)
+    } else IO.unit
+  }
+
+  def chargeItems(container: Container, startIndex: Int, endIndex: Int): IO[Unit] = IO {
+    if (getEnergyStored <= 0
+      || !canExtract
+      || startIndex >= endIndex
+      || container.getContainerSize < endIndex)
+      ()
+    else
+      for (i <- startIndex until endIndex) {
+        val item = Option(container.getItem(i))
         for {
-          direction <- eject
-          relative = worldPos.relative(direction)
-          be <- Option(level.getBlockEntity(relative))
-          cap = be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
-          storage <- cap.resolve().toScala
+          item <- item
+          storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala
         }
           transfer(storage)
-      } else IO.unit
-    }
+      }
   }
 
-  def chargeItems(container: Container, startIndex: Int, endIndex: Int): Unit = {
-    IO {
-      if (getEnergyStored <= 0
-        || !canExtract
-        || startIndex >= endIndex
-        || container.getContainerSize < endIndex)
-        ()
-      else
-        for (i <- startIndex until endIndex) {
-          val item = Option(container.getItem(i))
-          for {
-            item <- item
-            storage <- item.getCapability(CapabilityEnergy.ENERGY).resolve().toScala
-          }
-            transfer(storage)
-        }
-    }
-  }
+  protected def transfer(receiver: IEnergyStorage): IO[Unit] = IO {
+    val toSend = extractEnergy(maxExtract, simulate = false)
+    val received = receiver.receiveEnergy(toSend, false)
 
-  protected def transfer(receiver: IEnergyStorage): IO[Unit] = {
-    IO {
-      val toSend = extractEnergy(maxExtract, simulate = false)
-      val received = receiver.receiveEnergy(toSend, false)
-
-      energy = getEnergyStored + toSend - received
-    }
+    energy = getEnergyStored + toSend - received
   }
 }
 
