@@ -45,7 +45,7 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
         storage <- cap.resolve().toScala
       }
         transfer(storage)
-    } else IO.unit
+    }
   }
 
   def chargeItems(container: Container, startIndex: Int, endIndex: Int): IO[Unit] = IO {
