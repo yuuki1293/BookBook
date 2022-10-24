@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_INPUT, SLOT_OUTPUT}
+import cats.effect.IO
+import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity._
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
@@ -21,13 +22,12 @@ import net.minecraftforge.energy.CapabilityEnergy
 
 class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   extends BaseBookContainerBlockEntity(BlockEntities.BOOK_CAPACITOR.get(), worldPosition, blockState) {
-
   override var items: NonNullList[ItemStack] = NonNullList.withSize(2, ItemStack.EMPTY)
 
-  private val capacity = 10000
-  private val maxTransfer = 500
+  private final val capacity = 10000
+  private final val maxTransfer = 500
 
-  val energyStorage: BookEnergyStorage = createEnergyStorage
+  val energyStorage: BookEnergyStorage = BookEnergyStorage(capacity, maxTransfer)(this)
   private var energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   protected val dataAccess: ContainerData = new ContainerData {
     /**
@@ -36,8 +36,8 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
      */
     override def get(pIndex: Int): Int = {
       pIndex match {
-        case DATA_ENERGY_STORED => getEnergy
-        case DATA_MAX_ENERGY => getMaxEnergy
+        case DATA_ENERGY_STORED => getEnergy.unsafeRunSync()
+        case DATA_MAX_ENERGY => getMaxEnergy.unsafeRunSync()
         case _ => throw new UnsupportedOperationException("Unable to get index: " + pIndex)
       }
     }
@@ -69,9 +69,9 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       super.getCapability(cap, side)
   }
 
-  def getEnergy: Int = energyStorage.getEnergyStored
+  def getEnergy: IO[Int] = IO(energyStorage.getEnergyStored)
 
-  def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
+  def getMaxEnergy: IO[Int] = IO(energyStorage.getMaxEnergyStored)
 
   override def invalidateCaps(): Unit = {
     super.invalidateCaps()
@@ -83,37 +83,42 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     energy = LazyOptional.of(() => energyStorage)
   }
 
-  def outputEnergy(): Unit = {
-    energyStorage.chargeItems(this, 0, 1)
-
-    val item = items.get(SLOT_INPUT)
-    item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
-      if (storage.getEnergyStored >= storage.getMaxEnergyStored && items.get(SLOT_OUTPUT).isEmpty) {
-        items.set(SLOT_OUTPUT, item)
-        items.remove(SLOT_INPUT)
-      })
-
-    energyStorage.outputEnergy()
-  }
+  def outputEnergy(): IO[Unit] =
+    for {
+      _ <- energyStorage.chargeItems(this, 0, 1)
+      item = items.get(SLOT_INPUT)
+      _ <- IO {
+        item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
+          if (storage.getEnergyStored >= storage.getMaxEnergyStored
+            && items.get(SLOT_OUTPUT).isEmpty) {
+            items.set(SLOT_OUTPUT, item)
+            items.remove(SLOT_INPUT)
+          })
+      }
+      _ <- energyStorage.outputEnergy()
+    } yield ()
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    energyStorage.setEnergy(pTag.getInt("Energy"))
+    for (_ <- energyStorage.setEnergy(pTag.getInt("Energy"))) yield ()
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
     super.saveAdditional(pTag)
-    pTag.putInt("Energy", getEnergy)
+    for (energy <- getEnergy)
+      yield pTag.putInt("Energy", energy)
   }
 
-  private def createEnergyStorage: BookEnergyStorage = {
-    BookEnergyStorage(this, capacity, maxTransfer)
-  }
-
-  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_capacitor")
+  override def getDefaultName: Component =
+    new TranslatableComponent("container.bookbook.book_capacitor")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookCapacitorMenu(MenuTypes.BOOK_CAPACITOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
+    BookCapacitorMenu(
+      MenuTypes.BOOK_CAPACITOR.get(),
+      pContainerId,
+      pPlayerInventory,
+      this,
+      dataAccess)
   }
 
   override def getSlotsForFace(pSide: Direction): Array[Int] = Array(SLOT_INPUT, SLOT_OUTPUT)
@@ -132,7 +137,8 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     }
   }
 
-  override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
+  override def getUpdatePacket: Packet[ClientGamePacketListener] =
+    ClientboundBlockEntityDataPacket.create(this)
 }
 
 object BookCapacitorBlockEntity extends BlockEntityTicker[BookCapacitorBlockEntity] {
