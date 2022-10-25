@@ -40,16 +40,15 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
      *               1 - [[getMaxEnergy]]<br>
      *               2 - [[getProgress]]<br>
      *               3 - [[getPowerCost]]
-     * @return
      */
     override def get(pIndex: Int): Int = {
-      (pIndex match {
+      pIndex match {
         case DATA_ENERGY_STORED => getEnergy
         case DATA_MAX_ENERGY => getMaxEnergy
         case DATA_PROGRESS => getProgress
         case DATA_POWER_COST => getPowerCost
         case _ => throw new UnsupportedOperationException("Unable to get index: " + pIndex)
-      }).unsafeRunSync()
+      }
     }
 
     /**
@@ -63,17 +62,16 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     override def getCount: Int = 4
   }
 
-  def getEnergy: IO[Int] = IO(energyStorage.getEnergyStored)
+  def getEnergy: Int = energyStorage.getEnergyStored
 
-  def getMaxEnergy: IO[Int] = IO(energyStorage.getMaxEnergyStored)
+  def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
 
-  def getProgress: IO[Int] = IO(progress)
+  def getPowerCost: Int = recipe.map(_.getPowerCost).getOrElse(0)
 
-  def getPowerCost: IO[Int] = IO {
-    recipe.map(_.getPowerCost).getOrElse(0)
-  }
+  def getProgress: Int = progress
 
-  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_crafting_core")
+  override def getDefaultName: Component =
+    new TranslatableComponent("container.bookbook.book_crafting_core")
 
   override def createMenu(pContainerId: Int, pInventory: Inventory): AbstractContainerMenu = {
     BookCraftingCoreMenu(
@@ -116,23 +114,17 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     super.load(pTag)
     for {
       _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
+      _ <- IO(progress = pTag.getInt("Progress"))
     } yield ()
-    progress = pTag.getInt("Progress")
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
     super.saveAdditional(pTag)
-    for {
-      energy <- getEnergy
-      progress <- getProgress
-      _ <- IO {
-        pTag.putInt("Energy", energy)
-        pTag.putInt("Progress", progress)
-      }
-    } yield ()
+    pTag.putInt("Energy", getEnergy)
+    pTag.putInt("Progress", progress)
   }
 
-  def getStandWithItems: IO[Map[BlockPos, ItemStack]] = IO {
+  def getStandWithItems: Map[BlockPos, ItemStack] = {
     val stands = mutable.HashMap[BlockPos, ItemStack]()
     val level = Option(getLevel)
 
@@ -200,7 +192,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  private def process(recipe: BookCraftingRecipe): IO[Boolean] = IO {
+  private def process(recipe: BookCraftingRecipe): IO[Unit] = IO {
     val powerRate = recipe.getPowerRate
     val difference = recipe.getPowerCost - progress
 
@@ -208,8 +200,68 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
     val extracted = energyStorage.extractEnergy(extract, simulate = false)
     progress += extracted
+  }
 
-    progress >= recipe.getPowerCost
+  def isDone: Boolean = progress >= getPowerCost
+
+  def recipeTick(): IO[Unit] = IO {
+    if (!level.isClientSide) {
+
+      var flag = false
+
+      val standsWithItems = getStandWithItems
+      val stacks = standsWithItems.values.toList
+      val recipeItemContainer = new SimpleContainer(recipeItems.asScala.toSeq: _*)
+
+      for {
+        _ <- updateRecipe(stacks, recipeItemContainer)
+      } yield ()
+
+      recipe match {
+        case Some(recipe) =>
+          if (getEnergy > 0) {
+            if (!isDone) {
+              for {_ <- process(recipe)} yield ()
+            }
+
+            for {
+              result <- assemble(recipe, recipeItemContainer, this, SLOT_OUTPUT)
+              _ <- IO {
+                if (isDone && result) {
+                  removeItem(SLOT_INPUT, 1)
+
+                  for (standPos <- standsWithItems.keySet) {
+                    val be = level.getBlockEntity(standPos)
+
+                    be match {
+                      case stand: BookStandBlockEntity =>
+                        stand.removeItem(1)
+                    }
+                  }
+
+                  progress = 0
+
+                  flag = true
+                }
+              }
+            } yield ()
+          }
+        case None =>
+          progress = 0
+
+          if (flag) {
+            setChanged()
+
+            for {
+              pos <- standsWithItems.keySet
+              be <- Option(level.getBlockEntity(pos))
+            } {
+              be.setChanged()
+              level.sendBlockUpdated(pos, be.getBlockState, be.getBlockState, 2)
+            }
+          }
+      }
+    }
   }
 }
 
@@ -224,68 +276,8 @@ object BookCraftingCoreBlockEntity extends BlockEntityTicker[BookCraftingCoreBlo
   def apply(worldPosition: BlockPos, blockState: BlockState) =
     new BookCraftingCoreBlockEntity(worldPosition, blockState)
 
-  override def tick(level: Level, pos: BlockPos, state: BlockState, craftingCore: BookCraftingCoreBlockEntity): Unit = {
-    var flag = false
-
-    for {
-      standsWithItems <- craftingCore.getStandWithItems
-      stacks = standsWithItems.values.toList
-      recipeItemContainer = new SimpleContainer(craftingCore.recipeItems.asScala.toSeq: _*)
-      _ <- craftingCore.updateRecipe(stacks, recipeItemContainer)
-      _ <- IO {
-        if (!level.isClientSide) {
-          craftingCore.recipe match {
-            case Some(recipe) =>
-              if (craftingCore.energyStorage.getEnergyStored > 0) {
-                var done = craftingCore.progress >= recipe.getPowerCost
-
-                if (!done) {
-                  for {
-                    d <- craftingCore.process(recipe)
-                    _ <- IO(done = d)
-                  } yield ()
-                }
-
-                for {
-                  result <- assemble(recipe, recipeItemContainer, craftingCore, SLOT_OUTPUT)
-                  _ <- IO {
-                    if (done && result) {
-                      craftingCore.removeItem(SLOT_INPUT, 1)
-
-                      for (standPos <- standsWithItems.keySet) {
-                        val be = level.getBlockEntity(standPos)
-
-                        be match {
-                          case stand: BookStandBlockEntity =>
-                            stand.removeItem(1)
-                        }
-                      }
-
-                      craftingCore.progress = 0
-
-                      flag = true
-                    }
-                  }
-                } yield ()
-
-                if (flag) {
-                  craftingCore.setChanged()
-
-                  for {
-                    pos <- standsWithItems.keySet
-                    be <- Option(level.getBlockEntity(pos))
-                  } {
-                    be.setChanged()
-                    level.sendBlockUpdated(pos, be.getBlockState, be.getBlockState, 2)
-                  }
-                }
-              }
-            case None =>
-              craftingCore.progress = 0
-          }
-        }
-      }
-    } yield ()
+  override def tick(level: Level, pos: BlockPos, state: BlockState, blockEntity: BookCraftingCoreBlockEntity): Unit = {
+    blockEntity.recipeTick()
   }
 
   /**
