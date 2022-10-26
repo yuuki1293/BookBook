@@ -5,6 +5,7 @@ import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
+import com.yuuki1293.bookbook.common.util.ContainerUtil
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.chat.{Component, TranslatableComponent}
@@ -90,8 +91,8 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       _ <- IO {
         item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
           if (storage.getEnergyStored >= storage.getMaxEnergyStored
-            && items.get(SLOT_OUTPUT).isEmpty) {
-            items.set(SLOT_OUTPUT, item)
+            && ContainerUtil.canPlace(item, this, SLOT_OUTPUT)) {
+            for {_ <- ContainerUtil.place(item, this, SLOT_OUTPUT)} yield ()
             items.remove(SLOT_INPUT)
           })
       }
