@@ -10,4 +10,6 @@ trait IBookCraftingRecipe {
   def getPowerRate: Int
 
   def getInputs: NonNullList[Ingredient]
+
+  def getResultItem: ItemStack
 }
