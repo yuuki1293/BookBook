@@ -124,7 +124,7 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: ${scala_version})
+    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     compileOnly(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.5-kotori')
     compileOnly(group: 'org.typelevel', name: "cats-effect_${scala_major}", version: '2.5.3')
 
