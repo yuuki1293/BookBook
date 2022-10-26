@@ -22,6 +22,7 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 version = '1.18.2-1.0'
 group = 'com.yuuki1293.bookbook'
+//noinspection GroovyUnusedAssignment
 archivesBaseName = 'bookbook'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -103,6 +104,14 @@ repositories {
             it.includeModule("org.typelevel", "cats-effect_${scala_major}")
         }
     }
+    maven {
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
     repositories.stream().filter { it instanceof MavenArtifactRepository }.forEach { repo ->
         repo.content {
             excludeVersionByRegex(".*", ".*", ".*_mapped_snapshot_.*")
@@ -113,10 +122,9 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.80'
 
-    def scala_version = getProperty("scala_version").toString()
-    def scala_major = getProperty("scala_major").toString()
-
-    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: ${scala_version})
     compileOnly(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.5-kotori')
     compileOnly(group: 'org.typelevel', name: "cats-effect_${scala_major}", version: '2.5.3')
 
