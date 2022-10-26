@@ -1,6 +1,7 @@
 package com.yuuki1293.bookbook.common.recipe
 
 import com.google.gson.{JsonObject, JsonSyntaxException}
+import com.yuuki1293.bookbook.api.crafting.IBookCraftingRecipe
 import com.yuuki1293.bookbook.common.register.RecipeTypes
 import net.minecraft.core.NonNullList
 import net.minecraft.network.FriendlyByteBuf
@@ -14,7 +15,7 @@ import net.minecraftforge.common.util.RecipeMatcher
 import net.minecraftforge.registries.ForgeRegistryEntry
 
 class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int, pPowerRate: Int)
-  extends Recipe[SimpleContainer] {
+  extends Recipe[SimpleContainer] with IBookCraftingRecipe {
   private final val recipeId = pId
   private final val output = pOutput
   private final val ingredients = pIngredients
@@ -52,6 +53,8 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
   def getPowerCost: Int = powerCost
 
   def getPowerRate: Int = powerRate
+
+  override def getInputs: NonNullList[Ingredient] = ingredients
 }
 
 object BookCraftingRecipe {
