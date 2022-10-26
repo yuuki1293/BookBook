@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import cats.effect.IO
-import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity._
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, DATA_POWER_COST, DATA_PROGRESS, SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe

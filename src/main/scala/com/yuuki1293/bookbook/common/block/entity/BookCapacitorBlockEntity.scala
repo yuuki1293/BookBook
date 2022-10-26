@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import cats.effect.IO
-import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity._
+import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
