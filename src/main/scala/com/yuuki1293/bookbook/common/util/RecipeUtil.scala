@@ -17,9 +17,9 @@ object RecipeUtil {
   def assemble[A <: Container, B <: Container](recipe: Recipe[A], recipeContainer: A, container: B, slot: Int): IO[Boolean] = {
     val result = recipe.assemble(recipeContainer)
 
-    if (ContainerUtil.canPlace(result, container, slot, slot + 1)) {
+    if (ContainerUtil.canPlace(result, container, slot)) {
       for {
-        done <- ContainerUtil.place(result, container, slot, slot + 1)
+        done <- ContainerUtil.place(result, container, slot)
       } yield done
     }
     else IO(false)
