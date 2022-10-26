@@ -207,7 +207,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
   def recipeTick(): IO[Unit] = IO {
     if (!level.isClientSide) {
 
-      var flag = false
+      var hasChanged = false
 
       val standsWithItems = getStandWithItems
       val stacks = standsWithItems.values.toList
@@ -241,7 +241,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
                   progress = 0
 
-                  flag = true
+                  hasChanged = true
                 }
               }
             } yield ()
@@ -249,7 +249,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
         case None =>
           progress = 0
 
-          if (flag) {
+          if (hasChanged) {
             setChanged()
 
             for {
