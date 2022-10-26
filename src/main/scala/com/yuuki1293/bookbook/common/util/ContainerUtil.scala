@@ -42,6 +42,18 @@ object ContainerUtil {
    *
    * @param itemStack 配置したいItemStack
    * @param container 配置先のContainer
+   * @param slot      containerのindex
+   * @return 完全に配置が完了したならtrueを返す
+   */
+  def canPlace(itemStack: ItemStack, container: Container, slot: Int): Boolean = {
+    canPlace(itemStack, container, slot, slot + 1)
+  }
+
+  /**
+   * itemStackをcontainerに配置できるか調べる
+   *
+   * @param itemStack 配置したいItemStack
+   * @param container 配置先のContainer
    * @param start     containerの初めのindex(含まれる)
    * @param end       containerの最後のindex(含まれない)
    * @return 完全に配置が完了したならtrueを返す
