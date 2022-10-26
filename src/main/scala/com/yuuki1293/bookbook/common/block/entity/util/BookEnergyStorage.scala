@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity.util
 
 import cats.effect._
-import net.minecraft.core.Direction
+import net.minecraft.core.{BlockPos, Direction}
 import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraftforge.energy.{CapabilityEnergy, EnergyStorage, IEnergyStorage}
@@ -39,7 +39,7 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
 
       for {
         direction <- eject
-        relative = worldPos.relative(direction)
+        relative: BlockPos = worldPos.relative(direction)
         be <- Option(level.getBlockEntity(relative))
         cap = be.getCapability(CapabilityEnergy.ENERGY, direction.getOpposite)
         storage <- cap.resolve().toScala
