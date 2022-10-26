@@ -251,16 +251,19 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
           if (hasChanged) {
             setChanged()
-
-            for {
-              pos <- standsWithItems.keySet
-              be <- Option(level.getBlockEntity(pos))
-            } {
-              be.setChanged()
-              level.sendBlockUpdated(pos, be.getBlockState, be.getBlockState, 2)
-            }
+            for {_ <- updateStands()} yield ()
           }
       }
+    }
+  }
+
+  def updateStands(): IO[Unit] = IO {
+    for {
+      pos <- getStandWithItems.keySet
+      be <- Option(level.getBlockEntity(pos))
+    } {
+      be.setChanged()
+      level.sendBlockUpdated(pos, be.getBlockState, be.getBlockState, 2)
     }
   }
 }
