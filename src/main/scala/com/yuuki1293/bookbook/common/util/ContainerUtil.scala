@@ -10,6 +10,18 @@ object ContainerUtil {
    *
    * @param itemStack 配置したいItemStack
    * @param container 配置先のContainer
+   * @param slot      containerのindex
+   * @return 完全に配置が完了したならtrueを返す
+   */
+  def place(itemStack: ItemStack, container: Container, slot: Int): IO[Boolean] = {
+    place(itemStack, container, slot, slot + 1)
+  }
+
+  /**
+   * itemStackをcontainerにできるだけ配置する。
+   *
+   * @param itemStack 配置したいItemStack
+   * @param container 配置先のContainer
    * @param start     containerの初めのindex(含まれる)
    * @param end       containerの最後のindex(含まれない)
    * @return 完全に配置が完了したならtrueを返す
