@@ -14,7 +14,7 @@ import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 
-class BookCraftingCategory(helper: IGuiHelper) extends IRecipeCategory[IBookCraftingRecipe] {
+class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[IBookCraftingRecipe] {
   private final val background = helper.createDrawable(TEXTURE, 0, 0, 140, 171)
   private final val icon =
     helper.createDrawableIngredient(
@@ -46,4 +46,7 @@ class BookCraftingCategory(helper: IGuiHelper) extends IRecipeCategory[IBookCraf
 object BookCraftingCategory {
   private final val TEXTURE = new ResourceLocation(BookBook.MOD_ID, "textures/gui/jei/book_crafting.png")
   private final val UID = new ResourceLocation(BookBook.MOD_ID, "book_crafting")
+
+  def apply(implicit helper: IGuiHelper) =
+    new BookCraftingCategory
 }
