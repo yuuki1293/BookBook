@@ -2,7 +2,6 @@ package com.yuuki1293.bookbook.common.util
 
 import cats.effect.IO
 import net.minecraft.world.Container
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Recipe
 
 object RecipeUtil {
@@ -15,19 +14,14 @@ object RecipeUtil {
    * @param slot            containerのスロット
    * @return 結果が格納できた場合true、失敗した場合falseを返す
    */
-  protected def assemble[A <: Container, B <: Container](recipe: Recipe[A], recipeContainer: A, container: B, slot: Int): IO[Boolean] = IO {
-    val containerItem = container.getItem(slot)
-    val total = containerItem.getCount + recipe.getResultItem.getCount
+  protected def assemble[A <: Container, B <: Container](recipe: Recipe[A], recipeContainer: A, container: B, slot: Int): IO[Boolean] = {
+    val result = recipe.assemble(recipeContainer)
 
-    if (containerItem.isEmpty) {
-      container.setItem(slot, recipe.assemble(recipeContainer))
-      true
+    if (ContainerUtil.canPlace(result, container, slot, slot + 1)) {
+      for {
+        done <- ContainerUtil.place(result, container, slot, slot + 1)
+      } yield done
     }
-    else if (ItemStack.isSameItemSameTags(containerItem, recipe.getResultItem)
-      && total <= containerItem.getMaxStackSize) {
-      containerItem.setCount(total)
-      true
-    }
-    else false
+    else IO(false)
   }
 }
