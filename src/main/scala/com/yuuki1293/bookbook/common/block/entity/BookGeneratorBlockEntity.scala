@@ -106,8 +106,8 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
     for {
-      _ <- IO(burnTime = pTag.getInt("BurnTime"))
-      _ <- IO(burnDuration = getBurnDuration(items.get(SLOT_FUEL)))
+      _ <- IO{burnTime = pTag.getInt("BurnTime")}
+      _ <- IO{burnDuration = getBurnDuration(items.get(SLOT_FUEL))}
       _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
     } yield ()
   }

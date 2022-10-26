@@ -114,7 +114,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     super.load(pTag)
     for {
       _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
-      _ <- IO(progress = pTag.getInt("Progress"))
+      _ <- IO{progress = pTag.getInt("Progress")}
     } yield ()
   }
 
