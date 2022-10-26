@@ -47,20 +47,21 @@ object ContainerUtil {
    * @return 完全に配置が完了したならtrueを返す
    */
   def canPlace(itemStack: ItemStack, container: Container, start: Int, end: Int): Boolean = {
-    var done = itemStack.isEmpty
-    var count = itemStack.getCount
+    val nItemStack = itemStack.copy()
+
+    def done: Boolean = nItemStack.isEmpty
 
     for (i <- start until end) {
       if (!done) {
         val cItem = container.getItem(i)
         if (cItem.isEmpty) {
-          done = true
+          nItemStack.setCount(0)
         }
-        if (ItemStack.isSameItemSameTags(cItem, itemStack)) {
-          count -= cItem.getMaxStackSize - cItem.getCount
-        }
-        if (count <= 0) {
-          done = true
+        if (ItemStack.isSameItemSameTags(cItem, nItemStack)) {
+          val dCount = cItem.getMaxStackSize - cItem.getCount
+          val moveCount = Math.min(nItemStack.getCount, dCount)
+
+          nItemStack.shrink(moveCount)
         }
       }
     }
