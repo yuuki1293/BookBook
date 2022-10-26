@@ -1,5 +1,6 @@
 package com.yuuki1293.bookbook.common.block.entity
 
+import cats.effect.IO
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock
 import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_FUEL}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
@@ -32,7 +33,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   private var burnTime = 0
   private var burnDuration = 0
 
-  val energyStorage: BookEnergyStorage = createEnergyStorage
+  val energyStorage: BookEnergyStorage = BookEnergyStorage(capacity, 0, maxExtract)(this)
   private var energy: LazyOptional[BookEnergyStorage] = LazyOptional.of(() => energyStorage)
   protected val dataAccess: ContainerData = new ContainerData() {
     /**
@@ -65,9 +66,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     override def getCount: Int = 4
   }
 
-  private def isBurn = burnTime > 0
+  private def isBurn: Boolean = burnTime > 0
 
-  private def canBurn = getEnergy < getMaxEnergy
+  private def canBurn: Boolean = getEnergy < getMaxEnergy
 
   protected def getBurnDuration(stack: ItemStack): Int = {
     if (stack.isEmpty)
@@ -76,7 +77,8 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       ForgeHooks.getBurnTime(stack, RecipeType.SMELTING)
   }
 
-  override def canPlaceItem(pIndex: Int, pStack: ItemStack): Boolean = ForgeHooks.getBurnTime(pStack, RecipeType.SMELTING) > 0
+  override def canPlaceItem(pIndex: Int, pStack: ItemStack): Boolean =
+    ForgeHooks.getBurnTime(pStack, RecipeType.SMELTING) > 0
 
   override def getCapability[A](cap: Capability[A], side: Direction): LazyOptional[A] = {
     if (cap == CapabilityEnergy.ENERGY)
@@ -103,9 +105,11 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    burnTime = pTag.getInt("BurnTime")
-    burnDuration = getBurnDuration(items.get(SLOT_FUEL))
-    energyStorage.setEnergy(pTag.getInt("Energy"))
+    for {
+      _ <- IO{burnTime = pTag.getInt("BurnTime")}
+      _ <- IO{burnDuration = getBurnDuration(items.get(SLOT_FUEL))}
+      _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
+    } yield ()
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
@@ -114,18 +118,13 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     pTag.putInt("Energy", getEnergy)
   }
 
-  def outputEnergy(): Unit = {
-    energyStorage.outputEnergy()
-  }
+  def outputEnergy(): IO[Unit] = energyStorage.outputEnergy()
 
-  private def createEnergyStorage: BookEnergyStorage = {
-    new BookEnergyStorage(this, capacity, 0, maxExtract, 0)
-  }
-
-  override def getDefaultName: Component = new TranslatableComponent("container.bookbook.book_generator")
+  override def getDefaultName: Component =
+    new TranslatableComponent("container.bookbook.book_generator")
 
   override def createMenu(pContainerId: Int, pPlayerInventory: Inventory): AbstractContainerMenu = {
-    new BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
+    BookGeneratorMenu(MenuTypes.BOOK_GENERATOR.get(), pContainerId, pPlayerInventory, this, dataAccess)
   }
 
   override def canTakeItemThroughFace(pIndex: Int, pStack: ItemStack, pDirection: Direction): Boolean = false
@@ -137,6 +136,29 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
   def isFuel(itemStack: ItemStack): Boolean = getBurnDuration(itemStack) > 0
 
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
+
+  def burn(): IO[Unit] = IO {
+    val burnFlag = isBurn
+
+    if (canBurn) {
+      if (isFuel(items.get(SLOT_FUEL)) && !isBurn) {
+        burnDuration = getEnergyForStack(items.get(SLOT_FUEL))
+        burnTime = burnDuration
+        items.get(SLOT_FUEL).shrink(1)
+      } else if (isBurn) {
+        burnTime -= 1
+        energyStorage.increase(10)
+      } else {
+        burnTime = 0
+        burnDuration = 0
+      }
+    }
+
+    if (burnFlag != isBurn) {
+      val state = getBlockState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(isBurn))
+      getLevel.setBlock(getBlockPos, state, 3)
+    }
+  }
 }
 
 object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEntity] {
@@ -150,29 +172,9 @@ object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEnti
     new BookGeneratorBlockEntity(worldPosition, blockState)
 
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookGeneratorBlockEntity): Unit = {
-    val be = pBlockEntity
-
-    val burnFlag = be.isBurn
-
-    if (be.canBurn) {
-      if (be.isFuel(be.items.get(SLOT_FUEL)) && !be.isBurn) {
-        be.burnDuration = be.getEnergyForStack(be.items.get(SLOT_FUEL))
-        be.burnTime = be.burnDuration
-        be.items.get(SLOT_FUEL).shrink(1)
-      } else if (be.isBurn) {
-        be.burnTime -= 1
-        be.energyStorage.increase(10)
-      } else {
-        be.burnTime = 0
-        be.burnDuration = 0
-      }
-    }
-
-    if (burnFlag != be.isBurn) {
-      val state = pState.setValue(BookGeneratorBlock.LIT, java.lang.Boolean.valueOf(be.isBurn))
-      be.getLevel.setBlock(be.getBlockPos, state, 3)
-    }
-
-    be.outputEnergy()
+    for {
+      _ <- pBlockEntity.burn()
+      _ <- pBlockEntity.outputEnergy()
+    } yield ()
   }
 }
