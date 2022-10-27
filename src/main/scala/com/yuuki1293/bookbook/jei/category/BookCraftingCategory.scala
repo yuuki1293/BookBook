@@ -30,9 +30,7 @@ class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[
 
   override def getUid: ResourceLocation = UID
 
-  override def getRecipeClass: Class[_ <: IBookCraftingRecipe] = {
-    getClass[IBookCraftingRecipe]
-  }
+  override def getRecipeClass: Class[_ <: IBookCraftingRecipe] = classOf[IBookCraftingRecipe]
 
   override def setRecipe(builder: IRecipeLayoutBuilder, recipe: IBookCraftingRecipe, focuses: IFocusGroup): Unit = {
     builder.addSlot(RecipeIngredientRole.INPUT, 76, 149)
