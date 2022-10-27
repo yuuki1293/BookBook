@@ -37,6 +37,7 @@ class IBookBookPlugin extends IModPlugin {
           new RecipeType(BookCraftingCategory.UID, classOf[BookCraftingRecipe]),
           manager.getAllRecipesFor[SimpleContainer, BookCraftingRecipe](RecipeTypes.BOOK_CRAFTING)
         )
+      case None =>
     }
   }
 }
