@@ -14,10 +14,10 @@ import scala.reflect.{ClassTag, classTag}
 abstract class BaseBookContainerBlock[A <: BlockEntity with Container : ClassTag](properties: BlockBehaviour.Properties)
   extends BaseEntityBlock(properties) with BaseBookBlock {
   override def onRemove(pState: BlockState,
-                        pLevel: Level,
-                        pPos: BlockPos,
-                        pNewState: BlockState,
-                        pIsMoving: Boolean): Unit = {
+    pLevel: Level,
+    pPos: BlockPos,
+    pNewState: BlockState,
+    pIsMoving: Boolean): Unit = {
     if (!pState.is(pNewState.getBlock)) {
       val blockEntity = pLevel.getBlockEntity(pPos)
       blockEntity match {
