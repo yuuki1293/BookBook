@@ -28,8 +28,10 @@ class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[
 
   override def getIcon: IDrawable = icon
 
+  //noinspection ScalaDeprecation
   override def getUid: ResourceLocation = UID
 
+  //noinspection ScalaDeprecation
   override def getRecipeClass: Class[_ <: IBookCraftingRecipe] = classOf[IBookCraftingRecipe]
 
   override def setRecipe(builder: IRecipeLayoutBuilder, recipe: IBookCraftingRecipe, focuses: IFocusGroup): Unit = {
