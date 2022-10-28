@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock
-import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity._
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_FUEL}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
