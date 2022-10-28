@@ -11,6 +11,7 @@ buildscript {
 }
 
 plugins {
+    id 'java-library'
     id 'eclipse'
     id 'maven-publish'
     id 'io.github.cosmicsilence.scalafix' version '0.1.14'
