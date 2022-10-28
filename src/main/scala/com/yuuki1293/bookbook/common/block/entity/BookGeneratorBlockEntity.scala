@@ -1,8 +1,7 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import cats.effect.IO
 import com.yuuki1293.bookbook.common.block.BookGeneratorBlock
-import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity.{DATA_BURN_DURATION, DATA_BURN_TIME, DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_FUEL}
+import com.yuuki1293.bookbook.common.block.entity.BookGeneratorBlockEntity._
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookGeneratorMenu
 import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
@@ -105,11 +104,9 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    for {
-      _ <- IO{burnTime = pTag.getInt("BurnTime")}
-      _ <- IO{burnDuration = getBurnDuration(items.get(SLOT_FUEL))}
-      _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
-    } yield ()
+    burnTime = pTag.getInt("BurnTime")
+    burnDuration = getBurnDuration(items.get(SLOT_FUEL))
+    energyStorage.setEnergy(pTag.getInt("Energy"))
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
@@ -118,7 +115,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     pTag.putInt("Energy", getEnergy)
   }
 
-  def outputEnergy(): IO[Unit] = energyStorage.outputEnergy()
+  def outputEnergy(): Unit = energyStorage.outputEnergy()
 
   override def getDefaultName: Component =
     new TranslatableComponent("container.bookbook.book_generator")
@@ -137,7 +134,7 @@ class BookGeneratorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
 
   override def getUpdatePacket: Packet[ClientGamePacketListener] = ClientboundBlockEntityDataPacket.create(this)
 
-  def burn(): IO[Unit] = IO {
+  def burn(): Unit = {
     val burnFlag = isBurn
 
     if (canBurn) {
@@ -172,9 +169,7 @@ object BookGeneratorBlockEntity extends BlockEntityTicker[BookGeneratorBlockEnti
     new BookGeneratorBlockEntity(worldPosition, blockState)
 
   override def tick(pLevel: Level, pPos: BlockPos, pState: BlockState, pBlockEntity: BookGeneratorBlockEntity): Unit = {
-    for {
-      _ <- pBlockEntity.burn()
-      _ <- pBlockEntity.outputEnergy()
-    } yield ()
+    pBlockEntity.burn()
+    pBlockEntity.outputEnergy()
   }
 }
