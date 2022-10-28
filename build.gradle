@@ -124,9 +124,9 @@ dependencies {
 
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
-    compileOnly(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
-    compileOnly(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.5-kotori')
-    compileOnly(group: 'org.typelevel', name: "cats-effect_${scala_major}", version: '2.5.3')
+    implementation(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
+    implementation(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.5-kotori')
+    api(group: 'org.typelevel', name: "cats-effect_${scala_major}", version: '2.5.5')
 
     runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.8-build-4", classifier: "with-library") {
         transitive(false)
