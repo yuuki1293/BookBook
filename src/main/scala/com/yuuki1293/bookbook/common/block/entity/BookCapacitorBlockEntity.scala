@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import cats.effect.IO
 import com.yuuki1293.bookbook.common.block.entity.BookCapacitorBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, SLOT_INPUT, SLOT_OUTPUT}
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCapacitorMenu
@@ -37,8 +36,8 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
      */
     override def get(pIndex: Int): Int = {
       pIndex match {
-        case DATA_ENERGY_STORED => getEnergy.unsafeRunSync()
-        case DATA_MAX_ENERGY => getMaxEnergy.unsafeRunSync()
+        case DATA_ENERGY_STORED => getEnergy
+        case DATA_MAX_ENERGY => getMaxEnergy
         case _ => throw new UnsupportedOperationException("Unable to get index: " + pIndex)
       }
     }
@@ -70,9 +69,9 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
       super.getCapability(cap, side)
   }
 
-  def getEnergy: IO[Int] = IO(energyStorage.getEnergyStored)
+  def getEnergy: Int = energyStorage.getEnergyStored
 
-  def getMaxEnergy: IO[Int] = IO(energyStorage.getMaxEnergyStored)
+  def getMaxEnergy: Int = energyStorage.getMaxEnergyStored
 
   override def invalidateCaps(): Unit = {
     super.invalidateCaps()
@@ -84,30 +83,26 @@ class BookCapacitorBlockEntity(worldPosition: BlockPos, blockState: BlockState)
     energy = LazyOptional.of(() => energyStorage)
   }
 
-  def outputEnergy(): IO[Unit] =
-    for {
-      _ <- energyStorage.chargeItems(this, 0, 1)
-      item = items.get(SLOT_INPUT)
-      _ <- IO {
-        item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
-          if (storage.getEnergyStored >= storage.getMaxEnergyStored
-            && ContainerUtil.canPlace(item, this, SLOT_OUTPUT)) {
-            for {_ <- ContainerUtil.place(item, this, SLOT_OUTPUT)} yield ()
-            items.remove(SLOT_INPUT)
-          })
-      }
-      _ <- energyStorage.outputEnergy()
-    } yield ()
+  def outputEnergy(): Unit =
+    energyStorage.chargeItems(this, 0, 1)
+
+  val item: ItemStack = items.get(SLOT_INPUT)
+  item.getCapability(CapabilityEnergy.ENERGY).ifPresent(storage =>
+    if (storage.getEnergyStored >= storage.getMaxEnergyStored
+      && ContainerUtil.canPlace(item, this, SLOT_OUTPUT)) {
+      ContainerUtil.place(item, this, SLOT_OUTPUT)
+      items.remove(SLOT_INPUT)
+    })
+  energyStorage.outputEnergy()
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    for (_ <- energyStorage.setEnergy(pTag.getInt("Energy"))) yield ()
+    energyStorage.setEnergy(pTag.getInt("Energy"))
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
     super.saveAdditional(pTag)
-    for (energy <- getEnergy)
-      yield pTag.putInt("Energy", energy)
+    pTag.putInt("Energy", getEnergy)
   }
 
   override def getDefaultName: Component =
