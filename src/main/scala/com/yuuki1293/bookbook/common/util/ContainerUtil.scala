@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.util
 
-import cats.effect.IO
 import net.minecraft.world.Container
 import net.minecraft.world.item.ItemStack
 
@@ -13,7 +12,7 @@ object ContainerUtil {
    * @param slot      containerのindex
    * @return 完全に配置が完了したならtrueを返す
    */
-  def place(itemStack: ItemStack, container: Container, slot: Int): IO[Boolean] = {
+  def place(itemStack: ItemStack, container: Container, slot: Int): Boolean = {
     place(itemStack, container, slot, slot + 1)
   }
 
@@ -26,7 +25,7 @@ object ContainerUtil {
    * @param end       containerの最後のindex(含まれない)
    * @return 完全に配置が完了したならtrueを返す
    */
-  def place(itemStack: ItemStack, container: Container, start: Int, end: Int): IO[Boolean] = IO {
+  def place(itemStack: ItemStack, container: Container, start: Int, end: Int): Boolean = {
     def done: Boolean = itemStack.isEmpty
 
     for (i <- start until end) {
