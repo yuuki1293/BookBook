@@ -11,7 +11,6 @@ buildscript {
 }
 
 plugins {
-    id 'java-library'
     id 'eclipse'
     id 'maven-publish'
     id 'io.github.cosmicsilence.scalafix' version '0.1.14'
@@ -102,7 +101,6 @@ repositories {
             it.includeModule("com.kotori316", "ScalableCatsForce".toLowerCase())
             it.includeModule("org.typelevel", "cats-core_${scala_major}")
             it.includeModule("org.typelevel", "cats-kernel_${scala_major}")
-            it.includeModule("org.typelevel", "cats-effect_${scala_major}")
         }
     }
     maven {
@@ -127,7 +125,6 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     implementation(group: 'org.scala-lang', name: 'scala-library', version: scala_version)
     implementation(group: 'org.typelevel', name: "cats-core_${scala_major}", version: '2.8.5-kotori')
-    api(group: 'org.typelevel', name: "cats-effect_${scala_major}", version: '2.5.5')
 
     runtimeOnly(group: "com.kotori316", name: "ScalableCatsForce".toLowerCase(), version: "2.13.8-build-4", classifier: "with-library") {
         transitive(false)
