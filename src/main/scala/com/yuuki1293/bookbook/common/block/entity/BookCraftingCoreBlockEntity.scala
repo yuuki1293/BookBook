@@ -1,7 +1,6 @@
 package com.yuuki1293.bookbook.common.block.entity
 
-import cats.effect.IO
-import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{DATA_ENERGY_STORED, DATA_MAX_ENERGY, DATA_POWER_COST, DATA_PROGRESS, SLOT_INPUT, SLOT_OUTPUT}
+import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity._
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
@@ -112,10 +111,9 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   override def load(pTag: CompoundTag): Unit = {
     super.load(pTag)
-    for {
-      _ <- energyStorage.setEnergy(pTag.getInt("Energy"))
-      _ <- IO{progress = pTag.getInt("Progress")}
-    } yield ()
+    energyStorage.setEnergy(pTag.getInt("Energy"))
+    progress = pTag.getInt("Progress")
+
   }
 
   override def saveAdditional(pTag: CompoundTag): Unit = {
@@ -154,7 +152,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  def updateRecipeInventory(stacks: List[ItemStack]): IO[Unit] = IO {
+  def updateRecipeInventory(stacks: List[ItemStack]): Unit = {
     var flag = false
 
     flag = recipeItems.size() != stacks.length + 1 || !ItemStack.isSame(recipeItems.get(0), items.get(0))
@@ -180,8 +178,8 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  def updateRecipe(stacks: List[ItemStack], recipeContainer: SimpleContainer): IO[Unit] = IO {
-    for (_ <- updateRecipeInventory(stacks)) yield ()
+  def updateRecipe(stacks: List[ItemStack], recipeContainer: SimpleContainer): Unit = {
+    updateRecipeInventory(stacks)
 
     if (haveItemChanged && (recipe.isEmpty || !recipe.exists(_.matches(recipeContainer, level)))) {
       recipe =
@@ -192,7 +190,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  private def process(recipe: BookCraftingRecipe): IO[Unit] = IO {
+  private def process(recipe: BookCraftingRecipe): Unit = {
     val powerRate = recipe.getPowerRate
     val difference = recipe.getPowerCost - progress
 
@@ -204,7 +202,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
 
   def isDone: Boolean = progress >= getPowerCost
 
-  def recipeTick(): IO[Unit] = IO {
+  def recipeTick(): Unit = {
     if (!level.isClientSide) {
 
       var hasChanged = false
@@ -213,51 +211,44 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       val stacks = standsWithItems.values.toList
       val recipeItemContainer = new SimpleContainer(recipeItems.asScala.toSeq: _*)
 
-      for {
-        _ <- updateRecipe(stacks, recipeItemContainer)
-      } yield ()
+      updateRecipe(stacks, recipeItemContainer)
 
       recipe match {
         case Some(recipe) =>
           if (getEnergy > 0) {
-            if (!isDone) {
-              for {_ <- process(recipe)} yield ()
-            }
+            if (!isDone)
+              process(recipe)
 
-            for {
-              result <- RecipeUtil.assemble(recipe, recipeItemContainer, this, SLOT_OUTPUT)
-              _ <- IO {
-                if (isDone && result) {
-                  removeItem(SLOT_INPUT, 1)
+            val result = RecipeUtil.assemble(recipe, recipeItemContainer, this, SLOT_OUTPUT)
+            if (isDone && result) {
+              removeItem(SLOT_INPUT, 1)
 
-                  for (standPos <- standsWithItems.keySet) {
-                    val be = level.getBlockEntity(standPos)
+              for (standPos <- standsWithItems.keySet) {
+                val be = level.getBlockEntity(standPos)
 
-                    be match {
-                      case stand: BookStandBlockEntity =>
-                        stand.removeItem(1)
-                    }
-                  }
-
-                  progress = 0
-
-                  hasChanged = true
+                be match {
+                  case stand: BookStandBlockEntity =>
+                    stand.removeItem(1)
                 }
               }
-            } yield ()
+
+              progress = 0
+
+              hasChanged = true
+            }
           }
         case None =>
           progress = 0
 
           if (hasChanged) {
             setChanged()
-            for {_ <- updateStands()} yield ()
+            updateStands()
           }
       }
     }
   }
 
-  def updateStands(): IO[Unit] = IO {
+  def updateStands(): Unit = {
     for {
       pos <- getStandWithItems.keySet
       be <- Option(level.getBlockEntity(pos))
