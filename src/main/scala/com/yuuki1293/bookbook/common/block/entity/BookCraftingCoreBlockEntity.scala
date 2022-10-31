@@ -4,7 +4,7 @@ import com.yuuki1293.bookbook.common.block.entity.BookCraftingCoreBlockEntity.{D
 import com.yuuki1293.bookbook.common.block.entity.util.BookEnergyStorage
 import com.yuuki1293.bookbook.common.inventory.BookCraftingCoreMenu
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
-import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes, RecipeTypes}
+import com.yuuki1293.bookbook.common.register.{BlockEntities, MenuTypes}
 import com.yuuki1293.bookbook.common.util.RecipeUtil
 import net.minecraft.core.{BlockPos, Direction, NonNullList}
 import net.minecraft.nbt.CompoundTag
@@ -185,7 +185,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       recipe =
         Option(level
           .getRecipeManager
-          .getRecipeFor(RecipeTypes.BOOK_CRAFTING, recipeContainer, level)
+          .getRecipeFor(BookCraftingRecipe.Type, recipeContainer, level)
           .orElse(null))
     }
   }

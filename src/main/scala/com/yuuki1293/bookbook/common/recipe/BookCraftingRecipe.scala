@@ -2,7 +2,6 @@ package com.yuuki1293.bookbook.common.recipe
 
 import com.google.gson.{JsonObject, JsonSyntaxException}
 import com.yuuki1293.bookbook.api.crafting.IBookCraftingRecipe
-import com.yuuki1293.bookbook.common.register.RecipeTypes
 import net.minecraft.core.NonNullList
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -48,7 +47,7 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
 
   override def getSerializer: RecipeSerializer[_] = BookCraftingRecipe.Serializer
 
-  override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING
+  override def getType: RecipeType[_] = BookCraftingRecipe.Type
 
   def getPowerCost: Int = powerCost
 
@@ -60,6 +59,8 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
 object BookCraftingRecipe {
   def apply(id: ResourceLocation, ingredients: NonNullList[Ingredient], output: ItemStack, powerCost: Int, powerRate: Int) =
     new BookCraftingRecipe(id, ingredients, output, powerCost, powerRate)
+
+  object Type extends RecipeType[BookCraftingRecipe] {}
 
   object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingRecipe] {
     override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingRecipe = {

@@ -2,7 +2,6 @@ package com.yuuki1293.bookbook.jei
 
 import com.yuuki1293.bookbook.common.BookBook
 import com.yuuki1293.bookbook.common.recipe.BookCraftingRecipe
-import com.yuuki1293.bookbook.common.register.RecipeTypes
 import com.yuuki1293.bookbook.jei.IBookBookPlugin.UID
 import com.yuuki1293.bookbook.jei.category.BookCraftingCategory
 import mezz.jei.api.IModPlugin
@@ -35,7 +34,7 @@ class IBookBookPlugin extends IModPlugin {
         val manager = level.getRecipeManager
         registration.addRecipes(
           new RecipeType(BookCraftingCategory.UID, classOf[BookCraftingRecipe]),
-          manager.getAllRecipesFor[SimpleContainer, BookCraftingRecipe](RecipeTypes.BOOK_CRAFTING)
+          manager.getAllRecipesFor[SimpleContainer, BookCraftingRecipe](BookCraftingRecipe.Type)
         )
       case None =>
     }
