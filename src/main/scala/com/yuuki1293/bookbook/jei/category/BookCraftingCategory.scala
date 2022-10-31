@@ -45,7 +45,7 @@ class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[
 
 object BookCraftingCategory {
   private final val TEXTURE = new ResourceLocation(BookBook.MOD_ID, "textures/gui/jei/book_crafting.png")
-  final val UID = new ResourceLocation(BookBook.MOD_ID, "book_crafting_category")
+  final val UID = new ResourceLocation(BookBook.MOD_ID, "book_crafting")
 
   def apply(implicit helper: IGuiHelper) =
     new BookCraftingCategory
