@@ -1,0 +1,19 @@
+{
+  "type": "bookbook:book_crafting",
+  "powerCost": 1000,
+  "input": {
+    "item": "bookbook:drowned_book"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:cooked_porkchop"
+    }
+  ],
+  "result": {
+    "item": "bookbook:unstable_book",
+    "count": 1
+  }
+}
