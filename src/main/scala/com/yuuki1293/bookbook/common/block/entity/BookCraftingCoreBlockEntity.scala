@@ -161,7 +161,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  def updateRecipeInventory(stacks: List[ItemStack]): Unit = {
+  def updateRecipeInventory(stacks: Seq[ItemStack]): Unit = {
     var flag = false
 
     flag = recipeItems.size() != stacks.length + 1 || !ItemStack.isSame(recipeItems.get(0), items.get(0))
@@ -187,7 +187,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
     }
   }
 
-  def updateRecipe(stacks: List[ItemStack], recipeContainer: SimpleContainer): Unit = {
+  def updateRecipe(stacks: Seq[ItemStack], recipeContainer: SimpleContainer): Unit = {
     updateRecipeInventory(stacks)
 
     if (haveItemChanged && (recipe.isEmpty || !recipe.exists(_.matches(recipeContainer, level)))) {
@@ -217,7 +217,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       var hasChanged = false
 
       val standsWithItems = getStandWithItems
-      val stacks = standsWithItems.values.toList
+      val stacks = standsWithItems.values.toSeq
       val recipeItemContainer = new SimpleContainer(recipeItems.asScala.toSeq: _*)
 
       updateRecipe(stacks, recipeItemContainer)
