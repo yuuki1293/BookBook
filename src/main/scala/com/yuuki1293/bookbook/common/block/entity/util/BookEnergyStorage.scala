@@ -1,6 +1,5 @@
 package com.yuuki1293.bookbook.common.block.entity.util
 
-import cats.effect._
 import net.minecraft.core.{BlockPos, Direction}
 import net.minecraft.world.Container
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -24,15 +23,15 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
     super.receiveEnergy(maxReceive, simulate)
   }
 
-  def setEnergy(energy: Int): IO[Unit] = IO {
+  def setEnergy(energy: Int): Unit = {
     this.energy = Math.max(0, Math.min(energy, capacity))
   }
 
-  def increase(inc: Int): IO[Unit] = IO {
+  def increase(inc: Int): Unit = {
     energy = Math.min(capacity, energy + inc)
   }
 
-  def outputEnergy(eject: Array[Direction] = Direction.values()): IO[Unit] = IO {
+  def outputEnergy(eject: Array[Direction] = Direction.values()): Unit = {
     if (getEnergyStored > 0 && canExtract) {
       val level = blockEntity.getLevel
       val worldPos = blockEntity.getBlockPos
@@ -48,7 +47,7 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
     }
   }
 
-  def chargeItems(container: Container, startIndex: Int, endIndex: Int): IO[Unit] = IO {
+  def chargeItems(container: Container, startIndex: Int, endIndex: Int): Unit = {
     if (getEnergyStored <= 0
       || !canExtract
       || startIndex >= endIndex
@@ -65,7 +64,7 @@ class BookEnergyStorage(pCapacity: Int, pMaxReceive: Int, pMaxExtract: Int, pEne
       }
   }
 
-  protected def transfer(receiver: IEnergyStorage): IO[Unit] = IO {
+  protected def transfer(receiver: IEnergyStorage): Unit = {
     val toSend = extractEnergy(maxExtract, simulate = false)
     val received = receiver.receiveEnergy(toSend, false)
 

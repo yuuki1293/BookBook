@@ -1,7 +1,7 @@
 package com.yuuki1293.bookbook.common.recipe
 
 import com.google.gson.{JsonObject, JsonSyntaxException}
-import com.yuuki1293.bookbook.common.register.RecipeTypes
+import com.yuuki1293.bookbook.api.crafting.IBookCraftingRecipe
 import net.minecraft.core.NonNullList
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.resources.ResourceLocation
@@ -13,13 +13,13 @@ import net.minecraft.world.level.Level
 import net.minecraftforge.common.util.RecipeMatcher
 import net.minecraftforge.registries.ForgeRegistryEntry
 
-class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int, pPowerRate: Int)
-  extends Recipe[SimpleContainer] {
-  private final val recipeId = pId
-  private final val output = pOutput
-  private final val ingredients = pIngredients
-  private final val powerCost = pPowerCost
-  private final val powerRate = pPowerRate
+class BookCraftingRecipe(
+  private final val recipeId: ResourceLocation,
+  private final val ingredients: NonNullList[Ingredient],
+  private final val output: ItemStack,
+  private final val powerCost: Int,
+  private final val powerRate: Int)
+  extends Recipe[SimpleContainer] with IBookCraftingRecipe {
 
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = {
     var flag = false
@@ -47,16 +47,20 @@ class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingred
 
   override def getSerializer: RecipeSerializer[_] = BookCraftingRecipe.Serializer
 
-  override def getType: RecipeType[_] = RecipeTypes.BOOK_CRAFTING
+  override def getType: RecipeType[_] = BookCraftingRecipe.Type
 
   def getPowerCost: Int = powerCost
 
   def getPowerRate: Int = powerRate
+
+  override def getInputs: NonNullList[Ingredient] = ingredients
 }
 
 object BookCraftingRecipe {
   def apply(id: ResourceLocation, ingredients: NonNullList[Ingredient], output: ItemStack, powerCost: Int, powerRate: Int) =
     new BookCraftingRecipe(id, ingredients, output, powerCost, powerRate)
+
+  object Type extends RecipeType[BookCraftingRecipe] {}
 
   object Serializer extends ForgeRegistryEntry[RecipeSerializer[_]] with RecipeSerializer[BookCraftingRecipe] {
     override def fromJson(pRecipeId: ResourceLocation, pSerializedRecipe: JsonObject): BookCraftingRecipe = {
