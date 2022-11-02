@@ -13,13 +13,13 @@ import net.minecraft.world.level.Level
 import net.minecraftforge.common.util.RecipeMatcher
 import net.minecraftforge.registries.ForgeRegistryEntry
 
-class BookCraftingRecipe(pId: ResourceLocation, pIngredients: NonNullList[Ingredient], pOutput: ItemStack, pPowerCost: Int, pPowerRate: Int)
+class BookCraftingRecipe(
+  private final val recipeId: ResourceLocation,
+  private final val ingredients: NonNullList[Ingredient],
+  private final val output: ItemStack,
+  private final val powerCost: Int,
+  private final val powerRate: Int)
   extends Recipe[SimpleContainer] with IBookCraftingRecipe {
-  private final val recipeId = pId
-  private final val output = pOutput
-  private final val ingredients = pIngredients
-  private final val powerCost = pPowerCost
-  private final val powerRate = pPowerRate
 
   override def matches(pContainer: SimpleContainer, pLevel: Level): Boolean = {
     var flag = false
