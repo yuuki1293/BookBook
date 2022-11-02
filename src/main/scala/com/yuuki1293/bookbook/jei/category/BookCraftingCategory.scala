@@ -37,16 +37,16 @@ class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[
   override def getRecipeClass: Class[_ <: IBookCraftingRecipe] = classOf[IBookCraftingRecipe]
 
   override def setRecipe(builder: IRecipeLayoutBuilder, recipe: IBookCraftingRecipe, focuses: IFocusGroup): Unit = {
-    builder.addSlot(RecipeIngredientRole.INPUT, 54, 46)
+    builder.addSlot(RecipeIngredientRole.INPUT, 55, 47)
       .addIngredients(recipe.getInputs.get(0))
 
-    builder.addSlot(RecipeIngredientRole.OUTPUT, 54, 149)
+    builder.addSlot(RecipeIngredientRole.OUTPUT, 55, 150)
       .addItemStack(recipe.getResultItem)
 
     val inputs = recipe.getInputs
     val count = inputs.size() - 1
 
-    for ((i, pos) <- circlePos(count, 39.0d, new Point(54, 46))) {
+    for ((i, pos) <- circlePos(count, 39.0d, new Point(55, 47))) {
       builder.addSlot(RecipeIngredientRole.INPUT, pos.x, pos.y)
         .addIngredients(inputs.get(i + 1))
     }
