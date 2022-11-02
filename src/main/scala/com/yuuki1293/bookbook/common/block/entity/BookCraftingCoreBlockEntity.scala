@@ -16,7 +16,9 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntityTicker
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.common.capabilities.Capability
 import net.minecraftforge.common.util.LazyOptional
+import net.minecraftforge.energy.CapabilityEnergy
 
 import scala.collection.mutable
 import scala.jdk.CollectionConverters._
@@ -97,6 +99,13 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
       case SLOT_OUTPUT => true
       case _ => false
     }
+  }
+
+  override def getCapability[A](cap: Capability[A], side: Direction): LazyOptional[A] = {
+    if (cap == CapabilityEnergy.ENERGY)
+      energy.cast()
+    else
+      super.getCapability(cap, side)
   }
 
   override def invalidateCaps(): Unit = {
