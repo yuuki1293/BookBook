@@ -14,6 +14,8 @@ import net.minecraft.network.chat.{Component, TranslatableComponent}
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 
+import java.awt.Point
+
 class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[IBookCraftingRecipe] {
   private final val background = helper.createDrawable(TEXTURE, 0, 0, 140, 171)
   private final val icon =
@@ -40,6 +42,28 @@ class BookCraftingCategory(implicit helper: IGuiHelper) extends IRecipeCategory[
 
     builder.addSlot(RecipeIngredientRole.OUTPUT, 54, 149)
       .addItemStack(recipe.getResultItem)
+
+    val inputs = recipe.getInputs
+    val count = inputs.size() - 1
+
+    for ((i, pos) <- circlePos(count, 39.0d, new Point(54, 46))) {
+      builder.addSlot(RecipeIngredientRole.INPUT, pos.x, pos.y)
+        .addIngredients(inputs.get(i + 1))
+    }
+  }
+
+  //noinspection SameParameterValue
+  private def circlePos(count: Int, r: Double, origin: Point): Seq[(Int, Point)] = {
+    def toRad(i: Int): Double = -2.0d * math.Pi * i.toDouble / count.toDouble
+
+    for {
+      i <- 0 until count
+      sita = toRad(i)
+      x0 = 0
+      y0 = -r
+      x = x0 * math.cos(sita) - y0 * math.sin(sita) + origin.x
+      y = x0 * math.sin(sita) + y0 * math.cos(sita) + origin.y
+    } yield (i, new Point(x.toInt, y.toInt))
   }
 }
 
