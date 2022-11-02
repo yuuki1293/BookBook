@@ -228,8 +228,7 @@ class BookCraftingCoreBlockEntity(worldPosition: BlockPos, blockState: BlockStat
             if (!isDone)
               process(recipe)
 
-            val result = RecipeUtil.assemble(recipe, recipeItemContainer, this, SLOT_OUTPUT)
-            if (isDone && result) {
+            if (isDone && RecipeUtil.assemble(recipe, recipeItemContainer, this, SLOT_OUTPUT)) {
               removeItem(SLOT_INPUT, 1)
 
               for (standPos <- standsWithItems.keySet) {
