@@ -19,6 +19,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'scala'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
+apply from: "https://moddingtutorials.org/applesilicon.gradle"
 
 
 version = '1.18.2-1.0'
